@@ -23,12 +23,16 @@ namespace pokemonDuel.classi.Logicagioco
             } }
         public Nodo()
         {
+            vicini = new List<int>();
+            button = new Button();
             button.Click += Button_Click;
             bSelezionato = Brushes.LightGreen;
             bNSelezionato = Brushes.White;
         }
         public Nodo(int i)
         {
+            vicini = new List<int>();
+            button = new Button();
             button.Click += Button_Click;
             bSelezionato = Brushes.LightGreen;
             bNSelezionato = Brushes.White;
@@ -41,7 +45,7 @@ namespace pokemonDuel.classi.Logicagioco
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            DatiCondivisi.Instance().
+            DatiCondivisi.Instance();
         }
     }
 }

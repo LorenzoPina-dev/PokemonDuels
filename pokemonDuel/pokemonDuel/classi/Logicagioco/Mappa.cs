@@ -9,7 +9,7 @@ namespace pokemonDuel.classi.Logicagioco
 {
     class Mappa
     {
-        Nodo [] mappa;
+        public Nodo [] mappa;
         int fine = 3,partenza=22;
         int[] startPosizionamento;
         List<Pokemon> miaMano,altraMano;
@@ -19,10 +19,9 @@ namespace pokemonDuel.classi.Logicagioco
             this.mappa = new Nodo[32];
             this.fine = 3;
             this.partenza = 22;
-            this.startPosizionamento = new int[] { 25, 31 };
             for (int i = 0; i < mappa.Length; i++)
                 mappa[i] = new Nodo(i);
-            List<string> collegamenti = LeggiFile.Leggi("./file/Mappa.txt");
+            List<string> collegamenti = LeggiFile.Leggi("./file/Mappa.csv");
             foreach(string s in collegamenti)
             {
                 string[] campi = s.Split(';');
@@ -30,6 +29,30 @@ namespace pokemonDuel.classi.Logicagioco
                 mappa[I].AddVicino(F);
                 mappa[F].AddVicino(I);
             }
+            this.startPosizionamento = new int[] { 25, 31 };
+        }
+
+        public List<int> Raggiungibili(Nodo n,int passi)
+        {
+            List<int> ris = new List<int>();
+            Queue<KeyValuePair<int, int>> daVisitare = new Queue<KeyValuePair<int, int>>();
+            daVisitare.Enqueue(new KeyValuePair<int, int>(0, n.indice));
+            while(daVisitare.Count>0)
+            {
+                KeyValuePair<int, int> pair = daVisitare.Dequeue();
+                if (pair.Key >= passi)
+                    continue;
+                foreach(int vicino in mappa[pair.Value].vicini)
+                {
+                    if (vicino != n.indice && !ris.Contains(vicino))
+                    {
+                        ris.Add(vicino);
+                        daVisitare.Enqueue(new KeyValuePair<int, int>(pair.Key + 1, vicino));
+                    }
+                }
+            }
+
+            return ris;
         }
     }
 }

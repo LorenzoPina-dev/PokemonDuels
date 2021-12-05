@@ -20,11 +20,11 @@ namespace pokemonDuel.classi.Comunicazione
 
         private Messaggio Elabora(Messaggio m)
         {
-            Messaggio ris;
-            switch(m.scelta)
+            Messaggio ris=new Messaggio("");
+            /*switch(m.scelta)
             {
-
-            }
+                
+            }*/
             return ris;
         }
     }

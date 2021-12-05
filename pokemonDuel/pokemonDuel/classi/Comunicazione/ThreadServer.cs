@@ -21,7 +21,7 @@ namespace pokemonDuel.classi.Comunicazione
         }
         public Messaggio Ricevi()
         {
-            byte[] dataReceived;
+            byte[] dataReceived=new byte[2];
             return new Messaggio(Encoding.ASCII.GetString(dataReceived));
         }
     }
