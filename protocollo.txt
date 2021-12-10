@@ -29,4 +29,4 @@ CambioTurno:			//per espansioni future in caso il pokemon abbia mosse che li per
 	t;
 
 UsoCartaSpeciale:		//per espansioni future
-	s;nomeCarta		//basta solo il nome della carta perchè quella è la chiave primaria e in base a quello si possono recuperare tutte le informazioni della carta
+	sc;nomeCarta		//basta solo il nome della carta perchè quella è la chiave primaria e in base a quello si possono recuperare tutte le informazioni della carta
