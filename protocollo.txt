@@ -1,7 +1,7 @@
 Tcp
 
 connessione:
-	mittente:	c;nomeGiocatore;squadraPokemon			//squadraPokemon= una serie di 6 nomi di pokemon che andranno a comporre la squadra avversaria
+	mittente:	c;nomeGiocatore;squadraPokemon			//squadraPokemon= una serie di 6 id di pokemon che andranno a comporre la squadra avversaria
 	destinatario:	y;nomeGiocatore;squadraPokemon   o n=non voglio più  giocare//con le informazioni del secondo giocatore
 	mittente: 	y o n
 
@@ -10,8 +10,7 @@ disconnessione:
 
 
 SchierarePokemon:
-	s;nome;nNodo			//basta solo il nome del pokemon perchè quella è la chiave primaria e in base a quello si possono recuperare tutte le informazioni del pokemon
-					//nNodo= id del nodo dove dovrà essere posizionato il pokemon
+	s;idPokmon;nNodo			//nNodo= id del nodo dove dovrà essere posizionato il pokemon
 Attacca
 	mittente:	a;danno;nNodo
 	destinatario: 	danno 
@@ -23,10 +22,10 @@ TermineBattaglia
 	tb;vincitore					//vincitore: 0=vintoIo		1=Vintotu
 
 MuoviPokemon:
-	m;nomePokemon;inNodo
+	m;idPokemon;inNodo
 
 CambioTurno:			//per espansioni future in caso il pokemon abbia mosse che li permettono di fare altre mosse nello stesso turno
 	t;
 
 UsoCartaSpeciale:		//per espansioni future
-	sc;nomeCarta		//basta solo il nome della carta perchè quella è la chiave primaria e in base a quello si possono recuperare tutte le informazioni della carta
+	sc;idCarta		
