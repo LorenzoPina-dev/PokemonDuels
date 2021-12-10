@@ -12,8 +12,8 @@ disconnessione:
 SchierarePokemon:
 	s;idPokmon;nNodo			//nNodo= id del nodo dove dovrà essere posizionato il pokemon
 Attacca
-	mittente:	a;danno;nNodo
-	destinatario: 	danno 
+	mittente:	a;idMossa;nNodo
+	destinatario: 	idMossa 
 
 TerminaTurno:
 	tr;vincitore
