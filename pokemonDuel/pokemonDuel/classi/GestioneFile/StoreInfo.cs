@@ -9,8 +9,8 @@ namespace pokemonDuel.classi.GestioneFile
 {
     class StoreInfo
     {
-        public Dictionary<string, Pokemon> Pokedex;
-        public Dictionary<string, Mossa> Mosse;
+        public List<Pokemon> Pokedex;
+        public List<Mossa> Mosse;
         static StoreInfo instance=null;
         public static StoreInfo Instance()
         {
@@ -20,19 +20,19 @@ namespace pokemonDuel.classi.GestioneFile
         }
         private StoreInfo()
         {
-            Mosse= new Dictionary<string, Mossa>();
+            Mosse= new List<Mossa>();
             List<string> Tmosse = LeggiFile.Leggi("./file/mosse.csv");
             foreach (string m in Tmosse)
             {
                 Mossa mossa = new Mossa(m);
-                Mosse.Add(mossa.nome,mossa);
+                Mosse.Add(mossa);
             }
-            Pokedex = new Dictionary<string, Pokemon>();
+            Pokedex = new List<Pokemon>();
             List<string> pokemon = LeggiFile.Leggi("./file/pokemon.csv");
             foreach (string s in pokemon)
             {
                 Pokemon p = new Pokemon(s);
-                Pokedex.Add(p.Nome,p);
+                Pokedex.Add(p);
             }
         }
     }

@@ -12,20 +12,10 @@ namespace pokemonDuel.classi.Logicagioco
     {
         public int indice;
         public List<int> vicini;
-        public Button button;
-        Brush bSelezionato, bNSelezionato;
-        public bool IsSelezionato { get { return button.Background == bSelezionato; } 
-            set {
-                if (value)
-                    button.Background = bSelezionato;
-                else
-                    button.Background = bNSelezionato;
-            } }
         public Nodo()
         {
             vicini = new List<int>();
             button = new Button();
-            button.Click += Button_Click;
             bSelezionato = Brushes.LightGreen;
             bNSelezionato = Brushes.White;
         }
@@ -33,7 +23,6 @@ namespace pokemonDuel.classi.Logicagioco
         {
             vicini = new List<int>();
             button = new Button();
-            button.Click += Button_Click;
             bSelezionato = Brushes.LightGreen;
             bNSelezionato = Brushes.White;
             indice = i;
@@ -43,9 +32,5 @@ namespace pokemonDuel.classi.Logicagioco
             vicini.Add(n);
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            DatiCondivisi.Instance();
-        }
     }
 }

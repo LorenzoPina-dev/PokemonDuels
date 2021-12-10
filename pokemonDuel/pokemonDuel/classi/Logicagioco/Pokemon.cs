@@ -14,7 +14,6 @@ namespace pokemonDuel.classi.Logicagioco
         public string urlTexture;
         public bool mio;
         public Nodo posizione;
-        public Button button;
         public Pokemon(string csv)
         {
             string[] campi = csv.Split(';');
@@ -24,7 +23,6 @@ namespace pokemonDuel.classi.Logicagioco
                 Mosse.Add(campi[i]);
             urlTexture = Nome.ToUpper() + ".png";
             posizione = null;
-            button = null;
 
         }
     }
