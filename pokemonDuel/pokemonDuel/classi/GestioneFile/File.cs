@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.GestioneFile
 {
-    class LeggiFile
+    class File
     {
         public static List<string> Leggi(string file)
         {

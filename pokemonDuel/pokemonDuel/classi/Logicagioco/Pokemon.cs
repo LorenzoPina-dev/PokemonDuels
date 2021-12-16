@@ -9,19 +9,25 @@ namespace pokemonDuel.classi.Logicagioco
 {
     class Pokemon
     {
+        public int id;
         public string Nome;
+        public int Salti;
         public List<string> Mosse;
         public string urlTexture;
-        public bool mio;
         public Nodo posizione;
+        public bool mio;
+        public Pokemon()
+        {
+        }
         public Pokemon(string csv)
         {
             string[] campi = csv.Split(';');
-            Nome = campi[0];
+            id = int.Parse(campi[0]);
+            Nome = campi[1];
             Mosse = new List<string>();
-            for (int i = 1; i < campi.Length; i++)
+            for (int i = 2; i < campi.Length; i++)
                 Mosse.Add(campi[i]);
-            urlTexture = Nome.ToUpper() + ".png";
+            urlTexture =id + ".png";
             posizione = null;
 
         }

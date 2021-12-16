@@ -29,7 +29,6 @@ namespace pokemonDuel.classi
         }
         private DatiCondivisi()
         {
-            M = new Mappa();
             DaInviare = new Queue<Messaggio>();
             DaElaborare = new Queue<Messaggio>();
             synElaborare = new object();

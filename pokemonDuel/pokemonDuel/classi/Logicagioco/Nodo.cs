@@ -12,20 +12,22 @@ namespace pokemonDuel.classi.Logicagioco
     {
         public int indice;
         public List<int> vicini;
+        public int x, y;
+        public bool presentePokemon;
+        public Pokemon pokemon;
+        public bool selezionato;
         public Nodo()
         {
             vicini = new List<int>();
-            button = new Button();
-            bSelezionato = Brushes.LightGreen;
-            bNSelezionato = Brushes.White;
+            x = 0;
+            y = 0;
         }
         public Nodo(int i)
         {
             vicini = new List<int>();
-            button = new Button();
-            bSelezionato = Brushes.LightGreen;
-            bNSelezionato = Brushes.White;
             indice = i;
+            x = 0;
+            y = 0;
         }
         public void AddVicino(int n)
         {

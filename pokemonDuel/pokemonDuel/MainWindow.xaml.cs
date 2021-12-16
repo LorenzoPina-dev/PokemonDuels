@@ -31,9 +31,16 @@ namespace pokemonDuel
             Thread tc = new Thread(new ThreadStart(c.run));
             ThreadServer s = new ThreadServer();
             Thread ts = new Thread(new ThreadStart(s.run));
-            /*List<int> ris=DatiCondivisi.Instance().M.Raggiungibili(DatiCondivisi.Instance().M.mappa[6], 2);
+            DatiCondivisi.Instance().M = new classi.Logicagioco.Mappa(this);
+            HashSet<int> ris=DatiCondivisi.Instance().M.Raggiungibili(DatiCondivisi.Instance().M.mappa[0], 2);
+            DatiCondivisi.Instance().M.Disegna();
             foreach (int r in ris)
-                Console.WriteLine(r);*/
+                Console.WriteLine(r);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            DatiCondivisi.Instance().M.Disegna();
         }
     }
 }

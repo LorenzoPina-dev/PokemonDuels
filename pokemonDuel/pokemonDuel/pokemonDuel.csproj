@@ -63,7 +63,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="classi\DatiCondivisi.cs" />
-    <Compile Include="classi\GestioneFile\LeggiFile.cs" />
+    <Compile Include="classi\GestioneFile\File.cs" />
     <Compile Include="classi\GestioneFile\StoreInfo.cs" />
     <Compile Include="classi\Logicagioco\Mappa.cs" />
     <Compile Include="classi\Logicagioco\Mossa.cs" />
