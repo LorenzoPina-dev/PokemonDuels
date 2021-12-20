@@ -1,5 +1,6 @@
 ﻿using pokemonDuel.classi;
 using pokemonDuel.classi.Comunicazione;
+using pokemonDuel.classi.GestioneFile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,11 +28,9 @@ namespace pokemonDuel
         {
             InitializeComponent();
             DatiCondivisi.Instance();
-            ThreadClient c = new ThreadClient();
-            Thread tc = new Thread(new ThreadStart(c.run));
-            ThreadServer s = new ThreadServer();
-            Thread ts = new Thread(new ThreadStart(s.run));
+            StoreInfo.Instance();
             DatiCondivisi.Instance().M = new classi.Logicagioco.Mappa(this);
+            GestioneTcp g = new GestioneTcp();
             HashSet<int> ris=DatiCondivisi.Instance().M.Raggiungibili(DatiCondivisi.Instance().M.mappa[0], 2);
             DatiCondivisi.Instance().M.Disegna();
             foreach (int r in ris)

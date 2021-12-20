@@ -12,10 +12,11 @@ namespace pokemonDuel.classi.Logicagioco
         public int id;
         public string Nome;
         public int Salti;
-        public List<string> Mosse;
+        public List<int> Mosse;
         public string urlTexture;
         public Nodo posizione;
         public bool mio;
+        private static int idArrivato=0;
         public Pokemon()
         {
         }
@@ -24,9 +25,10 @@ namespace pokemonDuel.classi.Logicagioco
             string[] campi = csv.Split(';');
             id = int.Parse(campi[0]);
             Nome = campi[1];
-            Mosse = new List<string>();
-            for (int i = 2; i < campi.Length; i++)
-                Mosse.Add(campi[i]);
+            Salti = int.Parse(campi[2]);
+            Mosse = new List<int>();
+            for (int i = 0; i < int.Parse(campi[3]); i++)
+                Mosse.Add(idArrivato++);
             urlTexture =id + ".png";
             posizione = null;
 

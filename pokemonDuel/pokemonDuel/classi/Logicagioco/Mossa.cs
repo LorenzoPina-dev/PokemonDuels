@@ -8,15 +8,18 @@ namespace pokemonDuel.classi.Logicagioco
 {
     class Mossa
     {
-        public string nome;
+        public int id;
+        public string nome,desc;
         public int percentuale, danno;
 
         public Mossa(string csv)
         {
             string[] campi = csv.Split(';');
-            nome=campi[0];
-            percentuale = int.Parse(campi[1]);
-            danno = int.Parse(campi[2]);
+            id = int.Parse(campi[0]);
+            nome=campi[1];
+            desc = campi[2];
+            percentuale = int.Parse(campi[4]);
+            danno = int.Parse(campi[3]);
         }
         public string ToCsv()
         {

@@ -208,6 +208,11 @@ namespace pokemonDuel.classi.Logicagioco
             }
         }
 
+        private void Attacca(Nodo cliccato)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Reset()
         {
             foreach(Nodo n in mappa)
