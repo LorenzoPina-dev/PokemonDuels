@@ -33,6 +33,31 @@ namespace pokemonDuel.classi.Logicagioco
         {
             vicini.Add(n);
         }
+        
+
+        public HashSet<int> Raggiungibili(List<Nodo> mappa, int passi)
+        {
+            HashSet<int> ris = new HashSet<int>();
+            Queue<KeyValuePair<int, int>> daVisitare = new Queue<KeyValuePair<int, int>>();
+            daVisitare.Enqueue(new KeyValuePair<int, int>(0, this.indice));
+            while (daVisitare.Count > 0)
+            {
+                KeyValuePair<int, int> pair = daVisitare.Dequeue();
+                if (pair.Key >= passi)
+                    continue;
+                foreach (int vicino in mappa[pair.Value].vicini)
+                {
+                    if (vicino != indice && !ris.Contains(vicino) && !mappa[vicino].presentePokemon)
+                    {
+                        ris.Add(vicino);
+                        daVisitare.Enqueue(new KeyValuePair<int, int>(pair.Key + 1, vicino));
+                    }
+                }
+            }
+
+            return ris;
+        }
+
 
     }
 }

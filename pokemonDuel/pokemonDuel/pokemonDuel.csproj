@@ -67,6 +67,9 @@
     <Compile Include="classi\DatiCondivisi.cs" />
     <Compile Include="classi\GestioneFile\File.cs" />
     <Compile Include="classi\GestioneFile\StoreInfo.cs" />
+    <Compile Include="classi\Grafica\GestioneCanvas.cs" />
+    <Compile Include="classi\Grafica\GestioneRuota.cs" />
+    <Compile Include="classi\Logicagioco\Giocatore.cs" />
     <Compile Include="classi\Logicagioco\Mappa.cs" />
     <Compile Include="classi\Logicagioco\Mossa.cs" />
     <Compile Include="classi\Logicagioco\Pokemon.cs" />

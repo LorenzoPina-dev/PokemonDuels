@@ -21,13 +21,17 @@ namespace pokemonDuel.classi.Logicagioco
         MainWindow m;
         int partiX, partiY;
         int distanza = 0;
-        List<Ellipse> Grafica;
+        List<Rectangle> Grafica;
         int PartiPerMano;
-        int PedineMappa;
+        int PedineMappa,PedineMano;
         Nodo Selezionato;
-        public Mappa(MainWindow m)
+        int Nturno,Tvinti;
+        public Giocatore io, altro;
+        public Mappa(MainWindow m,Giocatore io,Giocatore altro)
         {
             this.m = m;
+            Destinazione = 3;
+            PedineMano = 6;
             this.mappa = new List<Nodo>();
             startPosizionamento = new List<int>();
             creaNodi();
@@ -35,8 +39,120 @@ namespace pokemonDuel.classi.Logicagioco
             myCanvas = new Canvas();
             Selezionato = null;
             turno = true;
+            Nturno = 0;
+            Tvinti = 0;
+            this.io = io;
+            this.altro = altro;
+            RicominciaGioco();
         }
 
+
+
+        private void Click_Pedina(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Rectangle el = (Rectangle)e.Source;
+            Nodo cliccato = mappa[int.Parse(el.Name.Split('_')[1])];
+            if (!cliccato.presentePokemon)
+            {
+                if (turno && cliccato.selezionato)
+                    Muovi(cliccato);
+            }
+            else
+            {
+                if (turno)
+                {
+                    if (cliccato.pokemon.mio)
+                        if (cliccato.indice >= PedineMappa)
+                        {
+                            HashSet<int> daEvidenziare = new HashSet<int>();
+                            foreach (int partenza in startPosizionamento)
+                            {
+                                HashSet<int> parziale = mappa[partenza].Raggiungibili(mappa, cliccato.pokemon.Salti);
+                                foreach (int p in parziale)
+                                    daEvidenziare.Add(p);
+                            }
+                            Mostra(cliccato, daEvidenziare);
+                        }
+                        else
+                            Mostra(cliccato, cliccato.Raggiungibili(mappa, cliccato.pokemon.Salti));
+                    else if(Selezionato!=null && Selezionato.vicini.Contains(cliccato.indice))
+                        Attacca(cliccato);
+                }
+            }
+        }
+
+        private void Attacca(Nodo cliccato)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Ridisegna()
+        {
+            foreach (Nodo n in mappa)
+            {
+                if (n.presentePokemon)
+                {
+                    Grafica[n.indice].Fill = n.pokemon.Render();
+                    Grafica[n.indice].Stroke =Brushes.Transparent;
+                }
+                else { 
+                    Grafica[n.indice].Fill = Brushes.White;
+                Grafica[n.indice].Stroke = Brushes.Black;
+            }
+            n.selezionato = false;
+            }
+        }
+
+        private void Muovi(Nodo cliccato)
+        {
+            cliccato.pokemon = Selezionato.pokemon;
+            cliccato.presentePokemon = true;
+            Selezionato.pokemon = null;
+            Selezionato.presentePokemon = false;
+            if(cliccato.indice==Destinazione)
+            {
+                Nturno++;
+                if (turno)
+                {
+                    Tvinti++;
+                    Console.WriteLine("vinto");
+                }
+                RicominciaGioco();
+            }
+            Ridisegna();
+        }
+
+        private void RicominciaGioco()
+        {
+            foreach(Nodo n in mappa)
+            {
+                n.pokemon = null;
+                n.presentePokemon = false;
+                n.selezionato = false;
+            }
+            for (int i = 0; i < io.Deck.Count; i++)
+            {
+                mappa[PedineMappa+PedineMano + i].pokemon = io.Deck[i];
+                mappa[PedineMappa+ PedineMano + i].presentePokemon = true;
+            }
+            for (int i = 0; i < altro.Deck.Count; i++)
+            {
+                mappa[PedineMappa+ i].pokemon = altro.Deck[i];
+                mappa[PedineMappa  + i].presentePokemon = true;
+            }
+
+        }
+
+        private void Mostra(Nodo cliccato, HashSet<int> hashSet)
+        {
+            Ridisegna();
+            Selezionato = cliccato;
+            foreach (int i in hashSet)
+            {
+                mappa[i].selezionato = true;
+                Grafica[i].Fill = Brushes.Yellow;
+            }
+        }
 
         public void creaNodi()
         {
@@ -90,12 +206,6 @@ namespace pokemonDuel.classi.Logicagioco
                         mappa.Add(n);
                     }
             }
-            Pokemon p=new Pokemon();
-            p.mio = true;
-            p.Salti = 4;
-            mappa[34].presentePokemon = true;
-            mappa[34].pokemon = p;
-
         }
         public void creaCollegamenti()
         {
@@ -108,33 +218,10 @@ namespace pokemonDuel.classi.Logicagioco
                 mappa[F].vicini.Add(P);
             }
         }
-
-        public HashSet<int> Raggiungibili(Nodo n, int passi)
-        {
-            HashSet<int> ris = new HashSet<int>();
-            Queue<KeyValuePair<int, int>> daVisitare = new Queue<KeyValuePair<int, int>>();
-            daVisitare.Enqueue(new KeyValuePair<int, int>(0, n.indice));
-            while (daVisitare.Count > 0)
-            {
-                KeyValuePair<int, int> pair = daVisitare.Dequeue();
-                if (pair.Key >= passi)
-                    continue;
-                foreach (int vicino in mappa[pair.Value].vicini)
-                {
-                    if (vicino != n.indice && !ris.Contains(vicino) && !mappa[vicino].presentePokemon)
-                    {
-                        ris.Add(vicino);
-                        daVisitare.Enqueue(new KeyValuePair<int, int>(pair.Key + 1, vicino));
-                    }
-                }
-            }
-
-            return ris;
-        }
-
         public void Disegna()
         {
             Rectangle r = new Rectangle();
+
             r.Width = m.Width;
             r.Height = m.Height;
             r.Fill = Brushes.White;
@@ -155,18 +242,22 @@ namespace pokemonDuel.classi.Logicagioco
         public void DisegnaNodi()
         {
             double dimensioneX = (m.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.Height - 40) / (partiY +PartiPerMano*2);
-            Grafica = new List<Ellipse>();
+            Grafica = new List<Rectangle>();
+
             foreach (Nodo n in mappa)
             {
-                Ellipse b = new Ellipse();
+                Rectangle b = new Rectangle();
                 b.Stroke = Brushes.Black;
-                b.Height = dimensioneY / 2;
-                b.Width = dimensioneX / 2;
-                if(n.presentePokemon)
-                    b.Fill = Brushes.Yellow;
+                b.Height = dimensioneY*3/4;
+                b.Width = dimensioneX * 3 / 4;
+                if (n.presentePokemon)
+                {
+                    b.Fill = n.pokemon.Render();
+                    b.Stroke = Brushes.Transparent;
+                }
                 else
                     b.Fill = Brushes.White;
-                Canvas.SetTop(b, dimensioneY * n.y + dimensioneY / 4);
+                Canvas.SetTop(b, dimensioneY * n.y +dimensioneY / 4);
                 Canvas.SetLeft(b, distanza + dimensioneX * n.x + dimensioneX / 4);
                 b.Name = "p_" + n.indice;
                 b.MouseLeftButtonDown += Click_Pedina;
@@ -175,75 +266,6 @@ namespace pokemonDuel.classi.Logicagioco
             }
         }
 
-        private void Click_Pedina(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Ellipse el = (Ellipse)e.Source;
-            Nodo cliccato = mappa[int.Parse(el.Name.Split('_')[1])];
-            if (!cliccato.presentePokemon)
-            {
-                if (turno && cliccato.selezionato)
-                    Muovi(cliccato);
-            }
-            else
-            {
-                if (turno)
-                {
-                    if (cliccato.pokemon.mio)
-                        if (cliccato.indice >= PedineMappa)
-                        {
-                            HashSet<int> daEvidenziare = new HashSet<int>();
-                            foreach (int partenza in startPosizionamento)
-                            {
-                                HashSet<int> parziale = Raggiungibili(mappa[partenza], cliccato.pokemon.Salti);
-                                foreach (int p in parziale)
-                                    daEvidenziare.Add(p);
-                            }
-                            Mostra(cliccato, daEvidenziare);
-                        }
-                        else
-                            Mostra(cliccato, Raggiungibili(cliccato, cliccato.pokemon.Salti));
-                    else
-                        Attacca(cliccato);
-                }
-            }
-        }
-
-        private void Attacca(Nodo cliccato)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Reset()
-        {
-            foreach(Nodo n in mappa)
-            {
-                if(n.presentePokemon)
-                    Grafica[n.indice].Fill = Brushes.Yellow;
-                else
-                    Grafica[n.indice].Fill = Brushes.White;
-                n.selezionato = false;
-            }
-        }
-
-        private void Muovi(Nodo cliccato)
-        {
-            cliccato.pokemon = Selezionato.pokemon;
-            cliccato.presentePokemon = true;
-            Selezionato.pokemon = null;
-            Selezionato.presentePokemon = false;
-            Reset();
-        }
-
-        private void Mostra(Nodo cliccato,HashSet<int> hashSet)
-        {
-            Reset();
-            Selezionato = cliccato;
-            foreach (int i in hashSet)
-            {
-                mappa[i].selezionato = true;
-                Grafica[i].Fill = Brushes.Yellow;
-            }
-        }
 
         public void DisegnaCollegamenti()
         {
@@ -253,10 +275,10 @@ namespace pokemonDuel.classi.Logicagioco
                 foreach (int vicino in n.vicini)
                 {
                     Line l = new Line();
-                    l.X1 = distanza + n.x * dimensioneX + dimensioneY / 2;
-                    l.Y1 = n.y * dimensioneY + dimensioneY / 2;
-                    l.X2 = distanza + mappa[vicino].x * dimensioneX + dimensioneY / 2;
-                    l.Y2 = mappa[vicino].y * dimensioneY + dimensioneY / 2;
+                    l.X1 = distanza + n.x * dimensioneX + dimensioneY * 3 / 4;
+                    l.Y1 = n.y * dimensioneY + dimensioneY *6 / 7;
+                    l.X2 = distanza + mappa[vicino].x * dimensioneX + dimensioneY *3/4;
+                    l.Y2 = mappa[vicino].y * dimensioneY + dimensioneY * 6 /7;
                     l.Stroke = Brushes.Black;
                     l.StrokeThickness = 2;
                     myCanvas.Children.Add(l);

@@ -31,8 +31,13 @@ namespace pokemonDuel.classi.GestioneFile
             List<string> pokemon = File.Leggi("./file/Pokemon.csv");
             foreach (string s in pokemon)
             {
-                Pokemon p = new Pokemon(s);
-                Pokedex.Add(p);
+                try
+                {
+                    Pokemon p = new Pokemon(s);
+                    if(p.Instance(s))
+                        Pokedex.Add(p);
+                }catch(Exception)
+                { }
             }
         }
     }
