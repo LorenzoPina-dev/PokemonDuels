@@ -1,4 +1,5 @@
 ﻿using pokemonDuel.classi.Comunicazione;
+using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace pokemonDuel.classi
         //Attributi per la logica di gioco
         public Mappa M;
         private GestioneConnessione _avversario;
+        public GestioneRuota ruota;
+
         public GestioneConnessione Avversario
         {
             get { lock (syncComunicazione) { return _avversario; } }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    class Mossa
+    public class Mossa
     {
         public int id;
         public string nome,desc;

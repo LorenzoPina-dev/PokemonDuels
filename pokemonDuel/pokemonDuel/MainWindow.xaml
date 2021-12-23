@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:pokemonDuel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <WindowsFormsHost DockPanel.Dock="Right" x:Name="host" Width="300" Height="400"/>
+        <Canvas Name="myCanvas" DockPanel.Dock="Left" Height="400" Width="440"></Canvas>
+    </DockPanel>
 </Window>

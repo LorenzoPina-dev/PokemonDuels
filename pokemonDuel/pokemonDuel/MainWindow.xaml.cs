@@ -60,7 +60,10 @@ namespace pokemonDuel
             DatiCondivisi.Instance().M.Disegna();
             foreach (int r in ris)
                 Console.WriteLine(r);
+            Ruota ruota = new Ruota((int)host.Width, (int)host.Height);
+            DatiCondivisi.Instance().M.r = ruota;
         }
+
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {

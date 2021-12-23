@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    class Pokemon :ICloneable
+    public class Pokemon :ICloneable
     {
         public int id;
         public string Nome;

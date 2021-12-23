@@ -14,7 +14,7 @@ namespace pokemonDuel.classi.Comunicazione
         TcpListener listener;
         public GestioneTcp()
         {
-            listener = new TcpListener(IPAddress.Loopback, 12345);
+            listener = new TcpListener(IPAddress.Any, 12345);
             listener.Start();
             Thread t = new Thread(run);
             t.Start();

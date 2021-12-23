@@ -1,4 +1,5 @@
 ﻿using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Grafica;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace pokemonDuel.classi.Logicagioco
         Nodo Selezionato;
         int Nturno,Tvinti;
         public Giocatore io, altro;
+        public Ruota r;
+        GestioneRuota gr;
+        public int mioAttacco;
         public Mappa(MainWindow m,Giocatore io,Giocatore altro)
         {
             this.m = m;
@@ -36,7 +40,7 @@ namespace pokemonDuel.classi.Logicagioco
             startPosizionamento = new List<int>();
             creaNodi();
             creaCollegamenti();
-            myCanvas = new Canvas();
+            myCanvas = m.myCanvas;
             Selezionato = null;
             turno = true;
             Nturno = 0;
@@ -44,6 +48,9 @@ namespace pokemonDuel.classi.Logicagioco
             this.io = io;
             this.altro = altro;
             RicominciaGioco();
+            r = new Ruota((int)m.host.Width, (int)m.host.Height);
+            gr = null;
+            CompositionTarget.Rendering += Upload;
         }
 
 
@@ -76,14 +83,29 @@ namespace pokemonDuel.classi.Logicagioco
                         else
                             Mostra(cliccato, cliccato.Raggiungibili(mappa, cliccato.pokemon.Salti));
                     else if(Selezionato!=null && Selezionato.vicini.Contains(cliccato.indice))
-                        Attacca(cliccato);
+                        Attacca(cliccato.pokemon);
                 }
             }
         }
 
-        private void Attacca(Nodo cliccato)
+        private void Attacca(Pokemon cliccato)
         {
-            throw new NotImplementedException();
+            gr = new GestioneRuota();
+            gr.ruota = r;
+            gr.Pokemon = cliccato;
+        }
+
+        private void Upload(object sender, EventArgs e)
+        {
+            if (gr != null)
+                if (gr.Risultato == null)
+                    gr.Upload();
+                else
+                { mioAttacco = gr.Risultato.danno;
+                    MessageBox.Show(mioAttacco+"");
+                    gr = null;
+                }
+
         }
 
         private void Ridisegna()
@@ -140,6 +162,8 @@ namespace pokemonDuel.classi.Logicagioco
                 mappa[PedineMappa+ i].pokemon = altro.Deck[i];
                 mappa[PedineMappa  + i].presentePokemon = true;
             }
+            mappa[20].pokemon = altro.Deck[2];
+            mappa[20].presentePokemon = true;
 
         }
 
@@ -236,12 +260,10 @@ namespace pokemonDuel.classi.Logicagioco
             myCanvas.Children.Add(l);
             DisegnaCollegamenti();
             DisegnaNodi();
-            m.Content = myCanvas;
-            m.Show();
         }
         public void DisegnaNodi()
         {
-            double dimensioneX = (m.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.Height - 40) / (partiY +PartiPerMano*2);
+            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY +PartiPerMano*2);
             Grafica = new List<Rectangle>();
 
             foreach (Nodo n in mappa)
@@ -269,7 +291,7 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void DisegnaCollegamenti()
         {
-            double dimensioneX = (m.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.Height - 40) / (partiY+PartiPerMano*2);
+            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY+PartiPerMano*2);
             foreach (Nodo n in mappa)
             {
                 foreach (int vicino in n.vicini)

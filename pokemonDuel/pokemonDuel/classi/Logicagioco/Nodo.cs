@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    class Nodo
+    public class Nodo
     {
         public int indice;
         public List<int> vicini;
