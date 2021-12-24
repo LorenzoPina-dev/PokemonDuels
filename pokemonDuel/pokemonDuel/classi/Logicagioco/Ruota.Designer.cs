@@ -36,7 +36,7 @@ namespace pokemonDuel.classi.Logicagioco
             // 
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(304, 204);
+            this.canvas.Size = new System.Drawing.Size(752, 528);
             this.canvas.TabIndex = 0;
             // 
             // Ruota
@@ -45,7 +45,7 @@ namespace pokemonDuel.classi.Logicagioco
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.canvas);
             this.Name = "Ruota";
-            this.Size = new System.Drawing.Size(304, 204);
+            this.Size = new System.Drawing.Size(752, 528);
             this.ResumeLayout(false);
 
         }

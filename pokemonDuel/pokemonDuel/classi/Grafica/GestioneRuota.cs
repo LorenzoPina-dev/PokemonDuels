@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace pokemonDuel.classi.Grafica
 {
@@ -22,21 +23,25 @@ namespace pokemonDuel.classi.Grafica
             ultimo = DateTime.Now;
         }
 
-        public void Upload()
+        public int Upload()
         {
-            if (ruota == null)
-                return;
-
-            ruota.Gira((int)(gradi *(DateTime.Now-ultimo).TotalSeconds));
-            gradi /=(float)(gradi * (DateTime.Now - ultimo).TotalSeconds);
+            if ((DateTime.Now - ultimo).TotalMilliseconds < 60)
+                return 0;
+            if (ruota == null || Pokemon==null)
+                throw new Exception("non esiste la ruota");
+            float g = (float)(gradi * (DateTime.Now - ultimo).TotalSeconds);
+            gradi -=g;
             ultimo = DateTime.Now;
-            if (gradi <= 0)
+            if (gradi <= 2)
             {
                 Mossa m = ruota.GetRisultato();
                 Risultato = m;
-                ruota = null;
+                Pokemon = null;
+                MessageBox.Show(Risultato.nome + Risultato.danno);
                 //DatiCondivisi.Instance().Avversario.Invia(new Comunicazione.Messaggio("a", m.id + ""));
+                return 0;
             }
+            return (int)g;
         }
 
     }

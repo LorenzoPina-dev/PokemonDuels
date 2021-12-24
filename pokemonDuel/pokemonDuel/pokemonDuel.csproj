@@ -85,6 +85,7 @@
     <Compile Include="classi\Logicagioco\Ruota.Designer.cs">
       <DependentUpon>Ruota.cs</DependentUpon>
     </Compile>
+    <Compile Include="classi\Util.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

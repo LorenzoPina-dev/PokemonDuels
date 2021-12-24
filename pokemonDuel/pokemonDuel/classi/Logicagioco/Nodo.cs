@@ -40,6 +40,8 @@ namespace pokemonDuel.classi.Logicagioco
             HashSet<int> ris = new HashSet<int>();
             Queue<KeyValuePair<int, int>> daVisitare = new Queue<KeyValuePair<int, int>>();
             daVisitare.Enqueue(new KeyValuePair<int, int>(0, this.indice));
+            if(!presentePokemon)
+                ris.Add(indice);
             while (daVisitare.Count > 0)
             {
                 KeyValuePair<int, int> pair = daVisitare.Dequeue();

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged">
     <DockPanel>
-        <WindowsFormsHost DockPanel.Dock="Right" x:Name="host" Width="300" Height="400"/>
+        <WindowsFormsHost DockPanel.Dock="Right" Margin="0,0,10,0" x:Name="host" Width="300" Height="300"/>
         <Canvas Name="myCanvas" DockPanel.Dock="Left" Height="400" Width="440"></Canvas>
     </DockPanel>
 </Window>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,6 +32,8 @@ namespace pokemonDuel.classi.Logicagioco
         public Ruota r;
         GestioneRuota gr;
         public int mioAttacco;
+        Timer t;
+
         public Mappa(MainWindow m,Giocatore io,Giocatore altro)
         {
             this.m = m;
@@ -47,11 +50,33 @@ namespace pokemonDuel.classi.Logicagioco
             Tvinti = 0;
             this.io = io;
             this.altro = altro;
-            RicominciaGioco();
-            r = new Ruota((int)m.host.Width, (int)m.host.Height);
+            m.host.Child = r;
             gr = null;
-            CompositionTarget.Rendering += Upload;
+
+            r = new Ruota((int)m.host.Width, (int)m.host.Height);
+            r.Pokemon = StoreInfo.Instance().Pokedex[10];
+            m.host.Child = r;
+            RicominciaGioco();
+
         }
+        public int angolo=0;
+        public void Gira(int gradi)
+        {
+            t = new Timer();
+            t.Interval = 1000;
+            t.Elapsed += T_Elapsed;
+            angolo = gradi;
+            t.Start();
+        }
+
+
+        private void T_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            r.Gira(angolo);
+            t.Stop();
+            angolo = 0;
+        }
+
 
 
 
@@ -92,20 +117,24 @@ namespace pokemonDuel.classi.Logicagioco
         {
             gr = new GestioneRuota();
             gr.ruota = r;
-            gr.Pokemon = cliccato;
+            gr.Pokemon = Selezionato.pokemon;
         }
 
-        private void Upload(object sender, EventArgs e)
+
+        public void Upload()
         {
             if (gr != null)
                 if (gr.Risultato == null)
-                    gr.Upload();
+                {
+                    int ris = gr.Upload();
+                    if(ris!=0)
+                        Gira(ris);
+                }
                 else
                 { mioAttacco = gr.Risultato.danno;
                     MessageBox.Show(mioAttacco+"");
                     gr = null;
                 }
-
         }
 
         private void Ridisegna()
@@ -164,7 +193,6 @@ namespace pokemonDuel.classi.Logicagioco
             }
             mappa[20].pokemon = altro.Deck[2];
             mappa[20].presentePokemon = true;
-
         }
 
         private void Mostra(Nodo cliccato, HashSet<int> hashSet)
