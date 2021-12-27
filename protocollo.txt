@@ -1,16 +1,15 @@
 Tcp
 
 connessione:
-	quando si accetta un nuovo client
-	destinatario:	c;nomeGiocatore;squadraPokemon   o n=non voglio più  giocare//con le informazioni del secondo giocatore
-	mittente:		c;nomeGiocatore;squadraPokemon			//squadraPokemon= una serie di 6 id di pokemon che andranno a comporre la squadra avversaria
-	mittente: n
+	Mittente: 		c;nomeGiocatore;squadraPokemon 
+	destinatario:	c;nomeGiocatore;squadraPokemon   o n=non voglio più  giocare
+	Mittente:		y o n
 
 MuoviPokemon:
-	m;idNodoPartenzan;inNodo
+	m;idNodoPartenza;inNodo
 
 Attacca
-	mittente:	a;idMossa;IdNodoPartenzaAttacco;nNodo
+	mittente:		a;idMossa;IdNodoPartenzaAttacco;nNodoAttaccato
 	destinatario: 	a;idMossa 
 
 TerminaTurno:
@@ -18,8 +17,6 @@ TerminaTurno:
 
 TermineBattaglia
 	tb;vincitore					//vincitore: 0=vintoIo		1=Vintotu
-
-
 
 CambioTurno:			//per espansioni future in caso il pokemon abbia mosse che li permettono di fare altre mosse nello stesso turno
 	t;
