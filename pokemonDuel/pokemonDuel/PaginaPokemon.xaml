@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="pokemonDuel.PaginaPokemon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:pokemonDuel"
+             mc:Ignorable="d" Height="466.667" Width="941.9" SizeChanged="UserControl_SizeChanged">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Grid x:Name="Deck"></Grid>
+        </DockPanel>
+        <DockPanel Background="Red" Grid.Row="1">
+            <Grid x:Name="Lista" SizeChanged="Lista_SizeChanged"></Grid>
+        </DockPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" FontSize="30" Click="Button_Click">Add</Button>
+            <Button Grid.Column="1" FontSize="30" Click="Button_Click_1">Remove</Button>
+        </Grid>
+    </Grid>
+</UserControl>

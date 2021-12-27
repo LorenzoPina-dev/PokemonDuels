@@ -25,10 +25,11 @@ namespace pokemonDuel
     /// </summary>
     public partial class MainWindow : Window
     {
+        PaginaPokemon paginaPokemon;
         public MainWindow()
         {
             InitializeComponent();
-            List<Pokemon> deck = new List<Pokemon>();
+            /*List<Pokemon> deck = new List<Pokemon>();
             Random rand = new Random();
 
             for (int i = 0; i < 6; i++)
@@ -58,20 +59,27 @@ namespace pokemonDuel
             foreach (int r in ris)
                 Console.WriteLine(r);
             CompositionTarget.Rendering += Upload;
-
+            */
+            paginaPokemon = new PaginaPokemon();
+            paginaPokemon.Background = Brushes.Gray;
+            paginaPokemon.Margin = new Thickness(0, 0, 0, 0);
+            Mappa.Children.Add(paginaPokemon);
         }
 
-        int i = 0;
+        /*int i = 0;
         private void Upload(object sender, EventArgs e)
         {
             if (DatiCondivisi.Instance().M == null || DatiCondivisi.Instance().M.r.Pokemon==null)
                 return;
             DatiCondivisi.Instance().M.Upload();
-        }
+        }*/
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //DatiCondivisi.Instance().M.Disegna();
+            paginaPokemon.Width = Width;
+            paginaPokemon.Height = Height*8.5/10;
+           // paginaPokemon.Ridimensiona(this.Width, this.Height*9/10);
         }
+
     }
 }

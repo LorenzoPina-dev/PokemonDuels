@@ -16,7 +16,8 @@ namespace pokemonDuel.classi.Logicagioco
         public string Nome;
         public int Salti;
         public List<int> Mosse;
-        public string urlTexture;
+        private string urlTexture;
+        public string UrlTexture { get { return path + urlTexture; } }
         public Nodo posizione;
         public bool mio;
         private static int idArrivato=0;

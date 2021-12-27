@@ -16,21 +16,25 @@ namespace pokemonDuel.classi.Grafica
         float gradi;
         DateTime ultimo;
         public Pokemon Pokemon { get { return ruota.Pokemon; } set { ruota.Pokemon = value; } }
+        float divisore;
         public GestioneRuota()
         {
             Random random = new Random();
-            gradi = (float)random.Next(10000000, 99999999);
+            gradi = (float)random.Next(4000, 5200);
             ultimo = DateTime.Now;
+            divisore = 1;
         }
 
         public int Upload()
         {
-            if ((DateTime.Now - ultimo).TotalMilliseconds < 60)
+            if ((DateTime.Now - ultimo).TotalMilliseconds < 140)
                 return 0;
             if (ruota == null || Pokemon==null)
                 throw new Exception("non esiste la ruota");
-            float g = (float)(gradi * (DateTime.Now - ultimo).TotalSeconds);
-            gradi -=g;
+            float g = (float)(gradi * (DateTime.Now - ultimo).TotalSeconds)/3;
+            gradi -= g;
+            //gradi /=divisore;
+            //divisore+=0.002f;
             ultimo = DateTime.Now;
             if (gradi <= 2)
             {

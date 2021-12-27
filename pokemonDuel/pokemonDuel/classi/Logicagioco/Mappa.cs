@@ -1,4 +1,5 @@
-﻿using pokemonDuel.classi.GestioneFile;
+﻿using pokemonDuel.classi.Comunicazione;
+using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Grafica;
 using System;
 using System.Collections.Generic;
@@ -20,21 +21,21 @@ namespace pokemonDuel.classi.Logicagioco
         bool turno;
         List<int> startPosizionamento;
         Canvas myCanvas;
-        MainWindow m;
+        Battaglia m;
         int partiX, partiY;
         int distanza = 0;
         List<Rectangle> Grafica;
         int PartiPerMano;
-        int PedineMappa,PedineMano;
+        int PedineMappa, PedineMano;
         Nodo Selezionato;
-        int Nturno,Tvinti;
+        int Nturno, Tvinti;
         public Giocatore io, altro;
         public Ruota r;
         GestioneRuota gr;
         public int mioAttacco;
         Timer t;
-
-        public Mappa(MainWindow m,Giocatore io,Giocatore altro)
+        int turniAPartita = 3;
+        public Mappa(Battaglia m, Giocatore io, Giocatore altro)
         {
             this.m = m;
             Destinazione = 3;
@@ -59,22 +60,23 @@ namespace pokemonDuel.classi.Logicagioco
             RicominciaGioco();
 
         }
-        public int angolo=0;
+        //public int angolo = 0;
         public void Gira(int gradi)
         {
-            t = new Timer();
+            r.Gira(gradi);
+            /*t = new Timer();
             t.Interval = 1000;
             t.Elapsed += T_Elapsed;
             angolo = gradi;
-            t.Start();
+            t.Start();*/
         }
 
 
         private void T_Elapsed(object sender, ElapsedEventArgs e)
         {
-            r.Gira(angolo);
-            t.Stop();
-            angolo = 0;
+
+           // t.Stop();
+            //angolo = 0;
         }
 
 
@@ -107,7 +109,7 @@ namespace pokemonDuel.classi.Logicagioco
                         }
                         else
                             Mostra(cliccato, cliccato.Raggiungibili(mappa, cliccato.pokemon.Salti));
-                    else if(Selezionato!=null && Selezionato.vicini.Contains(cliccato.indice))
+                    else if (Selezionato != null && Selezionato.vicini.Contains(cliccato.indice))
                         Attacca(cliccato.pokemon);
                 }
             }
@@ -127,12 +129,14 @@ namespace pokemonDuel.classi.Logicagioco
                 if (gr.Risultato == null)
                 {
                     int ris = gr.Upload();
-                    if(ris!=0)
+                    if (ris != 0)
                         Gira(ris);
                 }
                 else
-                { mioAttacco = gr.Risultato.danno;
-                    MessageBox.Show(mioAttacco+"");
+                {
+                    mioAttacco = gr.Risultato.id;
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", mioAttacco+""));
+                    MessageBox.Show(mioAttacco + "");
                     gr = null;
                 }
         }
@@ -144,13 +148,14 @@ namespace pokemonDuel.classi.Logicagioco
                 if (n.presentePokemon)
                 {
                     Grafica[n.indice].Fill = n.pokemon.Render();
-                    Grafica[n.indice].Stroke =Brushes.Transparent;
+                    Grafica[n.indice].Stroke = Brushes.Transparent;
                 }
-                else { 
+                else
+                {
                     Grafica[n.indice].Fill = Brushes.White;
-                Grafica[n.indice].Stroke = Brushes.Black;
-            }
-            n.selezionato = false;
+                    Grafica[n.indice].Stroke = Brushes.Black;
+                }
+                n.selezionato = false;
             }
         }
 
@@ -160,22 +165,31 @@ namespace pokemonDuel.classi.Logicagioco
             cliccato.presentePokemon = true;
             Selezionato.pokemon = null;
             Selezionato.presentePokemon = false;
-            if(cliccato.indice==Destinazione)
+            if (cliccato.indice == Destinazione)
             {
                 Nturno++;
                 if (turno)
                 {
                     Tvinti++;
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tr", "1"));
+                    if (Nturno == turniAPartita)
+                        DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "1"));
                     Console.WriteLine("vinto");
                 }
                 RicominciaGioco();
             }
+            if(Selezionato.indice>PedineMappa)
+                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("s", cliccato.pokemon.id + ";" + cliccato.indice));
+            else
+                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", cliccato.pokemon.id + ";" + cliccato.indice));
+            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
+            turno = !turno;
             Ridisegna();
         }
 
         private void RicominciaGioco()
         {
-            foreach(Nodo n in mappa)
+            foreach (Nodo n in mappa)
             {
                 n.pokemon = null;
                 n.presentePokemon = false;
@@ -183,13 +197,13 @@ namespace pokemonDuel.classi.Logicagioco
             }
             for (int i = 0; i < io.Deck.Count; i++)
             {
-                mappa[PedineMappa+PedineMano + i].pokemon = io.Deck[i];
-                mappa[PedineMappa+ PedineMano + i].presentePokemon = true;
+                mappa[PedineMappa + PedineMano + i].pokemon = io.Deck[i];
+                mappa[PedineMappa + PedineMano + i].presentePokemon = true;
             }
             for (int i = 0; i < altro.Deck.Count; i++)
             {
-                mappa[PedineMappa+ i].pokemon = altro.Deck[i];
-                mappa[PedineMappa  + i].presentePokemon = true;
+                mappa[PedineMappa + i].pokemon = altro.Deck[i];
+                mappa[PedineMappa + i].presentePokemon = true;
             }
             mappa[20].pokemon = altro.Deck[2];
             mappa[20].presentePokemon = true;
@@ -218,15 +232,15 @@ namespace pokemonDuel.classi.Logicagioco
             foreach (string s in righe[2].Split(';'))
                 startPosizionamento.Add(int.Parse(s));
             int x = 0;
-            for (int i = 0; i <partiY; i++)
+            for (int i = 0; i < partiY; i++)
             {
-                string[] celle = righe[3 + PartiPerMano+i].Split(';');
+                string[] celle = righe[3 + PartiPerMano + i].Split(';');
                 for (int j = 0; j < celle.Length; j++)
                     if (celle[j] == "1")
                     {
                         Nodo n = new Nodo();
                         n.x = j + 1;
-                        n.y = i+ PartiPerMano;
+                        n.y = i + PartiPerMano;
                         n.indice = x++;
                         mappa.Add(n);
                     }
@@ -240,20 +254,20 @@ namespace pokemonDuel.classi.Logicagioco
                     {
                         Nodo n = new Nodo();
                         n.x = j + 1;
-                        n.y = i ;
+                        n.y = i;
                         n.indice = x++;
                         mappa.Add(n);
                     }
             }
             for (int i = 0; i < PartiPerMano; i++)
             {
-                string[] celle = righe[3 + PartiPerMano + partiY+ i].Split(';');
+                string[] celle = righe[3 + PartiPerMano + partiY + i].Split(';');
                 for (int j = 0; j < celle.Length; j++)
                     if (celle[j] == "1")
                     {
                         Nodo n = new Nodo();
                         n.x = j + 1;
-                        n.y = i + PartiPerMano+partiY;
+                        n.y = i + PartiPerMano + partiY;
                         n.indice = x++;
                         mappa.Add(n);
                     }
@@ -291,14 +305,14 @@ namespace pokemonDuel.classi.Logicagioco
         }
         public void DisegnaNodi()
         {
-            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY +PartiPerMano*2);
+            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             Grafica = new List<Rectangle>();
 
             foreach (Nodo n in mappa)
             {
                 Rectangle b = new Rectangle();
                 b.Stroke = Brushes.Black;
-                b.Height = dimensioneY*3/4;
+                b.Height = dimensioneY * 3 / 4;
                 b.Width = dimensioneX * 3 / 4;
                 if (n.presentePokemon)
                 {
@@ -307,7 +321,7 @@ namespace pokemonDuel.classi.Logicagioco
                 }
                 else
                     b.Fill = Brushes.White;
-                Canvas.SetTop(b, dimensioneY * n.y +dimensioneY / 4);
+                Canvas.SetTop(b, dimensioneY * n.y + dimensioneY / 4);
                 Canvas.SetLeft(b, distanza + dimensioneX * n.x + dimensioneX / 4);
                 b.Name = "p_" + n.indice;
                 b.MouseLeftButtonDown += Click_Pedina;
@@ -319,16 +333,16 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void DisegnaCollegamenti()
         {
-            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY+PartiPerMano*2);
+            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             foreach (Nodo n in mappa)
             {
                 foreach (int vicino in n.vicini)
                 {
                     Line l = new Line();
                     l.X1 = distanza + n.x * dimensioneX + dimensioneY * 3 / 4;
-                    l.Y1 = n.y * dimensioneY + dimensioneY *6 / 7;
-                    l.X2 = distanza + mappa[vicino].x * dimensioneX + dimensioneY *3/4;
-                    l.Y2 = mappa[vicino].y * dimensioneY + dimensioneY * 6 /7;
+                    l.Y1 = n.y * dimensioneY + dimensioneY * 6 / 7;
+                    l.X2 = distanza + mappa[vicino].x * dimensioneX + dimensioneY * 3 / 4;
+                    l.Y2 = mappa[vicino].y * dimensioneY + dimensioneY * 6 / 7;
                     l.Stroke = Brushes.Black;
                     l.StrokeThickness = 2;
                     myCanvas.Children.Add(l);
