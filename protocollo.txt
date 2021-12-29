@@ -2,7 +2,7 @@ Tcp
 
 connessione:
 	Mittente: 		c;nomeGiocatore;squadraPokemon 
-	destinatario:	c;nomeGiocatore;squadraPokemon   o n=non voglio più  giocare
+	destinatario:	y;nomeGiocatore;squadraPokemon   o n=non voglio più  giocare
 	Mittente:		y o n
 
 MuoviPokemon:
