@@ -1,6 +1,7 @@
 ﻿using pokemonDuel.classi;
 using pokemonDuel.classi.Comunicazione;
 using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -27,19 +28,12 @@ namespace pokemonDuel
         public Battaglia()
         {
             InitializeComponent();
+            myCanvas.Width = this.Width;
+            myCanvas.Height = Height;
+            host.Width = Width / 2;
+            host.Height = Height / 2;
+            Random rand= new Random();
             List<Pokemon> deck = new List<Pokemon>();
-            Random rand = new Random();
-
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon p = (Pokemon)StoreInfo.Instance().Pokedex[rand.Next(0, StoreInfo.Instance().Pokedex.Count)].Clone();
-                p.mio = true;
-                deck.Add(p);
-            }
-            Giocatore io = new Giocatore();
-            io.Deck = deck;
-            io.Username = "pippo";
-            deck = new List<Pokemon>();
             Giocatore altro = new Giocatore();
             for (int i = 0; i < 6; i++)
             {
@@ -50,12 +44,8 @@ namespace pokemonDuel
             altro = new Giocatore();
             altro.Deck = deck;
             altro.Username = "pippo";
-            DatiCondivisi.Instance().M = new Mappa(this, io, altro);
-            GestioneTcp gt = new GestioneTcp();
-            HashSet<int> ris = DatiCondivisi.Instance().M.mappa[0].Raggiungibili(DatiCondivisi.Instance().M.mappa, 2);
-            DatiCondivisi.Instance().M.Disegna();
-            foreach (int r in ris)
-                Console.WriteLine(r);
+            DatiCondivisi.Instance().altro = altro;
+            DatiCondivisi.Instance().M = new Mappa(this);
             CompositionTarget.Rendering += Upload;
 
         }
@@ -63,14 +53,25 @@ namespace pokemonDuel
         int i = 0;
         private void Upload(object sender, EventArgs e)
         {
-            if (DatiCondivisi.Instance().M == null || DatiCondivisi.Instance().M.r.Pokemon == null)
-                return;
-            DatiCondivisi.Instance().M.Upload();
+            DatiCondivisi.Instance().Upload();
+            //DatiCondivisi.Instance().M.Upload();
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             DatiCondivisi.Instance().M.Disegna();
+        }
+
+        private void myCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            myCanvas.Width = Width;
+            myCanvas.Height = Height;
+            double unita = Math.Min(Width / 2, Height / 2);
+            host.Width = unita;
+            host.Height = unita;
+            host.Margin = new Thickness(0, Height - unita, Width -unita,0);
+            DatiCondivisi.Instance().M.Disegna();
+            GestioneRuota.Instance().ruota.CambiaDimensioni(host.Width, host.Height);
         }
     }
 }

@@ -62,6 +62,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CaricamentoBattaglia.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="classi\Util\RichiestaConnessione.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,6 +81,9 @@
     <Compile Include="Battaglia.xaml.cs">
       <DependentUpon>Battaglia.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CaricamentoBattaglia.xaml.cs">
+      <DependentUpon>CaricamentoBattaglia.xaml</DependentUpon>
+    </Compile>
     <Compile Include="classi\Comunicazione\GestioneConnessione.cs" />
     <Compile Include="classi\Comunicazione\GestioneTcp.cs" />
     <Compile Include="classi\DatiCondivisi.cs" />
@@ -80,6 +91,7 @@
     <Compile Include="classi\GestioneFile\StoreInfo.cs" />
     <Compile Include="classi\Grafica\GestioneCanvas.cs" />
     <Compile Include="classi\Grafica\GestioneRuota.cs" />
+    <Compile Include="classi\Logicagioco\Attacco.cs" />
     <Compile Include="classi\Logicagioco\Giocatore.cs" />
     <Compile Include="classi\Logicagioco\Mappa.cs" />
     <Compile Include="classi\Logicagioco\Mossa.cs" />
@@ -92,7 +104,10 @@
     <Compile Include="classi\Logicagioco\Ruota.Designer.cs">
       <DependentUpon>Ruota.cs</DependentUpon>
     </Compile>
-    <Compile Include="classi\Util.cs" />
+    <Compile Include="classi\Util\RichiestaConnessione.xaml.cs">
+      <DependentUpon>RichiestaConnessione.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="classi\Util\Util.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

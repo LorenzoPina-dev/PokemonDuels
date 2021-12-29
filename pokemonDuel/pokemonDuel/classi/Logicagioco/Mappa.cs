@@ -18,10 +18,15 @@ namespace pokemonDuel.classi.Logicagioco
     {
         public List<Nodo> mappa;
         int Destinazione;
-        bool turno;
+        bool _turno;
+        public bool Turno
+        {
+            get { lock (synTurno) { return _turno; } }
+            set { lock (synTurno) { _turno = value; } }
+        }
         List<int> startPosizionamento;
         Canvas myCanvas;
-        Battaglia m;
+        public Battaglia m;
         int partiX, partiY;
         int distanza = 0;
         List<Rectangle> Grafica;
@@ -29,15 +34,25 @@ namespace pokemonDuel.classi.Logicagioco
         int PedineMappa, PedineMano;
         Nodo Selezionato;
         int Nturno, Tvinti;
-        public Giocatore io, altro;
-        public Ruota r;
         GestioneRuota gr;
         public int mioAttacco;
-        Timer t;
         int turniAPartita = 3;
-        public Mappa(Battaglia m, Giocatore io, Giocatore altro)
+        private object synTurno;
+
+        internal void RimettiNellaMano(Nodo perdente)
+        {
+            int partenza = PedineMappa;
+            if (perdente.pokemon.mio)
+                partenza += PedineMano;
+            for (int i=0;i<PedineMano;i++)
+                if(!mappa[partenza + i].presentePokemon)
+                    Muovi(perdente,mappa[partenza + i]);
+        }
+
+        public Mappa(Battaglia m)
         {
             this.m = m;
+            synTurno = new object();
             Destinazione = 3;
             PedineMano = 6;
             this.mappa = new List<Nodo>();
@@ -46,54 +61,25 @@ namespace pokemonDuel.classi.Logicagioco
             creaCollegamenti();
             myCanvas = m.myCanvas;
             Selezionato = null;
-            turno = true;
+            Turno = true;
             Nturno = 0;
             Tvinti = 0;
-            this.io = io;
-            this.altro = altro;
-            m.host.Child = r;
             gr = null;
 
-            r = new Ruota((int)m.host.Width, (int)m.host.Height);
-            r.Pokemon = StoreInfo.Instance().Pokedex[10];
-            m.host.Child = r;
-            RicominciaGioco();
-
         }
-        //public int angolo = 0;
-        public void Gira(int gradi)
-        {
-            r.Gira(gradi);
-            /*t = new Timer();
-            t.Interval = 1000;
-            t.Elapsed += T_Elapsed;
-            angolo = gradi;
-            t.Start();*/
-        }
-
-
-        private void T_Elapsed(object sender, ElapsedEventArgs e)
-        {
-
-           // t.Stop();
-            //angolo = 0;
-        }
-
-
-
-
+       
         private void Click_Pedina(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Rectangle el = (Rectangle)e.Source;
             Nodo cliccato = mappa[int.Parse(el.Name.Split('_')[1])];
             if (!cliccato.presentePokemon)
             {
-                if (turno && cliccato.selezionato)
-                    Muovi(cliccato);
+                if (Turno && cliccato.selezionato)
+                    Muovi(Selezionato,cliccato);
             }
             else
             {
-                if (turno)
+                if (Turno)
                 {
                     if (cliccato.pokemon.mio)
                         if (cliccato.indice >= PedineMappa)
@@ -110,36 +96,19 @@ namespace pokemonDuel.classi.Logicagioco
                         else
                             Mostra(cliccato, cliccato.Raggiungibili(mappa, cliccato.pokemon.Salti));
                     else if (Selezionato != null && Selezionato.vicini.Contains(cliccato.indice))
-                        Attacca(cliccato.pokemon);
+                        GiraRuota(cliccato);
                 }
             }
         }
-
-        private void Attacca(Pokemon cliccato)
+        public void GiraRuota(Nodo Attaccato)
         {
-            gr = new GestioneRuota();
-            gr.ruota = r;
-            gr.Pokemon = Selezionato.pokemon;
+            DatiCondivisi.Instance().A=new Attacco(Selezionato, Attaccato, null, null);
+            GestioneRuota.Instance().Start();
         }
 
 
-        public void Upload()
-        {
-            if (gr != null)
-                if (gr.Risultato == null)
-                {
-                    int ris = gr.Upload();
-                    if (ris != 0)
-                        Gira(ris);
-                }
-                else
-                {
-                    mioAttacco = gr.Risultato.id;
-                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", mioAttacco+""));
-                    MessageBox.Show(mioAttacco + "");
-                    gr = null;
-                }
-        }
+
+        
 
         private void Ridisegna()
         {
@@ -147,6 +116,8 @@ namespace pokemonDuel.classi.Logicagioco
             {
                 if (n.presentePokemon)
                 {
+                    if (n.pokemon == null)
+                        n.presentePokemon = false;
                     Grafica[n.indice].Fill = n.pokemon.Render();
                     Grafica[n.indice].Stroke = Brushes.Transparent;
                 }
@@ -159,36 +130,46 @@ namespace pokemonDuel.classi.Logicagioco
             }
         }
 
-        private void Muovi(Nodo cliccato)
+        public void Muovi(int idPartenza,int idDetinazione)
         {
-            cliccato.pokemon = Selezionato.pokemon;
-            cliccato.presentePokemon = true;
-            Selezionato.pokemon = null;
-            Selezionato.presentePokemon = false;
-            if (cliccato.indice == Destinazione)
-            {
-                Nturno++;
-                if (turno)
-                {
-                    Tvinti++;
-                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tr", "1"));
-                    if (Nturno == turniAPartita)
-                        DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "1"));
-                    Console.WriteLine("vinto");
-                }
-                RicominciaGioco();
-            }
-            if(Selezionato.indice>PedineMappa)
-                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("s", cliccato.pokemon.id + ";" + cliccato.indice));
-            else
-                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", cliccato.pokemon.id + ";" + cliccato.indice));
-            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
-            turno = !turno;
-            Ridisegna();
+            Muovi(mappa[idPartenza], mappa[idDetinazione]);
         }
 
-        private void RicominciaGioco()
+        public void Muovi(Nodo partenza, Nodo destinazione)
         {
+            lock (this)
+            {
+                destinazione.pokemon = partenza.pokemon;
+                destinazione.presentePokemon = true;
+                partenza.pokemon = null;
+                partenza.presentePokemon = false;
+                if (destinazione.indice == Destinazione)
+                {
+                    Nturno++;
+                    if (Turno)
+                    {
+                        Tvinti++;
+                        DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tr", "1"));
+                        if (Nturno == turniAPartita)
+                            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "1"));
+                        Console.WriteLine("vinto");
+                    }
+                    RicominciaGioco();
+                }
+                if(partenza.indice>PedineMappa)
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("s", partenza.indice + ";" + destinazione.indice));
+                else
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", partenza.indice + ";" + destinazione.indice));
+                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
+                Turno = !Turno;
+                Ridisegna();
+            }
+        }
+
+        public void RicominciaGioco()
+        {
+            Giocatore io = DatiCondivisi.Instance().io;
+            Giocatore altro = DatiCondivisi.Instance().altro;
             foreach (Nodo n in mappa)
             {
                 n.pokemon = null;
@@ -205,8 +186,7 @@ namespace pokemonDuel.classi.Logicagioco
                 mappa[PedineMappa + i].pokemon = altro.Deck[i];
                 mappa[PedineMappa + i].presentePokemon = true;
             }
-            mappa[20].pokemon = altro.Deck[2];
-            mappa[20].presentePokemon = true;
+            Ridisegna();
         }
 
         private void Mostra(Nodo cliccato, HashSet<int> hashSet)
@@ -300,8 +280,10 @@ namespace pokemonDuel.classi.Logicagioco
             l.Stroke = Brushes.Black;
             l.StrokeThickness = 2;
             myCanvas.Children.Add(l);
+
             DisegnaCollegamenti();
             DisegnaNodi();
+            RicominciaGioco();
         }
         public void DisegnaNodi()
         {

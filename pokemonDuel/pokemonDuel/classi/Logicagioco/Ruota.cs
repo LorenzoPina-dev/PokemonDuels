@@ -14,7 +14,7 @@ namespace pokemonDuel.classi.Logicagioco
     public partial class Ruota : UserControl
     {
         Graphics g;
-        int W, H;
+        double W, H;
         Pokemon _pokemon;
         int ultimoAngolo;
         List<int> percentuali;
@@ -40,7 +40,7 @@ namespace pokemonDuel.classi.Logicagioco
         }
 
 
-        public Ruota(int W, int H)
+        public Ruota(double W, double H)
         {
             InitializeComponent();
             synPokemon = new object();
@@ -48,9 +48,16 @@ namespace pokemonDuel.classi.Logicagioco
             this.H = H;
             g = canvas.CreateGraphics();
             ultimoAngolo = 0;
-            d = Math.Min(W, H);
+            d = (int)Math.Min(W, H);
 
         }
+        public void CambiaDimensioni(double W, double H)
+        {
+            this.W = W;
+            this.H = H;
+            d = (int)Math.Min(W, H);
+        }
+
         private List<int> CalcolaPerc()
         {
             List<int> ris = new List<int>();
@@ -78,6 +85,9 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void Gira(int Gradi)
         {
+            try
+            {
+
             ris = -1;
             lock (synPokemon)
             {
@@ -97,8 +107,8 @@ namespace pokemonDuel.classi.Logicagioco
                         //x =(int)( d / 2 + (Math.Cos(Util.getRad(Arrivati)) + Math.Cos(Util.getRad(Arrivati + percentuali[i])))/2 * (d / 2) -30);
                         //y = (int)(d / 2 + (Math.Sin(Util.getRad(Arrivati))+ Math.Sin(Util.getRad(Arrivati + percentuali[i])))/2 * (d / 2) - 5);
                         int gradi = (Arrivati * 2 + percentuali[i]) / 2;
-                        x = (int)(d / 2 + Math.Cos(Util.getRad(gradi)) * (d / 2));
-                        y = (int)(d / 2 + Math.Sin(Util.getRad(gradi)) * (d / 2));
+                        x = (int)(d / 2 + Math.Cos(Conversione.getRad(gradi)) * (d / 2));
+                        y = (int)(d / 2 + Math.Sin(Conversione.getRad(gradi)) * (d / 2));
                         if (x > d * 5 / 7)
                             x -= d * 1 / 7;
                         if (y > d * 5 / 7)
@@ -115,10 +125,10 @@ namespace pokemonDuel.classi.Logicagioco
                         Arrivati += percentuali[i];
                     }
                     Pen pen = new Pen(Color.Red, 4);
-                    g.DrawLine(pen, d - 10, d / 2, d + 10, d / 2);
+                    g.DrawLine(pen, (float)(d - 10), d / 2, d + 10, d / 2);
+                    }
                 }
-            }
+            }catch (Exception) { }
         }
-
     }
 }

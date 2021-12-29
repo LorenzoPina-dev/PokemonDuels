@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.Comunicazione
 {
-    class Messaggio
+    public class Messaggio
     {
         public string scelta, dati;
         public Messaggio(string scelta, string dati)
@@ -18,7 +18,7 @@ namespace pokemonDuel.classi.Comunicazione
         {
             int separatore = csv.IndexOf(';');
             this.scelta = csv.Substring(0,separatore);
-            this.dati = csv.Substring(separatore+1,csv.Length-separatore);
+            this.dati = csv.Substring(separatore+1,csv.Length-separatore-1);
         }
         public string toCsv()
         {

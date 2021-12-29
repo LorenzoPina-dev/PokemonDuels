@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace pokemonDuel.classi
 {
@@ -15,8 +16,11 @@ namespace pokemonDuel.classi
         //Attributi per la logica di gioco
         public Mappa M;
         private GestioneConnessione _avversario;
-        public GestioneRuota ruota;
-
+        public MainWindow main;
+        public Giocatore io,altro;
+        public Attacco A;
+        public GestioneTcp gt;
+        public CaricamentoBattaglia caricamento;
         public GestioneConnessione Avversario
         {
             get { lock (syncComunicazione) { return _avversario; } }
@@ -28,20 +32,27 @@ namespace pokemonDuel.classi
                 } }
         }
         private object syncComunicazione;
+        private static object syn = new object();
 
         //////////////////////////////////////////////////////////////////////
 
         public static DatiCondivisi Instance()
         {
-            if (instance == null)
-                instance = new DatiCondivisi();
-            return instance;
+            lock (syn)
+            {
+                if (instance == null)
+                    instance = new DatiCondivisi();
+                return instance;
+            }
         }
         private DatiCondivisi()
         {
             syncComunicazione = new object();
             _avversario = null;
             M = null;
+            io = new Giocatore();
+            altro = new Giocatore();
+            gt = new GestioneTcp();
         }
         public void InviaMessaggio(Messaggio m)
         {
@@ -49,6 +60,40 @@ namespace pokemonDuel.classi
                 Avversario.Invia(m);
             else
                 throw new Exception("Avversario inesistente");
+        }
+
+        internal void MostraRichiestaBattaglia(GestioneConnessione gestioneConnessione)
+        {
+            caricamento.AddConnessione(gestioneConnessione);
+        }
+
+        internal void MostraRichiestaBaattaglia(GestioneConnessione gestioneConnessione)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void VintoPartita()
+        {
+
+        }
+        public void PersoPartita()
+        {
+
+        }
+
+        internal void AvviaPartita()
+        {
+            throw new NotImplementedException();
+        }
+        public void Upload()
+        {
+            GestioneRuota GestRuota = GestioneRuota.Instance();
+            if (GestRuota.Risultato == null)
+            {
+                int ris = GestRuota.Upload();
+                if (ris != 0)
+                    GestRuota.Gira(ris);
+            }
         }
     }
 }

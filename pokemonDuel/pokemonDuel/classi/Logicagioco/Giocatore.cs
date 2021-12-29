@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    class Giocatore
+    public class Giocatore
     {
         public int Xp;
         public string Username;

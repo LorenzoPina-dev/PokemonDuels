@@ -1,4 +1,6 @@
-﻿using System;
+﻿using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Logicagioco;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.Comunicazione
 {
-    class GestioneConnessione
+    public class GestioneConnessione
     {
         private StreamWriter sw;
         private StreamReader sr;
@@ -18,6 +20,8 @@ namespace pokemonDuel.classi.Comunicazione
         private Queue<Messaggio> DaElaborare;
         private object synInvia;
         private object synTerm;
+        public Giocatore Avversario;
+
         public bool Termina { get { lock (synTerm) { return termina; } }set { lock (synTerm) { termina = value; } } }
         public GestioneConnessione(TcpClient c)
         {
@@ -37,14 +41,70 @@ namespace pokemonDuel.classi.Comunicazione
         }
 
 
-        private Messaggio Elabora(Messaggio m)
+        private void Elabora(Messaggio m)
         {
-            Messaggio ris = new Messaggio("");
-            /*switch(m.scelta)
+            string[] split;
+            switch (m.scelta)
             {
-                
-            }*/
-            return ris;
+                case "c":
+                    split = m.dati.Split(';');
+                    Avversario = new Giocatore();
+                    Avversario.Username = split[0];
+                    for(int i=1;i<split.Length;i++)
+                        Avversario.Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
+                    if(DatiCondivisi.Instance().Avversario==null)
+                        DatiCondivisi.Instance().MostraRichiestaBattaglia(this);
+                    break;
+                case "m":
+                    split = m.dati.Split(';');
+                    Mappa M = DatiCondivisi.Instance().M;
+                    M.Muovi(int.Parse(split[0]), int.Parse(split[1]));
+                    break;
+                case "t":
+                    DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
+                    break;
+                case "tr":
+                    DatiCondivisi.Instance().M.RicominciaGioco();
+                    break;
+                case "tb":
+                    if (bool.Parse(m.dati))
+                        DatiCondivisi.Instance().VintoPartita();
+                    else
+                        DatiCondivisi.Instance().PersoPartita();
+                    Termina = true;
+                    break;
+                case "y":
+                    if(m.dati.Contains(';'))
+                    {
+                        Avversario = new Giocatore();
+                        split = m.dati.Split(';');
+                        Avversario.Username = split[0];
+                        for (int i = 1; i < split.Length; i++)
+                            Avversario.Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
+                    }
+                    DatiCondivisi.Instance().altro = Avversario;
+                    DatiCondivisi.Instance().Avversario = this;
+                    DatiCondivisi.Instance().AvviaPartita();
+                    break;
+                case "n":
+                    Termina = true;
+                    break;
+                case "a":
+                    if (m.dati.Contains(';'))
+                    {
+                        List<Nodo> mappa = DatiCondivisi.Instance().M.mappa;
+                        split = m.dati.Split(';');
+                        DatiCondivisi.Instance().A = new Attacco(mappa[int.Parse(split[2])], mappa[int.Parse(split[1])], null, StoreInfo.Instance().Mosse[int.Parse(split[0])]);
+                    }
+                    else
+                    {
+                        Attacco a = DatiCondivisi.Instance().A;
+                        a.MossaAvversario = StoreInfo.Instance().Mosse[int.Parse(m.dati)];
+                        if (a.Settato())
+                            a.EseguiAttacco();
+                    }
+                    break;
+            }
         }
 
         public void Invia(Messaggio m)
@@ -63,7 +123,7 @@ namespace pokemonDuel.classi.Comunicazione
                 {
                     Messaggio m = DaElaborare.Dequeue();
                     if (m != null)
-                        Invia(Elabora(m));
+                        Elabora(m);
                 }
             }
         }

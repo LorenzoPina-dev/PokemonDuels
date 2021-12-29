@@ -1,4 +1,5 @@
-﻿using pokemonDuel.classi.GestioneFile;
+﻿using pokemonDuel.classi;
+using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -70,8 +71,8 @@ namespace pokemonDuel
             for (int j= 0;j < 6;j++)
             {
                 Image i = new Image();
-                if(g.Deck.Count>j)
-                    i.Source = new BitmapImage(new Uri(g.Deck[j].UrlTexture));
+                if(DatiCondivisi.Instance().io.Deck.Count>j)
+                    i.Source = new BitmapImage(new Uri(DatiCondivisi.Instance().io.Deck[j].UrlTexture));
                 else
                     i.Source = new BitmapImage(new Uri(PedinaVuota));
                 i.Name = "D_" + j;
@@ -106,20 +107,30 @@ namespace pokemonDuel
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (g.Deck.Count <= 6)
+            if (DatiCondivisi.Instance().io.Deck.Count < 6 && selezionata!=null)
             {
-                g.Deck.Add((Pokemon)selezionata.Clone());
+                Pokemon p = (Pokemon)selezionata.Clone();
+                p.mio = true;
+                DatiCondivisi.Instance().io.Deck.Add(p);
                 tuttiPokemon.Remove(selezionata);
                 CaricaPokemon();
+                selezionata = null;
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (g.Deck.Contains(selezionata))
-            { g.Deck.Remove(selezionata);
+            if (selezionata!=null && DatiCondivisi.Instance().io.Deck.Contains(selezionata))
+            {
+                DatiCondivisi.Instance().io.Deck.Remove(selezionata);
                 tuttiPokemon.Add(selezionata);
-                CaricaPokemon(); }
+                CaricaPokemon(); 
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            DatiCondivisi.Instance().io.Username = Username.Text;
         }
 
         internal void Ridimensiona(double width, double height)

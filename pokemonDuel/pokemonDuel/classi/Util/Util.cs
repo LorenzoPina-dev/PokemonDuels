@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi
 {
-    public class Util
+    public class Conversione
     {
         public static double getRad(int gradi)
         {
             return gradi / 180f * Math.PI;
         }
     }
+
 }

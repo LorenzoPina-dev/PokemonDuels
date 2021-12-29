@@ -29,7 +29,50 @@ namespace pokemonDuel
         public MainWindow()
         {
             InitializeComponent();
-            /*List<Pokemon> deck = new List<Pokemon>();
+            DatiCondivisi.Instance().main = this;
+            DatiCondivisi.Instance().caricamento = caricamento;
+            paginaPokemon = new PaginaPokemon();
+            paginaPokemon.Background = Brushes.Gray;
+            paginaPokemon.Width = Width;
+            paginaPokemon.Height = Height * 8.5 / 10;
+            paginaPokemon.Margin = new Thickness(0, 0, 0, 0);
+            Mappa.Children.Add(paginaPokemon);
+        }
+
+        public void MostraMappa()
+        {
+            caricamento.Visibility = Visibility.Visible;
+            Mappa.Visibility = Visibility.Hidden;
+        }
+        public void MostraApp()
+        {
+            caricamento.Visibility = Visibility.Hidden;
+            Mappa.Visibility = Visibility.Visible;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            paginaPokemon.Width = Width;
+            paginaPokemon.Height = Height*8.5/10;
+            caricamento.Height = Height;
+            caricamento.Width = Width;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MostraMappa();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MostraApp();
+        }
+    }
+}
+
+
+
+/*List<Pokemon> deck = new List<Pokemon>();
             Random rand = new Random();
 
             for (int i = 0; i < 6; i++)
@@ -60,26 +103,13 @@ namespace pokemonDuel
                 Console.WriteLine(r);
             CompositionTarget.Rendering += Upload;
             */
-            paginaPokemon = new PaginaPokemon();
-            paginaPokemon.Background = Brushes.Gray;
-            paginaPokemon.Margin = new Thickness(0, 0, 0, 0);
-            Mappa.Children.Add(paginaPokemon);
-        }
 
-        /*int i = 0;
-        private void Upload(object sender, EventArgs e)
-        {
-            if (DatiCondivisi.Instance().M == null || DatiCondivisi.Instance().M.r.Pokemon==null)
-                return;
-            DatiCondivisi.Instance().M.Upload();
-        }*/
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            paginaPokemon.Width = Width;
-            paginaPokemon.Height = Height*8.5/10;
-           // paginaPokemon.Ridimensiona(this.Width, this.Height*9/10);
-        }
 
-    }
-}
+/*int i = 0;
+private void Upload(object sender, EventArgs e)
+{
+    if (DatiCondivisi.Instance().M == null || DatiCondivisi.Instance().M.r.Pokemon==null)
+        return;
+    DatiCondivisi.Instance().M.Upload();
+}*/
