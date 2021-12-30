@@ -51,8 +51,8 @@ namespace pokemonDuel.classi.Logicagioco
         }
         public ImageBrush Render()
         {
-
-            ImageBrush myBrush = new ImageBrush(new BitmapImage(new Uri(path+urlTexture)));
+            Uri uri = new Uri(path + urlTexture);
+            ImageBrush myBrush = new ImageBrush(new BitmapImage(uri));
             return myBrush;
         }
     }

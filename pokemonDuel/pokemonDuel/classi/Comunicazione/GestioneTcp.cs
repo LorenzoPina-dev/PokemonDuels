@@ -14,11 +14,12 @@ namespace pokemonDuel.classi.Comunicazione
     class GestioneTcp
     {
         TcpListener listener;
+        Thread t;
         public GestioneTcp()
         {
-            listener = new TcpListener(IPAddress.Any, 12345);
+            listener = new TcpListener(IPAddress.Any, 54321);
             listener.Start();
-            Thread t = new Thread(run);
+            t = new Thread(run);
             t.Start();
         }
         public void run()
@@ -38,13 +39,18 @@ namespace pokemonDuel.classi.Comunicazione
             if (DatiCondivisi.Instance().Avversario == null)
             {
                 Giocatore io = DatiCondivisi.Instance().io;
-                TcpClient c = new TcpClient(ip,12345);
+                TcpClient c = new TcpClient(ip, 54321);
                 GestioneConnessione gc = new GestioneConnessione(c);
                 string s="";
                 foreach (Pokemon p in io.Deck)
                     s += ";" + p.id;
                 gc.Invia(new Messaggio("c", io.Username + s));
             }
+        }
+        public void stop()
+        {
+            listener.Stop();
+            t.Abort();
         }
 
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pokemonDuel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged">
+        Title="MainWindow" Height="450" Width="800" SizeChanged="Window_SizeChanged" Closing="Window_Closing">
     <Grid>
         <local:CaricamentoBattaglia  x:Name="caricamento"></local:CaricamentoBattaglia>
         <Grid x:Name="App">

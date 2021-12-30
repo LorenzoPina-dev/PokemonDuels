@@ -35,7 +35,7 @@ namespace pokemonDuel
             this.W = (int)Width;
             this.H = (int) Height;
             tuttiPokemon = new List<Pokemon>();
-            foreach (Pokemon p in StoreInfo.Instance().Pokedex)
+            foreach (Pokemon p in StoreInfo.Instance().Pokedex.Values)
                 tuttiPokemon.Add(p);
             selezionata = null;
             g = new Giocatore();
@@ -90,7 +90,7 @@ namespace pokemonDuel
             Image temp = (Image)e.Source;
             string[] split = temp.Name.Split('_');
             if (split[0] == "P")
-                selezionata = (Pokemon)StoreInfo.Instance().Pokedex[int.Parse(temp.Name.Split('_')[1]) - 1];
+                selezionata = (Pokemon)StoreInfo.Instance().Pokedex[int.Parse(temp.Name.Split('_')[1])];
             else if (split[0] == "D")
                 selezionata = g.Deck[int.Parse(split[1])];
         }

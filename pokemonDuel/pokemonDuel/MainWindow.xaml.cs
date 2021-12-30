@@ -36,22 +36,47 @@ namespace pokemonDuel
             paginaPokemon.Width = Width;
             paginaPokemon.Height = Height * 8.5 / 10;
             paginaPokemon.Margin = new Thickness(0, 0, 0, 0);
+            caricamento.Width = Width;
+            caricamento.Height =Height;
+            caricamento.Ridimensiona();
             Mappa.Children.Add(paginaPokemon);
         }
 
         public void MostraMappa()
         {
-            caricamento.Visibility = Visibility.Visible;
-            Mappa.Visibility = Visibility.Hidden;
+            Dispatcher.Invoke(delegate
+            {
+                caricamento.Visibility = Visibility.Visible;
+                App.Visibility = Visibility.Visible;
+                Mappa.Visibility = Visibility.Hidden;
+                caricamento.MostraInviti();
+            });
         }
+        public void MostraPartita()
+        {
+            Dispatcher.Invoke(delegate
+            {
+                caricamento.Visibility = Visibility.Visible;
+                App.Visibility = Visibility.Hidden;
+                caricamento.MostraMappa();
+                DatiCondivisi.Instance().M.Disegna();
+            });
+        }
+        
         public void MostraApp()
         {
-            caricamento.Visibility = Visibility.Hidden;
-            Mappa.Visibility = Visibility.Visible;
+            Dispatcher.Invoke(delegate
+            {
+                caricamento.Visibility = Visibility.Hidden;
+                App.Visibility = Visibility.Visible;
+                Mappa.Visibility = Visibility.Visible;
+                caricamento.MostraInviti();
+            });
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+
             paginaPokemon.Width = Width;
             paginaPokemon.Height = Height*8.5/10;
             caricamento.Height = Height;
@@ -66,6 +91,10 @@ namespace pokemonDuel
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             MostraApp();
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DatiCondivisi.Instance().gt.stop();
         }
     }
 }

@@ -25,7 +25,6 @@ namespace pokemonDuel.classi.Logicagioco
             set { lock (synTurno) { _turno = value; } }
         }
         List<int> startPosizionamento;
-        Canvas myCanvas;
         public Battaglia m;
         int partiX, partiY;
         int distanza = 0;
@@ -59,7 +58,6 @@ namespace pokemonDuel.classi.Logicagioco
             startPosizionamento = new List<int>();
             creaNodi();
             creaCollegamenti();
-            myCanvas = m.myCanvas;
             Selezionato = null;
             Turno = true;
             Nturno = 0;
@@ -75,9 +73,13 @@ namespace pokemonDuel.classi.Logicagioco
             if (!cliccato.presentePokemon)
             {
                 if (Turno && cliccato.selezionato)
-                    Muovi(Selezionato,cliccato);
+                {
+                    Muovi(Selezionato, cliccato);
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", Selezionato.indice + ";" + cliccato.indice));
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
+                }
             }
-            else
+                else
             {
                 if (Turno)
                 {
@@ -156,12 +158,6 @@ namespace pokemonDuel.classi.Logicagioco
                     }
                     RicominciaGioco();
                 }
-                if(partenza.indice>PedineMappa)
-                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("s", partenza.indice + ";" + destinazione.indice));
-                else
-                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", partenza.indice + ";" + destinazione.indice));
-                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
-                Turno = !Turno;
                 Ridisegna();
             }
         }
@@ -266,28 +262,14 @@ namespace pokemonDuel.classi.Logicagioco
         }
         public void Disegna()
         {
-            Rectangle r = new Rectangle();
-
-            r.Width = m.Width;
-            r.Height = m.Height;
-            r.Fill = Brushes.White;
-            myCanvas.Children.Add(r);
-            Line l = new Line();
-            l.X1 = distanza;
-            l.Y1 = 0;
-            l.X2 = distanza;
-            l.Y2 = 2000;
-            l.Stroke = Brushes.Black;
-            l.StrokeThickness = 2;
-            myCanvas.Children.Add(l);
-
+            m.myCanvas.Children.Clear();
             DisegnaCollegamenti();
             DisegnaNodi();
             RicominciaGioco();
         }
         public void DisegnaNodi()
         {
-            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
+            double dimensioneX = (m.myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             Grafica = new List<Rectangle>();
 
             foreach (Nodo n in mappa)
@@ -308,14 +290,14 @@ namespace pokemonDuel.classi.Logicagioco
                 b.Name = "p_" + n.indice;
                 b.MouseLeftButtonDown += Click_Pedina;
                 Grafica.Add(b);
-                myCanvas.Children.Add(b);
+                m.myCanvas.Children.Add(b);
             }
         }
 
 
         public void DisegnaCollegamenti()
         {
-            double dimensioneX = (myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
+            double dimensioneX = (m.myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             foreach (Nodo n in mappa)
             {
                 foreach (int vicino in n.vicini)
@@ -327,9 +309,17 @@ namespace pokemonDuel.classi.Logicagioco
                     l.Y2 = mappa[vicino].y * dimensioneY + dimensioneY * 6 / 7;
                     l.Stroke = Brushes.Black;
                     l.StrokeThickness = 2;
-                    myCanvas.Children.Add(l);
+                    m.myCanvas.Children.Add(l);
                 }
             }
+        }
+        public int SistemaIndici(int daSistemare)
+        {
+            if (daSistemare >= PedineMappa)
+                daSistemare -= PedineMano;
+            if (daSistemare < PedineMappa)
+                daSistemare = PedineMappa-1 - daSistemare;
+            return daSistemare;
         }
     }
 }

@@ -52,13 +52,20 @@ namespace pokemonDuel.classi.Comunicazione
                     Avversario.Username = split[0];
                     for(int i=1;i<split.Length;i++)
                         Avversario.Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
-                    if(DatiCondivisi.Instance().Avversario==null)
+                    if (DatiCondivisi.Instance().Avversario == null)
                         DatiCondivisi.Instance().MostraRichiestaBattaglia(this);
+                    else
+                        Invia(new Messaggio("n", ""));
                     break;
                 case "m":
                     split = m.dati.Split(';');
                     Mappa M = DatiCondivisi.Instance().M;
-                    M.Muovi(int.Parse(split[0]), int.Parse(split[1]));
+                    DatiCondivisi.Instance().caricamento.Dispatcher.Invoke(delegate
+                    {
+                        int partenza = M.SistemaIndici(int.Parse(split[0]));
+                        int destinazione = M.SistemaIndici(int.Parse(split[1]));
+                        M.Muovi(partenza, destinazione);
+                    });
                     break;
                 case "t":
                     DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
@@ -71,6 +78,7 @@ namespace pokemonDuel.classi.Comunicazione
                         DatiCondivisi.Instance().VintoPartita();
                     else
                         DatiCondivisi.Instance().PersoPartita();
+                    Avversario = null;
                     Termina = true;
                     break;
                 case "y":
@@ -81,10 +89,20 @@ namespace pokemonDuel.classi.Comunicazione
                         Avversario.Username = split[0];
                         for (int i = 1; i < split.Length; i++)
                             Avversario.Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
+                        if (DatiCondivisi.Instance().Avversario == null)
+                        {
+                            Invia(new Messaggio("y", ""));
+                            DatiCondivisi.Instance().M.Turno = false;
+                        }
+                        else
+                            Invia(new Messaggio("n", ""));
                     }
-                    DatiCondivisi.Instance().altro = Avversario;
-                    DatiCondivisi.Instance().Avversario = this;
-                    DatiCondivisi.Instance().AvviaPartita();
+                    if (DatiCondivisi.Instance().Avversario == null)
+                    {
+                        DatiCondivisi.Instance().altro = Avversario;
+                        DatiCondivisi.Instance().Avversario = this;
+                        DatiCondivisi.Instance().AvviaPartita();
+                    }
                     break;
                 case "n":
                     Termina = true;

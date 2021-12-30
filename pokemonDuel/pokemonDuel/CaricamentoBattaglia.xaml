@@ -6,23 +6,24 @@
              xmlns:local="clr-namespace:pokemonDuel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" SizeChanged="UserControl_SizeChanged">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" >Ip Amico</TextBlock>
-            <TextBox Grid.Column="1" x:Name="IpConnessione"></TextBox>
-            <Button Grid.Column="2" Click="Button_Click">Connetti</Button>
+    <Grid x:Name="finestra">
+        <Grid x:Name="GestInviti">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" >Ip Amico</TextBlock>
+                <TextBox Grid.Column="1" x:Name="IpConnessione"></TextBox>
+                <Button Grid.Column="2" Click="Button_Click">Connetti</Button>
+            </Grid>
+            <ListBox x:Name="Inviti" Grid.Row="1"></ListBox>
         </Grid>
-        <ListBox x:Name="Inviti" Grid.Row="1"></ListBox>
-        <local:Battaglia Visibility="Hidden" x:Name="Campo"/>
     </Grid>
 </UserControl>

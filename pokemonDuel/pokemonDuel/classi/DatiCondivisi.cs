@@ -83,7 +83,11 @@ namespace pokemonDuel.classi
 
         internal void AvviaPartita()
         {
-            throw new NotImplementedException();
+            main.Dispatcher.Invoke(delegate
+            {
+                main.MostraPartita();
+                M.Disegna();
+            });
         }
         public void Upload()
         {

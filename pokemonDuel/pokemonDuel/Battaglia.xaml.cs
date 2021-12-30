@@ -32,19 +32,6 @@ namespace pokemonDuel
             myCanvas.Height = Height;
             host.Width = Width / 2;
             host.Height = Height / 2;
-            Random rand= new Random();
-            List<Pokemon> deck = new List<Pokemon>();
-            Giocatore altro = new Giocatore();
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon p = (Pokemon)StoreInfo.Instance().Pokedex[rand.Next(0, StoreInfo.Instance().Pokedex.Count)].Clone();
-                p.mio = false;
-                deck.Add(p);
-            }
-            altro = new Giocatore();
-            altro.Deck = deck;
-            altro.Username = "pippo";
-            DatiCondivisi.Instance().altro = altro;
             DatiCondivisi.Instance().M = new Mappa(this);
             CompositionTarget.Rendering += Upload;
 
@@ -56,22 +43,20 @@ namespace pokemonDuel
             DatiCondivisi.Instance().Upload();
             //DatiCondivisi.Instance().M.Upload();
         }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            DatiCondivisi.Instance().M.Disegna();
-        }
-
-        private void myCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void Ridimensiona(double Width, double Height)
         {
             myCanvas.Width = Width;
             myCanvas.Height = Height;
             double unita = Math.Min(Width / 2, Height / 2);
             host.Width = unita;
             host.Height = unita;
-            host.Margin = new Thickness(0, Height - unita, Width -unita,0);
+            host.Margin = new Thickness(0, Height - unita, Width - unita, 0);
             DatiCondivisi.Instance().M.Disegna();
             GestioneRuota.Instance().ruota.CambiaDimensioni(host.Width, host.Height);
+        }
+        private void myCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Ridimensiona(Width,Height);
         }
     }
 }
