@@ -67,11 +67,6 @@ namespace pokemonDuel.classi
             caricamento.AddConnessione(gestioneConnessione);
         }
 
-        internal void MostraRichiestaBaattaglia(GestioneConnessione gestioneConnessione)
-        {
-            throw new NotImplementedException();
-        }
-
         public void VintoPartita()
         {
 
@@ -87,17 +82,12 @@ namespace pokemonDuel.classi
             {
                 main.MostraPartita();
                 M.Disegna();
+                M.RicominciaGioco();
             });
         }
         public void Upload()
         {
-            GestioneRuota GestRuota = GestioneRuota.Instance();
-            if (GestRuota.Risultato == null)
-            {
-                int ris = GestRuota.Upload();
-                if (ris != 0)
-                    GestRuota.Gira(ris);
-            }
+            
         }
     }
 }

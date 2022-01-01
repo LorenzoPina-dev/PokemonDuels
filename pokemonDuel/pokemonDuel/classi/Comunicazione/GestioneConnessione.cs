@@ -1,4 +1,5 @@
 ﻿using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,15 @@ namespace pokemonDuel.classi.Comunicazione
         private bool termina;
         private Queue<Messaggio> DaInviare;
         private Queue<Messaggio> DaElaborare;
-        private object synInvia;
+        private object synElabora,synInvia;
         private object synTerm;
         public Giocatore Avversario;
 
         public bool Termina { get { lock (synTerm) { return termina; } }set { lock (synTerm) { termina = value; } } }
         public GestioneConnessione(TcpClient c)
         {
-            synInvia=new object();
+            synInvia = new object();
+            synElabora = new object();
             synTerm = new object();
             sw = new StreamWriter(c.GetStream());
             sr = new StreamReader(c.GetStream());
@@ -62,9 +64,7 @@ namespace pokemonDuel.classi.Comunicazione
                     Mappa M = DatiCondivisi.Instance().M;
                     DatiCondivisi.Instance().caricamento.Dispatcher.Invoke(delegate
                     {
-                        int partenza = M.SistemaIndici(int.Parse(split[0]));
-                        int destinazione = M.SistemaIndici(int.Parse(split[1]));
-                        M.Muovi(partenza, destinazione);
+                        M.Muovi(int.Parse(split[0]), int.Parse(split[1]));
                     });
                     break;
                 case "t":
@@ -110,14 +110,18 @@ namespace pokemonDuel.classi.Comunicazione
                 case "a":
                     if (m.dati.Contains(';'))
                     {
-                        List<Nodo> mappa = DatiCondivisi.Instance().M.mappa;
+                        Mappa mappa = DatiCondivisi.Instance().M;
                         split = m.dati.Split(';');
-                        DatiCondivisi.Instance().A = new Attacco(mappa[int.Parse(split[2])], mappa[int.Parse(split[1])], null, StoreInfo.Instance().Mosse[int.Parse(split[0])]);
+                        DatiCondivisi.Instance().A = new Attacco(mappa.mappa[mappa.SistemaIndici(int.Parse(split[1]))], mappa.mappa[mappa.SistemaIndici(int.Parse(split[0]))], null, StoreInfo.Instance().Mosse[int.Parse(split[2])]);
+                        DatiCondivisi.Instance().main.Dispatcher.Invoke(delegate
+                        {
+                            GestioneRuota.Instance().Start();
+                        });
                     }
                     else
                     {
                         Attacco a = DatiCondivisi.Instance().A;
-                        a.MossaAvversario = StoreInfo.Instance().Mosse[int.Parse(m.dati)];
+                        a.MossaAvversario = (Mossa)StoreInfo.Instance().Mosse[int.Parse(m.dati)].Clone();
                         if (a.Settato())
                             a.EseguiAttacco();
                     }
@@ -139,7 +143,11 @@ namespace pokemonDuel.classi.Comunicazione
             {
                 if (DaElaborare.Count > 0)
                 {
-                    Messaggio m = DaElaborare.Dequeue();
+                    Messaggio m;
+                    lock (synElabora)
+                    {
+                        m = DaElaborare.Dequeue();
+                    }
                     if (m != null)
                         Elabora(m);
                 }
@@ -152,7 +160,11 @@ namespace pokemonDuel.classi.Comunicazione
             {
                 if (DaInviare.Count > 0)
                 {
-                    Messaggio m = DaInviare.Dequeue();
+                    Messaggio m;
+                    lock (synInvia)
+                    {
+                        m = DaInviare.Dequeue();
+                    }
                     if (m != null)
                     {
                         sw.WriteLine(m.toCsv());
@@ -173,7 +185,10 @@ namespace pokemonDuel.classi.Comunicazione
                 else if (s != "")
                 {
                     Console.WriteLine(s);
-                    DaElaborare.Enqueue(new Messaggio(s));
+                    lock (synElabora)
+                    {
+                        DaElaborare.Enqueue(new Messaggio(s));
+                    }
                 }
             }
             sr.Close();

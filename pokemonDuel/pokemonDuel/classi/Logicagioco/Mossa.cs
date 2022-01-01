@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    public class Mossa
+    public class Mossa: ICloneable
     {
         public int id;
         public string nome,desc;
@@ -35,6 +35,10 @@ namespace pokemonDuel.classi.Logicagioco
         public string ToCsv()
         {
             return nome + ";" + percentuale + ";" + danno;
+        }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

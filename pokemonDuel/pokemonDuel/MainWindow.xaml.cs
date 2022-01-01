@@ -33,9 +33,6 @@ namespace pokemonDuel
             DatiCondivisi.Instance().caricamento = caricamento;
             paginaPokemon = new PaginaPokemon();
             paginaPokemon.Background = Brushes.Gray;
-            paginaPokemon.Width = Width;
-            paginaPokemon.Height = Height * 8.5 / 10;
-            paginaPokemon.Margin = new Thickness(0, 0, 0, 0);
             caricamento.Width = Width;
             caricamento.Height =Height;
             caricamento.Ridimensiona();
@@ -60,6 +57,7 @@ namespace pokemonDuel
                 App.Visibility = Visibility.Hidden;
                 caricamento.MostraMappa();
                 DatiCondivisi.Instance().M.Disegna();
+                DatiCondivisi.Instance().M.RicominciaGioco();
             });
         }
         
@@ -98,47 +96,3 @@ namespace pokemonDuel
         }
     }
 }
-
-
-
-/*List<Pokemon> deck = new List<Pokemon>();
-            Random rand = new Random();
-
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon p = (Pokemon)StoreInfo.Instance().Pokedex[rand.Next(0, StoreInfo.Instance().Pokedex.Count)].Clone();
-                p.mio = true;
-                deck.Add(p);
-            }
-            Giocatore io = new Giocatore();
-            io.Deck = deck;
-            io.Username = "pippo";
-            deck = new List<Pokemon>();
-            Giocatore altro = new Giocatore();
-            for (int i = 0; i < 6; i++)
-            {
-                Pokemon p = (Pokemon)StoreInfo.Instance().Pokedex[rand.Next(0, StoreInfo.Instance().Pokedex.Count)].Clone();
-                p.mio = false;
-                deck.Add(p);
-            }
-            altro = new Giocatore();
-            altro.Deck = deck;
-            altro.Username = "pippo";
-            DatiCondivisi.Instance().M = new Mappa(this,io,altro);
-            GestioneTcp gt = new GestioneTcp();
-            HashSet<int> ris=DatiCondivisi.Instance().M.mappa[0].Raggiungibili(DatiCondivisi.Instance().M.mappa, 2);
-            DatiCondivisi.Instance().M.Disegna();
-            foreach (int r in ris)
-                Console.WriteLine(r);
-            CompositionTarget.Rendering += Upload;
-            */
-
-
-
-/*int i = 0;
-private void Upload(object sender, EventArgs e)
-{
-    if (DatiCondivisi.Instance().M == null || DatiCondivisi.Instance().M.r.Pokemon==null)
-        return;
-    DatiCondivisi.Instance().M.Upload();
-}*/

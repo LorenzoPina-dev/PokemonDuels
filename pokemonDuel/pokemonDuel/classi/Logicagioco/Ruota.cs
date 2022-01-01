@@ -88,9 +88,9 @@ namespace pokemonDuel.classi.Logicagioco
             try
             {
 
-            ris = -1;
             lock (synPokemon)
             {
+                ris = -1;
                 if (Pokemon != null)
                 {
                     ultimoAngolo =(ultimoAngolo+ Gradi)%360;

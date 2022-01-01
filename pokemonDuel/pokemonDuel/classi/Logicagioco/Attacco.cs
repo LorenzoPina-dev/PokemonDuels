@@ -15,8 +15,14 @@ namespace pokemonDuel.classi.Logicagioco
         {
             this.Mio = Mio;
             this.Avversario = Avversario;
-            this.MossaMia = MossaMia;
-            this.MossaAvversario = MossaAvversario;
+            if (MossaMia != null)
+                this.MossaMia = (Mossa)MossaMia.Clone();
+            else
+                this.MossaMia = null;
+            if (MossaAvversario != null)
+                this.MossaAvversario = (Mossa)MossaAvversario.Clone();
+            else
+                this.MossaAvversario = null;
         }
         public bool Settato()
         {

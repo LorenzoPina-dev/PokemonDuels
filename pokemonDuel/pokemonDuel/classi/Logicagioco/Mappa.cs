@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
@@ -43,9 +44,11 @@ namespace pokemonDuel.classi.Logicagioco
             int partenza = PedineMappa;
             if (perdente.pokemon.mio)
                 partenza += PedineMano;
-            for (int i=0;i<PedineMano;i++)
-                if(!mappa[partenza + i].presentePokemon)
-                    Muovi(perdente,mappa[partenza + i]);
+            for (int i = 0; i < PedineMano; i++)
+                if (!mappa[partenza + i].presentePokemon)
+                { 
+                    Muovi(perdente, mappa[partenza + i]);
+                    DatiCondivisi.Instance().main.Dispatcher.Invoke(delegate { Ridisegna(); }); return; }
         }
 
         public Mappa(Battaglia m)
@@ -75,8 +78,10 @@ namespace pokemonDuel.classi.Logicagioco
                 if (Turno && cliccato.selezionato)
                 {
                     Muovi(Selezionato, cliccato);
+                    ControllaVincitore(cliccato.indice);
                     DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", Selezionato.indice + ";" + cliccato.indice));
                     DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
+                    Turno = !Turno;
                 }
             }
                 else
@@ -134,7 +139,8 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void Muovi(int idPartenza,int idDetinazione)
         {
-            Muovi(mappa[idPartenza], mappa[idDetinazione]);
+            Muovi(mappa[SistemaIndici(idPartenza)], mappa[SistemaIndici(idDetinazione)]);
+            ControllaVincitore(idDetinazione);
         }
 
         public void Muovi(Nodo partenza, Nodo destinazione)
@@ -145,21 +151,25 @@ namespace pokemonDuel.classi.Logicagioco
                 destinazione.presentePokemon = true;
                 partenza.pokemon = null;
                 partenza.presentePokemon = false;
-                if (destinazione.indice == Destinazione)
-                {
-                    Nturno++;
-                    if (Turno)
-                    {
-                        Tvinti++;
-                        DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tr", "1"));
-                        if (Nturno == turniAPartita)
-                            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "1"));
-                        Console.WriteLine("vinto");
-                    }
-                    RicominciaGioco();
-                }
-                Ridisegna();
             }
+        }
+
+        public void ControllaVincitore(int destinazione)
+        {
+            if (destinazione == Destinazione)
+            {
+                Nturno++;
+                if (Turno)
+                {
+                    Tvinti++;
+                    DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tr", "1"));
+                    if (Nturno == turniAPartita)
+                        DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "1"));
+                    Console.WriteLine("vinto");
+                }
+                RicominciaGioco();
+            }
+            Ridisegna();
         }
 
         public void RicominciaGioco()
@@ -265,7 +275,6 @@ namespace pokemonDuel.classi.Logicagioco
             m.myCanvas.Children.Clear();
             DisegnaCollegamenti();
             DisegnaNodi();
-            RicominciaGioco();
         }
         public void DisegnaNodi()
         {

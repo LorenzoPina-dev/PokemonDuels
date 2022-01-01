@@ -7,27 +7,25 @@
              mc:Ignorable="d" Height="466.667" Width="941.9" SizeChanged="UserControl_SizeChanged">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="8*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0">
-            <Grid x:Name="Deck"></Grid>
-        </DockPanel>
-        <DockPanel Background="Red" Grid.Row="1">
-            <Grid x:Name="Lista" SizeChanged="Lista_SizeChanged"></Grid>
-        </DockPanel>
+        <Grid  Grid.Row="0" x:Name="Deck"></Grid>
+        <Grid x:Name="Lista" Background="Red" Grid.Row="1"></Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" FontSize="30" Click="Button_Click">Add</Button>
-            <Button Grid.Column="1" FontSize="30" Click="Button_Click_1">Remove</Button>
-            <TextBox x:Name="Username" Grid.Column="2"></TextBox>
-            <Button Grid.Column="3" Click="Button_Click_2">Cambia username</Button>
+            <Button Grid.Column="0" FontSize="25" Click="Button_Click">Add</Button>
+            <Button Grid.Column="1" FontSize="25" Click="Button_Click_1">Remove</Button>
+            <TextBox x:Name="numPag" Grid.Column="2" FontSize="25"></TextBox>
+            <Button Grid.Column="3" Click="Prima_Click" FontSize="25">Pagina prima</Button>
+            <Button Grid.Column="4" Click="Dopo_Click" FontSize="25">Pagina dopo</Button>
         </Grid>
     </Grid>
 </UserControl>
