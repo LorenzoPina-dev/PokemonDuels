@@ -4,16 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:pokemonDuel"
-             mc:Ignorable="d" Height="466.667" Width="941.9" SizeChanged="UserControl_SizeChanged">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid  Grid.Row="0" x:Name="Deck"></Grid>
-        <Grid x:Name="Lista" Background="Red" Grid.Row="1"></Grid>
-        <Grid Grid.Row="2">
+             mc:Ignorable="d" Height="10000" Width="10000" SizeChanged="UserControl_SizeChanged">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" x:Name="Deck"></Grid>
+        <Grid x:Name="Lista" Background="Red" DockPanel.Dock="Top"></Grid>
+        <Grid  DockPanel.Dock="Bottom" x:Name="Bottoni">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
@@ -27,5 +22,5 @@
             <Button Grid.Column="3" Click="Prima_Click" FontSize="25">Pagina prima</Button>
             <Button Grid.Column="4" Click="Dopo_Click" FontSize="25">Pagina dopo</Button>
         </Grid>
-    </Grid>
+    </DockPanel>
 </UserControl>

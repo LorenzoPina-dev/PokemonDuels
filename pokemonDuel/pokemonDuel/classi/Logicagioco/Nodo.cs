@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace pokemonDuel.classi.Logicagioco
 {
-    public class Nodo
+    public class Nodo : ICloneable
     {
         public int indice;
         public List<int> vicini;
@@ -59,7 +59,10 @@ namespace pokemonDuel.classi.Logicagioco
 
             return ris;
         }
-
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
     }
 }

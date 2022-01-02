@@ -24,15 +24,12 @@ namespace pokemonDuel
     /// </summary>
     public partial class CaricamentoBattaglia : UserControl
     {
-        public Battaglia Campo;
         public CaricamentoBattaglia()
         {
             InitializeComponent();
-            Campo = new Battaglia();
             Campo.Height = Height;
             Campo.Width = Width;
             Inviti.Background = Brushes.Red;
-            finestra.Children.Add(Campo);
         }
         public void AddConnessione(GestioneConnessione gr)
         {
@@ -54,8 +51,8 @@ namespace pokemonDuel
         {
             Campo.Width = Width;
             Campo.Height = Height;
-            Campo.Ridimensiona(Campo.Width, Campo.Height);
-            Inviti.Height = Height * 8 / 9;
+            Inviti.Height = Height- DatiCondivisi.Instance().main.Bottoni.Height;
+            Campo.Ridimensiona();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -71,6 +68,10 @@ namespace pokemonDuel
         {
             Campo.Visibility = Visibility.Hidden;
             GestInviti.Visibility = Visibility.Visible;
+        }
+        public void MostraAttacco()
+        {
+            
         }
     }
 }

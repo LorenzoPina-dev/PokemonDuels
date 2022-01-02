@@ -81,7 +81,7 @@ namespace pokemonDuel.classi.Grafica
                     }
                     Gira((int)g);
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
         }
 
@@ -97,9 +97,12 @@ namespace pokemonDuel.classi.Grafica
             DatiCondivisi.Instance().M.m.Dispatcher.Invoke(delegate
             {
                 if (visibility)
-                    DatiCondivisi.Instance().M.m.host.Visibility = Visibility.Visible;
+                {
+                    DatiCondivisi.Instance().M.m.Attacco.Visibility = Visibility.Visible;
+                    DatiCondivisi.Instance().M.m.MostraAttacco();
+                }
                 else
-                    DatiCondivisi.Instance().M.m.host.Visibility = Visibility.Hidden;
+                    DatiCondivisi.Instance().M.m.Attacco.Visibility = Visibility.Hidden;
             });
         }
 

@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -28,10 +29,6 @@ namespace pokemonDuel
         public Battaglia()
         {
             InitializeComponent();
-            myCanvas.Width = this.Width;
-            myCanvas.Height = Height;
-            host.Width = Width / 2;
-            host.Height = Height / 2;
             DatiCondivisi.Instance().M = new Mappa(this);
             CompositionTarget.Rendering += Upload;
 
@@ -43,20 +40,34 @@ namespace pokemonDuel
             DatiCondivisi.Instance().Upload();
             //DatiCondivisi.Instance().M.Upload();
         }
-        public void Ridimensiona(double Width, double Height)
+        public void Ridimensiona()
         {
             myCanvas.Width = Width;
             myCanvas.Height = Height;
             double unita = Math.Min(Width / 2, Height / 2);
             host.Width = unita;
             host.Height = unita;
+            CanvasAttacco.Width = Width;
+            CanvasAttacco.Height = Height;
+            if(DatiCondivisi.Instance().A!=null)
+                DatiCondivisi.Instance().A.Render();
             host.Margin = new Thickness(0, Height - unita, Width - unita, 0);
             DatiCondivisi.Instance().M.Disegna();
             GestioneRuota.Instance().ruota.CambiaDimensioni(host.Width, host.Height);
         }
-        private void myCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void MostraAttacco()
         {
-            Ridimensiona(Width,Height);
+            Attacco.Visibility = Visibility.Visible;
+            DatiCondivisi.Instance().A.Render();
+        }
+        public void MostraMappa()
+        {
+            Attacco.Visibility = Visibility.Hidden;
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Ridimensiona();
         }
     }
 }

@@ -110,7 +110,8 @@ namespace pokemonDuel.classi.Logicagioco
         public void GiraRuota(Nodo Attaccato)
         {
             DatiCondivisi.Instance().A=new Attacco(Selezionato, Attaccato, null, null);
-            GestioneRuota.Instance().Start();
+            GestioneRuota.Instance().Start(); 
+            DatiCondivisi.Instance().M.m.MostraAttacco();
         }
 
 

@@ -54,14 +54,21 @@ namespace pokemonDuel
             {
                 Image i = new Image();
                 if (DatiCondivisi.Instance().io.Deck.Count > j)
+                {
                     i.Source = new BitmapImage(new Uri(DatiCondivisi.Instance().io.Deck[j].UrlTexture));
+                    i.Width = unita-10;
+                    i.Height = (int)Math.Min(unita, Deck.Height)-10;
+                    i.Margin = new Thickness(x, 0, Deck.Width - x - unita, 10);
+                }
                 else
+                {
                     i.Source = new BitmapImage(new Uri(PedinaVuota));
+                    i.Margin = new Thickness(x, Deck.Height / 6, Deck.Width - x - unita, 0);
+                    i.Height = (int)Math.Min(unita, Deck.Height);
+                    i.Width = unita;
+                }
                 i.Name = "D_" + j;
                 i.MouseDown += Cliccata;
-                i.Width = unita;
-                i.Height = (int)Math.Min(unita, Deck.Height);
-                i.Margin = new Thickness(x, Deck.Height / 6, Deck.Width - x - unita, 0);
                 x += unita;
                 Deck.Children.Add(i);
             }
@@ -75,7 +82,7 @@ namespace pokemonDuel
         private int DisegnaPokemon(int ind)
         {
             Lista.Children.Clear();
-            int x = 0, y = 0, unita = 75,j=ind;
+            int x = 0, y = 0, unita = 100,j=ind;
             var keys = tuttiPokemon.Keys.ToList();
             for(;j< keys.Count;j++)
             {
@@ -100,14 +107,9 @@ namespace pokemonDuel
             return j - ind;
         }
 
-        private void Lista_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
-        }
-
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Ridimensiona(Width, Height);
+            Ridimensiona(e.NewSize.Width,e.NewSize.Height);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -171,12 +173,12 @@ namespace pokemonDuel
             }
         }
 
-        internal void Ridimensiona(double width, double height)
+        internal void Ridimensiona(double Width,double Height)
         {
-            Lista.Width = width;
-            Lista.Height = height * partiLista / parti;
-            Deck.Height = height * partiMano / parti;
-            Deck.Width = width;
+            Lista.Width = Width;
+            Lista.Height = Height * partiLista / parti;
+            Deck.Height = Height * partiMano / parti;
+            Deck.Width = Width;
             CaricaPokemon();
         }
     }

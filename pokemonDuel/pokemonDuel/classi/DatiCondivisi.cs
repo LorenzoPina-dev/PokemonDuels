@@ -89,5 +89,7 @@ namespace pokemonDuel.classi
         {
             
         }
+
+
     }
 }

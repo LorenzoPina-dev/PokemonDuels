@@ -15,21 +15,29 @@ namespace pokemonDuel.classi.Comunicazione
     {
         TcpListener listener;
         Thread t;
+        private bool termina;
         public GestioneTcp()
         {
             listener = new TcpListener(IPAddress.Any, 54321);
             listener.Start();
             t = new Thread(run);
             t.Start();
+            termina = false;
         }
         public void run()
         {
-            while(true)
+            try
             {
-                TcpClient c = listener.AcceptTcpClient();
-                GestioneConnessione gc = new GestioneConnessione(c);
-                if(DatiCondivisi.Instance().Avversario!=null)
-                    gc.Termina = true;
+                while (!termina)
+                {
+                    TcpClient c = listener.AcceptTcpClient();
+                    GestioneConnessione gc = new GestioneConnessione(c);
+                    if (DatiCondivisi.Instance().Avversario != null)
+                        gc.Termina = true;
+                }
+            }
+            catch (Exception)
+            {
             }
             listener.Stop();
         }
@@ -50,7 +58,7 @@ namespace pokemonDuel.classi.Comunicazione
         public void stop()
         {
             listener.Stop();
-            t.Abort();
+            termina = true;
         }
 
     }

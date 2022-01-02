@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -25,27 +26,33 @@ namespace pokemonDuel
     /// </summary>
     public partial class MainWindow : Window
     {
-        PaginaPokemon paginaPokemon;
         public MainWindow()
         {
+
             InitializeComponent();
+            Width = SystemParameters.FullPrimaryScreenWidth;
+            Height =SystemParameters.FullPrimaryScreenHeight;
             DatiCondivisi.Instance().main = this;
             DatiCondivisi.Instance().caricamento = caricamento;
-            paginaPokemon = new PaginaPokemon();
-            paginaPokemon.Background = Brushes.Gray;
+            paginaPokemon.Background = Brushes.Black;
             caricamento.Width = Width;
             caricamento.Height =Height;
             caricamento.Ridimensiona();
-            Mappa.Children.Add(paginaPokemon);
+            Mappa m = DatiCondivisi.Instance().M;
+            Nodo mio = (Nodo)m.mappa[34].Clone();
+            mio.pokemon = StoreInfo.Instance().Pokedex[1];
+            Nodo Altro = (Nodo)m.mappa[34].Clone();
+            Altro.pokemon = StoreInfo.Instance().Pokedex[3];
+            MostraApp();
         }
 
         public void MostraMappa()
         {
             Dispatcher.Invoke(delegate
             {
+                paginaPokemon.Visibility = Visibility.Hidden;
                 caricamento.Visibility = Visibility.Visible;
                 App.Visibility = Visibility.Visible;
-                Mappa.Visibility = Visibility.Hidden;
                 caricamento.MostraInviti();
             });
         }
@@ -53,6 +60,7 @@ namespace pokemonDuel
         {
             Dispatcher.Invoke(delegate
             {
+                paginaPokemon.Visibility = Visibility.Hidden;
                 caricamento.Visibility = Visibility.Visible;
                 App.Visibility = Visibility.Hidden;
                 caricamento.MostraMappa();
@@ -65,20 +73,23 @@ namespace pokemonDuel
         {
             Dispatcher.Invoke(delegate
             {
+                paginaPokemon.Visibility = Visibility.Visible;
                 caricamento.Visibility = Visibility.Hidden;
                 App.Visibility = Visibility.Visible;
-                Mappa.Visibility = Visibility.Visible;
                 caricamento.MostraInviti();
             });
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-
+            Width = e.NewSize.Width;
+            Height = e.NewSize.Height;
+            Bottoni.Height = Height / 13;
             paginaPokemon.Width = Width;
-            paginaPokemon.Height = Height*8.5/10;
+            paginaPokemon.Height = Height-Bottoni.Height;
             caricamento.Height = Height;
             caricamento.Width = Width;
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
