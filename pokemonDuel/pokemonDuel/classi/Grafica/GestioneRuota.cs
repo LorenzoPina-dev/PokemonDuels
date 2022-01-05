@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace pokemonDuel.classi.Grafica
 {
@@ -32,7 +34,7 @@ namespace pokemonDuel.classi.Grafica
             Risultato = null;
             gradi = 0;
             Battaglia b = DatiCondivisi.Instance().caricamento.Campo;
-            ruota = new Ruota((int)b.host.Width, (int)b.host.Height);
+            ruota = new Ruota();
             b.host.Child = ruota;
             MostraRuota(false);
 
@@ -70,14 +72,20 @@ namespace pokemonDuel.classi.Grafica
                         stoppa = true;
                         Attacco a = DatiCondivisi.Instance().A;
                         a.MossaMia = m;
-                        MostraRuota(false);
+                        DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
+                        {
+                            DatiCondivisi.Instance().b.host.Visibility = Visibility.Hidden;
+                        });
                         if (a.Settato())
                         {
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", "" + a.MossaMia.id));
                             a.EseguiAttacco();
                         }
                         else
+                        { 
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", a.Mio.indice + ";" + a.Avversario.indice + ";" + a.MossaMia.id));
+                            DatiCondivisi.Instance().b.gestCanvas.MostraAttacca();
+                        }
                     }
                     Gira((int)g);
                 }
@@ -85,24 +93,27 @@ namespace pokemonDuel.classi.Grafica
             }
         }
 
+
         public void Gira(int gradi)
         {
-            DatiCondivisi.Instance().M.m.Dispatcher.Invoke(delegate
+            DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
                 ruota.Gira(gradi);
             });
         }
         public void MostraRuota(bool visibility)
         {
-            DatiCondivisi.Instance().M.m.Dispatcher.Invoke(delegate
+            DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
                 if (visibility)
                 {
-                    DatiCondivisi.Instance().M.m.Attacco.Visibility = Visibility.Visible;
-                    DatiCondivisi.Instance().M.m.MostraAttacco();
+                    DatiCondivisi.Instance().b.Attacco.Visibility = Visibility.Visible;
+                    DatiCondivisi.Instance().b.MostraAttacco();
                 }
                 else
-                    DatiCondivisi.Instance().M.m.Attacco.Visibility = Visibility.Hidden;
+                {
+                    DatiCondivisi.Instance().b.Attacco.Visibility = Visibility.Hidden;
+                }
             });
         }
 

@@ -37,13 +37,15 @@ namespace pokemonDuel
             paginaPokemon.Background = Brushes.Black;
             caricamento.Width = Width;
             caricamento.Height =Height;
-            caricamento.Ridimensiona();
             Mappa m = DatiCondivisi.Instance().M;
             Nodo mio = (Nodo)m.mappa[34].Clone();
             mio.pokemon = StoreInfo.Instance().Pokedex[1];
             Nodo Altro = (Nodo)m.mappa[34].Clone();
             Altro.pokemon = StoreInfo.Instance().Pokedex[3];
+            /*DatiCondivisi.Instance().A = new Attacco(mio, Altro, StoreInfo.Instance().Mosse[0], StoreInfo.Instance().Mosse[1]);
+            MostraPartita();*/
             MostraApp();
+            DatiCondivisi.Instance().io.Username = "lorenzo";
         }
 
         public void MostraMappa()
@@ -89,7 +91,6 @@ namespace pokemonDuel
             paginaPokemon.Height = Height-Bottoni.Height;
             caricamento.Height = Height;
             caricamento.Width = Width;
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

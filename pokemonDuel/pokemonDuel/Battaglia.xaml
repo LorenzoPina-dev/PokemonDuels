@@ -7,10 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" SizeChanged="UserControl_SizeChanged">
     <Grid>
+        <DockPanel x:Name="Mappa">
+            <Canvas DockPanel.Dock="Top" Name="CanvasGiocatore" Background="White"/>
+            <Canvas DockPanel.Dock="Bottom" Name="myCanvas" Background="White"/>
+        </DockPanel>
         <Grid x:Name="Attacco">
-            <WindowsFormsHost x:Name="host" Background="Transparent"/>
-            <Canvas x:Name="CanvasAttacco" ></Canvas>
+            <Canvas x:Name="CanvasEventi" Background="Transparent"></Canvas>
         </Grid>
-        <Canvas Name="myCanvas"/>
     </Grid>
 </UserControl>

@@ -27,8 +27,6 @@ namespace pokemonDuel
         public CaricamentoBattaglia()
         {
             InitializeComponent();
-            Campo.Height = Height;
-            Campo.Width = Width;
             Inviti.Background = Brushes.Red;
         }
         public void AddConnessione(GestioneConnessione gr)
@@ -44,15 +42,16 @@ namespace pokemonDuel
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Ridimensiona();
+            Ridimensiona(e.NewSize.Width,e.NewSize.Height);
         }
 
-        public void Ridimensiona()
+        public void Ridimensiona(double Width,double Height)
         {
+            this.Width = Width;
+            this.Height = Height;
             Campo.Width = Width;
             Campo.Height = Height;
             Inviti.Height = Height- DatiCondivisi.Instance().main.Bottoni.Height;
-            Campo.Ridimensiona();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

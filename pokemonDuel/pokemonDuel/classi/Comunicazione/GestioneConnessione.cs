@@ -20,8 +20,9 @@ namespace pokemonDuel.classi.Comunicazione
         private Queue<Messaggio> DaInviare;
         private Queue<Messaggio> DaElaborare;
         private object synElabora,synInvia;
-        private object synTerm;
+        private object synTerm,synIo;
         public Giocatore Avversario;
+
 
         public bool Termina { get { lock (synTerm) { return termina; } }set { lock (synTerm) { termina = value; } } }
         public GestioneConnessione(TcpClient c)
@@ -29,6 +30,7 @@ namespace pokemonDuel.classi.Comunicazione
             synInvia = new object();
             synElabora = new object();
             synTerm = new object();
+            synIo = new object();
             sw = new StreamWriter(c.GetStream());
             sr = new StreamReader(c.GetStream());
             termina = false;
@@ -71,15 +73,10 @@ namespace pokemonDuel.classi.Comunicazione
                     DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
                     break;
                 case "tr":
-                    DatiCondivisi.Instance().M.RicominciaGioco();
+                    DatiCondivisi.Instance().TermineRound(int.Parse(m.dati)==1);
                     break;
                 case "tb":
-                    if (bool.Parse(m.dati))
-                        DatiCondivisi.Instance().VintoPartita();
-                    else
-                        DatiCondivisi.Instance().PersoPartita();
-                    Avversario = null;
-                    Termina = true;
+                    DatiCondivisi.Instance().TerminaPartita(int.Parse(m.dati) == 1);
                     break;
                 case "y":
                     if(m.dati.Contains(';'))
@@ -179,7 +176,8 @@ namespace pokemonDuel.classi.Comunicazione
         {
             while(!Termina)
             {
-                string s = sr.ReadLine();
+                string s;
+                     s= sr.ReadLine();
                 if (s == null)
                     Termina = true;
                 else if (s != "")
