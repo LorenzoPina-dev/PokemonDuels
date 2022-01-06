@@ -81,7 +81,7 @@ namespace pokemonDuel.classi.Logicagioco
             return StoreInfo.Instance().Mosse[_pokemon.Mosse[ris]];
         }
 
-        public void Gira(int Gradi)
+        public void Gira(int Gradi)     //disegna la ruota ruotata in base ai gradi che li vengono passati come parametro
         {
             try
             {
@@ -103,8 +103,6 @@ namespace pokemonDuel.classi.Logicagioco
                         g.FillPie(m.colore, new Rectangle(new Point(0, 0), new Size(d, d)), Arrivati, percentuali[i]);
 
                         int x, y;
-                        //x =(int)( d / 2 + (Math.Cos(Util.getRad(Arrivati)) + Math.Cos(Util.getRad(Arrivati + percentuali[i])))/2 * (d / 2) -30);
-                        //y = (int)(d / 2 + (Math.Sin(Util.getRad(Arrivati))+ Math.Sin(Util.getRad(Arrivati + percentuali[i])))/2 * (d / 2) - 5);
                         int gradi = (Arrivati * 2 + percentuali[i]) / 2;
                         x = (int)(d / 2 + Math.Cos(Conversione.getRad(gradi)) * (d / 2));
                         y = (int)(d / 2 + Math.Sin(Conversione.getRad(gradi)) * (d / 2));

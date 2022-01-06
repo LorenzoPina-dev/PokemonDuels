@@ -49,10 +49,7 @@ namespace pokemonDuel.classi.Comunicazione
                 Giocatore io = DatiCondivisi.Instance().io;
                 TcpClient c = new TcpClient(ip, 54321);
                 GestioneConnessione gc = new GestioneConnessione(c);
-                string s="";
-                foreach (Pokemon p in io.Deck)
-                    s += ";" + p.id;
-                gc.Invia(new Messaggio("c", io.Username + s));
+                gc.Invia(new Messaggio("c", io.toCsv()));
             }
         }
         public void stop()

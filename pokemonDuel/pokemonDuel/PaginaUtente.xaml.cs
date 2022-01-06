@@ -21,17 +21,17 @@ namespace pokemonDuel
     /// </summary>
     public partial class PaginaUtente : UserControl
     {
-        public int Xp { get { return DatiCondivisi.Instance().io.Xp; } }
-        public string Username { get { return DatiCondivisi.Instance().io.Username; } }
         public PaginaUtente()
         {
             InitializeComponent();
+            TxtNome.Text= DatiCondivisi.Instance().io.Username;
+            TxtXp.Content = DatiCondivisi.Instance().io.Xp;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Profilo.Height = e.NewSize.Height/ 4;
-            Mano.Height = e.NewSize.Height * 3 / 4;
+            Profilo.Height = 40;
+            Mano.Height = e.NewSize.Height -40;
             Mano.Width = e.NewSize.Width;
         }
         public void disegna()
@@ -42,6 +42,11 @@ namespace pokemonDuel
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DatiCondivisi.Instance().io.Username = TxtNome.Text;
+        }
+
+        public void AggiornaXp(int xp)
+        {
+            TxtXp.Content = xp;
         }
     }
 }

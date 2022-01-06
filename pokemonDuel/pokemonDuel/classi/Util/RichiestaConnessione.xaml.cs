@@ -39,6 +39,7 @@ namespace pokemonDuel.classi.Util
             foreach (Pokemon m in io.Deck)
                 s += ";" + m.id;
             gr.Invia(new Messaggio("y", io.Username + s));
+            caricamento.Rimuovi(this);
         }
 
         private void Nega_Click(object sender, RoutedEventArgs e)

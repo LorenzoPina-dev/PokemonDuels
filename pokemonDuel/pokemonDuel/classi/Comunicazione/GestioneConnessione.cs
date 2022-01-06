@@ -19,11 +19,11 @@ namespace pokemonDuel.classi.Comunicazione
         private bool termina;
         private Queue<Messaggio> DaInviare;
         private Queue<Messaggio> DaElaborare;
-        private object synElabora,synInvia;
+        private object synElabora, synInvia;
         private object synTerm;
         public Giocatore Avversario;
 
-        public bool Termina { get { lock (synTerm) { return termina; } }set { lock (synTerm) { termina = value; } } }
+        public bool Termina { get { lock (synTerm) { return termina; } } set { lock (synTerm) { termina = value; } } }
         public GestioneConnessione(TcpClient c)
         {
             synInvia = new object();
@@ -58,16 +58,13 @@ namespace pokemonDuel.classi.Comunicazione
                 case "m":
                     split = m.dati.Split(';');
                     Mappa M = DatiCondivisi.Instance().M;
-                    DatiCondivisi.Instance().caricamento.Dispatcher.Invoke(delegate
-                    {
-                        M.Muovi(int.Parse(split[0]), int.Parse(split[1]));
-                    });
+                    M.Muovi(int.Parse(split[0]), int.Parse(split[1]));
                     break;
                 case "t":
                     DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
                     break;
                 case "tr":
-                    DatiCondivisi.Instance().TermineRound(int.Parse(m.dati)==0);
+                    DatiCondivisi.Instance().TermineRound(int.Parse(m.dati) == 0);
                     DatiCondivisi.Instance().M.Nturno++;
                     if (int.Parse(m.dati) == 0)
                         DatiCondivisi.Instance().M.Tvinti++;
@@ -77,7 +74,7 @@ namespace pokemonDuel.classi.Comunicazione
                     Termina = true;
                     break;
                 case "y":
-                    if(m.dati.Contains(';'))
+                    if (m.dati.Contains(';'))
                     {
                         Avversario = new Giocatore();
                         split = m.dati.Split(';');
@@ -170,32 +167,35 @@ namespace pokemonDuel.classi.Comunicazione
                         }
                     }
                 }
-            }catch(Exception)
-            {}
+            }
+            catch (Exception)
+            { }
             sw.Close();
         }
 
         private void GClient()
         {
-            try { 
-            while(!Termina)
+            try
             {
-                string s = sr.ReadLine();
-                if (s == null)
-                    Termina = true;
-                else if (s != "")
+                while (!Termina)
                 {
-                    Console.WriteLine(s);
-                    Messaggio m = new Messaggio(s);
-                    lock (synElabora)
+                    string s = sr.ReadLine();
+                    if (s == null)
+                        Termina = true;
+                    else if (s != "")
                     {
-                        DaElaborare.Enqueue(m);
+                        Console.WriteLine(s);
+                        Messaggio m = new Messaggio(s);
+                        lock (synElabora)
+                        {
+                            DaElaborare.Enqueue(m);
+                        }
                     }
                 }
             }
-        }catch(Exception)
-            {}
-    sr.Close();
+            catch (Exception)
+            { }
+            sr.Close();
         }
     }
 }

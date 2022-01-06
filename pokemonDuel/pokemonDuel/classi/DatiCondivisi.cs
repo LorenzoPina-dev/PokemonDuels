@@ -24,12 +24,11 @@ namespace pokemonDuel.classi
         public CaricamentoBattaglia caricamento;
         public Battaglia b;
         Timer t;
-        int tempoRimanente;
         public GestioneConnessione Avversario
         {
             get { lock (syncComunicazione) { return _avversario; } }
             set { lock (syncComunicazione) {
-                    if (_avversario == null)
+                    if (_avversario == null || value==null)
                         _avversario = value;
                     else
                         throw new Exception("Avversario già esistente");
@@ -59,7 +58,6 @@ namespace pokemonDuel.classi
             altro = new Giocatore();
             gt = new GestioneTcp();
             t = new Timer();
-            tempoRimanente = 0;
             t.Interval = 1000;
             t.Elapsed += T_Elapsed;
         }
@@ -73,10 +71,21 @@ namespace pokemonDuel.classi
                 {
 
                     b.gestCanvas.Svuota();
-                    AvviaPartita();
+                    b.MostraMappa();
+                    RidisegnaPartita();
                     t.Stop();
                 }
             }
+        }
+
+        private void RidisegnaPartita()
+        {
+            main.Dispatcher.Invoke(delegate
+            {
+                main.MostraFinestra(Finestra.Battaglia);
+                M.Disegna();
+                M.RicominciaGioco();
+            });
         }
 
         public void InviaMessaggio(Messaggio m)
@@ -107,18 +116,21 @@ namespace pokemonDuel.classi
         {
             Random r = new Random();
             int xp = r.Next(20, 50);//,materiale=r.Next(50,60);
+            io.Xp += xp;
             b.Dispatcher.Invoke(delegate {
                 b.gestCanvas.RenderFine(vinto,xp/*,materiale*/);
                 b.MostraUtil();
             });
+            Avversario.Termina = true;
+            Avversario = null;
         }
         public void AvviaPartita()
         {
-            main.Dispatcher.Invoke(delegate
+            b.Dispatcher.Invoke(delegate
             {
-                main.MostraPartita();
-                M.Disegna();
-                M.RicominciaGioco();
+                M.Riavvia();
+                b.MostraMappa();
+                RidisegnaPartita();
             });
         }
 

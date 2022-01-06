@@ -37,6 +37,7 @@ namespace pokemonDuel.classi.Grafica
                 sfondo.Height = canvas.Height;
                 sfondo.Fill = new SolidColorBrush(Color.FromArgb(175,0,0,0));
                 canvas.Children.Add(sfondo);
+
                 Label scritta = new Label();
                 if (vinto)
                 {
@@ -52,6 +53,7 @@ namespace pokemonDuel.classi.Grafica
                 Canvas.SetLeft(scritta, canvas.Width / 2 - 50);
                 Canvas.SetTop(scritta, canvas.Height / 2-60);
                 canvas.Children.Add(scritta);
+
                 Button TornaHome = new Button();
                 TornaHome.Content = "Torna Home";
                 TornaHome.Background = Brushes.LightBlue;
@@ -65,6 +67,7 @@ namespace pokemonDuel.classi.Grafica
                 TornaHome.VerticalContentAlignment = VerticalAlignment.Center;
                 TornaHome.HorizontalContentAlignment = HorizontalAlignment.Center;
                 canvas.Children.Add(TornaHome);
+
                 Label Xp = new Label();
                 Xp.Content ="XP +"+ xp;
                 Xp.Foreground = Brushes.White;
@@ -78,7 +81,7 @@ namespace pokemonDuel.classi.Grafica
 
         private void TornaHome_Click(object sender, RoutedEventArgs e)
         {
-            DatiCondivisi.Instance().main.MostraApp();
+            DatiCondivisi.Instance().main.MostraFinestra(Finestra.Utente);
         }
 
         public void RenderFineRound(bool vinto)
@@ -133,6 +136,7 @@ namespace pokemonDuel.classi.Grafica
             triangoloAvv.Stroke = Brushes.OrangeRed;
             triangoloAvv.StrokeThickness = 5;
             canvas.Children.Add(triangoloAvv);
+
             if (a.MossaMia != null)
             {
                 Label NomeMossaAltro = new Label();

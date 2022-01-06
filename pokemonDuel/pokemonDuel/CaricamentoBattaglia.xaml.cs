@@ -49,29 +49,12 @@ namespace pokemonDuel
         {
             this.Height = Height;
             this.Width = Width;
-            Campo.Width = Width;
-            Campo.Height = Height;
             Inviti.Height = Height- DatiCondivisi.Instance().main.Bottoni.Height;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             GestioneTcp.Connetti(IpConnessione.Text);
-        }
-        public void MostraMappa()
-        {
-            Campo.Visibility = Visibility.Visible;
-            GestInviti.Visibility = Visibility.Hidden;
-            Campo.MostraMappa();
-        }
-        public void MostraInviti()
-        {
-            Campo.Visibility = Visibility.Hidden;
-            GestInviti.Visibility = Visibility.Visible;
-        }
-        public void MostraAttacco()
-        {
-            
         }
     }
 }

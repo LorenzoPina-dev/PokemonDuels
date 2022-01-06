@@ -13,5 +13,9 @@ namespace pokemonDuel.classi
             return gradi / 180f * Math.PI;
         }
     }
+    public enum Finestra
+    {
+        Utente,Pokemon,Inviti,Battaglia
+    }
 
 }

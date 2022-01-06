@@ -9,14 +9,15 @@ namespace pokemonDuel.classi.Logicagioco
 {
     public class Giocatore
     {
-        public int Xp;
+        private int _xp;
         public string Username;
+        public int Xp { get { return _xp; } set { _xp = value; DatiCondivisi.Instance().main.AggiornaXp(_xp); } }
         public int Materiali;
         public List<Pokemon> Deck;
 
         public Giocatore()
         {
-            Xp = 0;
+            _xp = 0;
             Username = "";
             Materiali = 0;
             Deck = new List<Pokemon>();

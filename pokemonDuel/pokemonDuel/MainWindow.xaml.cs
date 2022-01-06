@@ -26,57 +26,62 @@ namespace pokemonDuel
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        CaricamentoBattaglia caricamento;
+        PaginaPokemon pokemon;
+        PaginaUtente utente;
         public MainWindow()
         {
 
             InitializeComponent();
+            utente = new PaginaUtente();
+            pokemon = new PaginaPokemon();
+            caricamento = new CaricamentoBattaglia();
+            finestre.Children.Add(caricamento);
+            finestre.Children.Add(pokemon);
+            finestre.Children.Add(utente);
             Width = SystemParameters.FullPrimaryScreenWidth;
             Height =SystemParameters.FullPrimaryScreenHeight;
             DatiCondivisi.Instance().main = this;
             DatiCondivisi.Instance().caricamento = caricamento;
-            paginaPokemon.Background = Brushes.Black;
-            caricamento.Width = Width;
-            caricamento.Height =Height;
             Mappa m = DatiCondivisi.Instance().M;
             Nodo mio = (Nodo)m.mappa[34].Clone();
             mio.pokemon = StoreInfo.Instance().Pokedex[1];
             Nodo Altro = (Nodo)m.mappa[34].Clone();
             Altro.pokemon = StoreInfo.Instance().Pokedex[3];
-            MostraApp();
+            MostraFinestra(Finestra.Utente);
+        }
+        private void NascondiTutto()
+        {
+            App.Visibility = Visibility.Hidden;
+            battaglia.Visibility = Visibility.Hidden;
+            caricamento.Visibility = Visibility.Hidden;
+            pokemon.Visibility = Visibility.Hidden;
+            utente.Visibility = Visibility.Hidden;
         }
 
-        public void MostraMappa()
+        public void MostraFinestra(Finestra fin)
         {
             Dispatcher.Invoke(delegate
             {
-                paginaPokemon.Visibility = Visibility.Hidden;
-                caricamento.Visibility = Visibility.Visible;
-                App.Visibility = Visibility.Visible;
-                caricamento.MostraInviti();
-            });
-        }
-        public void MostraPartita()
-        {
-            Dispatcher.Invoke(delegate
-            {
-                paginaPokemon.Visibility = Visibility.Hidden;
-                caricamento.Visibility = Visibility.Visible;
-                App.Visibility = Visibility.Hidden;
-                caricamento.MostraMappa();
-                DatiCondivisi.Instance().M.Disegna();
-                DatiCondivisi.Instance().M.RicominciaGioco();
-            });
-        }
-        
-        public void MostraApp()
-        {
-            Dispatcher.Invoke(delegate
-            {
-                paginaPokemon.Visibility = Visibility.Visible;
-                caricamento.Visibility = Visibility.Hidden;
-                App.Visibility = Visibility.Visible;
-                caricamento.MostraInviti();
+                NascondiTutto();
+                switch (fin)
+                {
+                    case Finestra.Utente:
+                        App.Visibility = Visibility.Visible;
+                        utente.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Pokemon:
+                        App.Visibility = Visibility.Visible;
+                        pokemon.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Inviti:
+                        App.Visibility = Visibility.Visible;
+                        caricamento.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Battaglia:
+                        battaglia.Visibility = Visibility.Visible;
+                        break;
+                }
             });
         }
 
@@ -85,24 +90,41 @@ namespace pokemonDuel
             Width = e.NewSize.Width;
             Height = e.NewSize.Height;
             Bottoni.Height = Height / 13;
-            paginaPokemon.Width = Width;
-            paginaPokemon.Height = Height-Bottoni.Height;
+            finestre.Width = Width;
+            finestre.Height = Height-Bottoni.Height;
             caricamento.Height = Height;
             caricamento.Width = Width;
+            pokemon.Height= Height - Bottoni.Height;
+            pokemon.Width = Width;
+            battaglia.Width = Width;
+            battaglia.Height = Height;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MostraMappa();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            MostraApp();
-        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             DatiCondivisi.Instance().gt.stop();
         }
+
+
+        private void Deck_Button(object sender, RoutedEventArgs e)
+        {
+            MostraFinestra(Finestra.Pokemon);
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            MostraFinestra(Finestra.Inviti);
+        }
+
+        private void Main_Click(object sender, RoutedEventArgs e)
+        {
+            MostraFinestra(Finestra.Utente);
+        }
+
+        public void AggiornaXp(int xp)
+        {
+            utente.AggiornaXp(xp);
+        }
+
     }
 }

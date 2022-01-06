@@ -31,14 +31,14 @@ namespace pokemonDuel.classi.Grafica
             stoppa = true;
             Risultato = null;
             gradi = 0;
-            Battaglia b = DatiCondivisi.Instance().caricamento.Campo;
             ruota = new Ruota();
-            b.host.Child = ruota;
+            DatiCondivisi.Instance().b.host.Child = ruota;
             MostraRuota(false);
 
         }
         public void Start()
         {
+
             lock (this)
             {
                 ruota.Pokemon = DatiCondivisi.Instance().A.Mio.pokemon;

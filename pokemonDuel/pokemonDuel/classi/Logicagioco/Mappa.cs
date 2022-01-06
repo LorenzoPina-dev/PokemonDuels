@@ -29,7 +29,6 @@ namespace pokemonDuel.classi.Logicagioco
         int PedineMappa, PedineMano;
         Nodo Selezionato;
         public int Nturno, Tvinti;
-        GestioneRuota gr;
         public int mioAttacco;
         int turniAPartita = 3;
         private object synTurno;
@@ -67,10 +66,17 @@ namespace pokemonDuel.classi.Logicagioco
             _turno = true;
             Nturno = 0;
             Tvinti = 0;
-            gr = null;
             t.Interval = 1000;
             timer = new Label();
             t.Elapsed += T_Elapsed;
+        }
+        public void Riavvia()
+        {
+            Nturno = 0;
+            Tvinti = 0;
+            Selezionato = null;
+            Disegna();
+            Ridisegna();
         }
 
         private void T_Elapsed(object sender, ElapsedEventArgs e)
@@ -103,9 +109,9 @@ namespace pokemonDuel.classi.Logicagioco
                 if (Turno && cliccato.selezionato)
                 {
                     Muovi(Selezionato, cliccato);
-                    ControllaVincitore(cliccato.indice);
                     DatiCondivisi.Instance().Avversario.Invia(new Messaggio("m", Selezionato.indice + ";" + cliccato.indice));
                     DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
+                    ControllaVincitore(cliccato.indice);
                     Turno = !Turno;
                 }
             }
@@ -171,7 +177,10 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void Muovi(int idPartenza,int idDetinazione)
         {
-            Muovi(mappa[SistemaIndici(idPartenza)], mappa[SistemaIndici(idDetinazione)]);
+            DatiCondivisi.Instance().caricamento.Dispatcher.Invoke(delegate
+            {
+                Muovi(mappa[SistemaIndici(idPartenza)], mappa[SistemaIndici(idDetinazione)]);
+            });
         }
 
         public void Muovi(Nodo partenza, Nodo destinazione)
@@ -219,7 +228,7 @@ namespace pokemonDuel.classi.Logicagioco
             Ridisegna();
         }
 
-        public void RicominciaGioco()
+        public void RicominciaGioco()       
         {
             Giocatore io = DatiCondivisi.Instance().io;
             Giocatore altro = DatiCondivisi.Instance().altro;
@@ -242,7 +251,7 @@ namespace pokemonDuel.classi.Logicagioco
             DatiCondivisi.Instance().main.Dispatcher.Invoke(delegate { Ridisegna(); });
         }
 
-        private void Mostra(Nodo cliccato, HashSet<int> hashSet)
+        private void Mostra(Nodo cliccato, HashSet<int> hashSet)        //evidenzia le caselle raggiungibili
         {
             Ridisegna();
             Selezionato = cliccato;
@@ -253,7 +262,7 @@ namespace pokemonDuel.classi.Logicagioco
             }
         }
 
-        public void creaNodi()
+        public void creaNodi()      //crea i nodi logici
         {
             List<string> righe = File.Leggi("./file/Mappa.csv");
             string[] split = righe[0].Split(';');
@@ -306,7 +315,7 @@ namespace pokemonDuel.classi.Logicagioco
                     }
             }
         }
-        public void creaCollegamenti()
+        public void creaCollegamenti()      //crea i collegamenti logici
         {
             List<string> righe = File.Leggi("./file/Collegamenti.csv");
             foreach (string s in righe)
@@ -317,17 +326,20 @@ namespace pokemonDuel.classi.Logicagioco
                 mappa[F].vicini.Add(P);
             }
         }
-        public void Disegna()
+        public void Disegna()       //metodo per ridisegnare tutta la mappa
         {
             Battaglia m = DatiCondivisi.Instance().b;
-            m.myCanvas.Children.Clear();
-            m.CanvasGiocatore.Children.Clear();
-            DisegnaGiocatori(m);
-            DisegnaCollegamenti(m);
-            DisegnaNodi(m);
+            m.Dispatcher.Invoke(delegate
+            {
+                m.myCanvas.Children.Clear();
+                m.CanvasGiocatore.Children.Clear();
+                DisegnaGiocatori(m);
+                DisegnaCollegamenti(m);
+                DisegnaNodi(m);
+            });
         }
 
-        private void DisegnaGiocatori(Battaglia m)
+        private void DisegnaGiocatori(Battaglia m)      //disegna la barra in alto con le informazioni dei 2 utenti e il timer
         {
             Rectangle mio = new Rectangle();
             mio.Width = m.CanvasGiocatore.Width / 2;
@@ -407,7 +419,7 @@ namespace pokemonDuel.classi.Logicagioco
             m.CanvasGiocatore.Children.Add(RoundPersi);
         }
 
-        public void DisegnaNodi(Battaglia m)
+        public void DisegnaNodi(Battaglia m)        //per disegnare le caselle della mappa
         {
             double dimensioneX = (m.myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             Grafica = new List<Rectangle>();
@@ -435,7 +447,7 @@ namespace pokemonDuel.classi.Logicagioco
         }
 
 
-        public void DisegnaCollegamenti(Battaglia m)
+        public void DisegnaCollegamenti(Battaglia m)        //per disegnare le linee della mappa
         {
             double dimensioneX = (m.myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
             foreach (Nodo n in mappa)
@@ -453,7 +465,7 @@ namespace pokemonDuel.classi.Logicagioco
                 }
             }
         }
-        public int SistemaIndici(int daSistemare)
+        public int SistemaIndici(int daSistemare)       //perchè il destinatario manderà le coordinate in base al suo sistema di riferimento e questo metodo fa interagire i 2 sistemi
         {
             if (daSistemare >= PedineMappa)
                 daSistemare -= PedineMano;

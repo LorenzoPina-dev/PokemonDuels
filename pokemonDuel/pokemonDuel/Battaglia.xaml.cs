@@ -54,8 +54,6 @@ namespace pokemonDuel
                 if (DatiCondivisi.Instance().A != null)
                     gestCanvas.MostraAttacca();
                 GestioneRuota.Instance().ruota.CambiaDimensioni(unita, unita);
-                /*DatiCondivisi.Instance().main.MostraPartita();
-                DatiCondivisi.Instance().TerminaPartita(true);*/
             }
         }
         public void MostraAttacco()
@@ -73,8 +71,12 @@ namespace pokemonDuel
         }
         public void MostraMappa()
         {
-            Attacco.Visibility = Visibility.Hidden;
-            myCanvas.Visibility = Visibility.Visible;
+            Dispatcher.Invoke(delegate
+            {
+                Attacco.Visibility = Visibility.Hidden;
+                myCanvas.Visibility = Visibility.Visible;
+                CanvasEventi.Visibility = Visibility.Hidden;
+            });
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
