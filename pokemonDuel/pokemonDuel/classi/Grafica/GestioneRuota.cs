@@ -50,6 +50,7 @@ namespace pokemonDuel.classi.Grafica
                 MostraRuota(true);
                 Thread t = new Thread(Upload);
                 t.Start();
+                DatiCondivisi.Instance().b.MostraAttacco(true);
             }
         }
 
@@ -79,7 +80,7 @@ namespace pokemonDuel.classi.Grafica
                         else
                         {
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", a.Mio.indice + ";" + a.Avversario.indice + ";" + a.MossaMia.id));
-                            DatiCondivisi.Instance().b.gestCanvas.MostraAttacca();
+                            DatiCondivisi.Instance().b.MostraAttacco(true);
                         }
                     }
                     Gira((int)g);
@@ -99,13 +100,13 @@ namespace pokemonDuel.classi.Grafica
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
+                if(DatiCondivisi.Instance().A!=null)
                 if (visibility)
+                     DatiCondivisi.Instance().b.gestCanvas.MostraAttacca(true);
+                    else 
                 {
-                    DatiCondivisi.Instance().b.Attacco.Visibility = Visibility.Visible;
-                    DatiCondivisi.Instance().b.MostraAttacco();
+                    DatiCondivisi.Instance().b.gestCanvas.MostraAttacca(false);
                 }
-                else
-                    DatiCondivisi.Instance().b.Attacco.Visibility = Visibility.Hidden;
             });
         }
 

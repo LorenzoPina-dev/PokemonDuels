@@ -19,11 +19,13 @@ namespace pokemonDuel.classi.Grafica
         {
             this.canvas = canvas;
         }
-        public void MostraAttacca()
+        public void MostraAttacca(bool MostraRuota)
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
                 Svuota();
+                if (MostraRuota)
+                    RenderRuota();
                 RenderAttacco();
             });
         }
@@ -107,6 +109,13 @@ namespace pokemonDuel.classi.Grafica
 
             });
         }
+        private void RenderRuota()
+        {
+            WindowsFormsHost host = DatiCondivisi.Instance().b.host;
+            Canvas.SetBottom(host, 0);
+            Canvas.SetLeft(host, 0);
+            canvas.Children.Add(host);
+        }
 
         private void RenderAttacco()
         {
@@ -114,10 +123,6 @@ namespace pokemonDuel.classi.Grafica
             double H =canvas.Height, W =canvas.Width;
             double unita = Math.Min(W / 5, H / 5) ;
 
-            WindowsFormsHost host = DatiCondivisi.Instance().b.host;
-            Canvas.SetBottom(host, 0);
-            Canvas.SetLeft(host, 0);
-            canvas.Children.Add(host);
 
             Polygon triangoloMio = new Polygon();
             triangoloMio.Points.Add(new Point(W, H * 3 / 4 - 5));

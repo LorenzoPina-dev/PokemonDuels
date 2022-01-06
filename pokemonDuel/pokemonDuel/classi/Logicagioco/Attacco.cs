@@ -41,8 +41,10 @@ namespace pokemonDuel.classi.Logicagioco
         {
             if (!Settato())
                 throw new Exception("attacco non settato");
+            DatiCondivisi.Instance().b.MostraAttacco(false);
             Timer t = new Timer();
             t.Interval = 2000;
+            t.AutoReset = false;
             t.Elapsed += T_Elapsed;
             t.Start();
         }
@@ -51,6 +53,7 @@ namespace pokemonDuel.classi.Logicagioco
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
+                DatiCondivisi.Instance().b.MostraMappa();
                 if (MossaMia.danno > MossaAvversario.danno)
                     DatiCondivisi.Instance().M.RimettiNellaMano(Avversario);
                 else if (MossaMia.danno < MossaAvversario.danno)

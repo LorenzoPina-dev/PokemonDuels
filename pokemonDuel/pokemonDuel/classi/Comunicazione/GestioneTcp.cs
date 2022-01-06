@@ -18,7 +18,7 @@ namespace pokemonDuel.classi.Comunicazione
         private bool termina;
         public GestioneTcp()
         {
-            listener = new TcpListener(IPAddress.Any, 54321);
+            listener = new TcpListener(IPAddress.Any, 12345);
             listener.Start();
             t = new Thread(run);
             t.Start();
@@ -47,7 +47,7 @@ namespace pokemonDuel.classi.Comunicazione
             if (DatiCondivisi.Instance().Avversario == null)
             {
                 Giocatore io = DatiCondivisi.Instance().io;
-                TcpClient c = new TcpClient(ip, 54321);
+                TcpClient c = new TcpClient(ip, 12345);
                 GestioneConnessione gc = new GestioneConnessione(c);
                 gc.Invia(new Messaggio("c", io.toCsv()));
             }

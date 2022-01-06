@@ -3,6 +3,7 @@ using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Grafica;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -11,6 +12,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Timer = System.Timers.Timer;
 
@@ -62,10 +64,7 @@ namespace pokemonDuel.classi.Logicagioco
             startPosizionamento = new List<int>();
             creaNodi();
             creaCollegamenti();
-            Selezionato = null;
             _turno = true;
-            Nturno = 0;
-            Tvinti = 0;
             t.Interval = 1000;
             timer = new Label();
             t.Elapsed += T_Elapsed;
@@ -77,7 +76,7 @@ namespace pokemonDuel.classi.Logicagioco
             Selezionato = null;
             Disegna();
             Ridisegna();
-        }
+         }
 
         private void T_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -264,7 +263,7 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void creaNodi()      //crea i nodi logici
         {
-            List<string> righe = File.Leggi("./file/Mappa.csv");
+            List<string> righe = GestioneFile.File.Leggi("./file/Mappa.csv");
             string[] split = righe[0].Split(';');
             partiX = int.Parse(split[0]);
             partiY = int.Parse(split[1]);
@@ -317,7 +316,7 @@ namespace pokemonDuel.classi.Logicagioco
         }
         public void creaCollegamenti()      //crea i collegamenti logici
         {
-            List<string> righe = File.Leggi("./file/Collegamenti.csv");
+            List<string> righe = GestioneFile.File.Leggi("./file/Collegamenti.csv");
             foreach (string s in righe)
             {
                 string[] estremi = s.Split(';');

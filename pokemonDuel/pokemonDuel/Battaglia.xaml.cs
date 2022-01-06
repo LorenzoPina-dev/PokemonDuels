@@ -52,22 +52,28 @@ namespace pokemonDuel
                 CanvasEventi.Width = Width;
                 CanvasEventi.Height = Height;
                 if (DatiCondivisi.Instance().A != null)
-                    gestCanvas.MostraAttacca();
+                    gestCanvas.MostraAttacca(true);
                 GestioneRuota.Instance().ruota.CambiaDimensioni(unita, unita);
             }
         }
-        public void MostraAttacco()
+        public void MostraAttacco(bool MostraRuota)
         {
-            Attacco.Visibility = Visibility.Visible;
-            CanvasEventi.Visibility = Visibility.Visible;
-            host.Visibility = Visibility.Visible;
-            gestCanvas.MostraAttacca();
+            Dispatcher.Invoke(delegate
+            {
+                Attacco.Visibility = Visibility.Visible;
+                CanvasEventi.Visibility = Visibility.Visible;
+                host.Visibility = Visibility.Visible;
+                gestCanvas.MostraAttacca(MostraRuota);
+            });
         }
         public void MostraUtil()
         {
-            Attacco.Visibility = Visibility.Visible;
-            CanvasEventi.Visibility = Visibility.Visible;
-            host.Visibility = Visibility.Hidden;
+            Dispatcher.Invoke(delegate
+            {
+                Attacco.Visibility = Visibility.Visible;
+                CanvasEventi.Visibility = Visibility.Visible;
+                host.Visibility = Visibility.Hidden;
+            });
         }
         public void MostraMappa()
         {

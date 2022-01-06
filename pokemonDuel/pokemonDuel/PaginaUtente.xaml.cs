@@ -46,7 +46,10 @@ namespace pokemonDuel
 
         public void AggiornaXp(int xp)
         {
-            TxtXp.Content = xp;
+            Dispatcher.Invoke(delegate
+            {
+                TxtXp.Content = xp;
+            });
         }
     }
 }
