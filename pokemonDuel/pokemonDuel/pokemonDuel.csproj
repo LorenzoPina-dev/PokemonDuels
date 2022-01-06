@@ -116,12 +116,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PaginaUtente.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PaginaPokemon.xaml.cs">
       <DependentUpon>PaginaPokemon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PaginaProfilo.cs" />
+    <Compile Include="PaginaUtente.xaml.cs">
+      <DependentUpon>PaginaUtente.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

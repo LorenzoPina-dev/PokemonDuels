@@ -14,10 +14,11 @@ namespace pokemonDuel.classi.Logicagioco
     public partial class Ruota : UserControl
     {
         Graphics g;
+        double W, H;
         Pokemon _pokemon;
         int ultimoAngolo;
         List<int> percentuali;
-        public int d;
+        int d;
         private object synPokemon;
         int ris = -1;
         public Pokemon Pokemon
@@ -44,13 +45,15 @@ namespace pokemonDuel.classi.Logicagioco
             InitializeComponent();
             synPokemon = new object();
             ultimoAngolo = 0;
-            g =canvas.CreateGraphics();
+            d = (int)Math.Min(W, H);
+
         }
         public void CambiaDimensioni(double W, double H)
         {
-            int unita = (int)Math.Min(W , H );
-            Width = unita;
-            Height = unita;
+            this.W = W;
+            this.H = H;
+            d = (int)Math.Min(W, H);
+            g = canvas.CreateGraphics();
         }
 
         private List<int> CalcolaPerc()

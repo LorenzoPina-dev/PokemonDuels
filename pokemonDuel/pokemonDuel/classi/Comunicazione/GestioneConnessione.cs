@@ -20,9 +20,8 @@ namespace pokemonDuel.classi.Comunicazione
         private Queue<Messaggio> DaInviare;
         private Queue<Messaggio> DaElaborare;
         private object synElabora,synInvia;
-        private object synTerm,synIo;
+        private object synTerm;
         public Giocatore Avversario;
-
 
         public bool Termina { get { lock (synTerm) { return termina; } }set { lock (synTerm) { termina = value; } } }
         public GestioneConnessione(TcpClient c)
@@ -30,7 +29,6 @@ namespace pokemonDuel.classi.Comunicazione
             synInvia = new object();
             synElabora = new object();
             synTerm = new object();
-            synIo = new object();
             sw = new StreamWriter(c.GetStream());
             sr = new StreamReader(c.GetStream());
             termina = false;
@@ -51,11 +49,7 @@ namespace pokemonDuel.classi.Comunicazione
             switch (m.scelta)
             {
                 case "c":
-                    split = m.dati.Split(';');
-                    Avversario = new Giocatore();
-                    Avversario.Username = split[0];
-                    for(int i=1;i<split.Length;i++)
-                        Avversario.Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
+                    Avversario = new Giocatore(m.dati);
                     if (DatiCondivisi.Instance().Avversario == null)
                         DatiCondivisi.Instance().MostraRichiestaBattaglia(this);
                     else
@@ -73,10 +67,14 @@ namespace pokemonDuel.classi.Comunicazione
                     DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
                     break;
                 case "tr":
-                    DatiCondivisi.Instance().TermineRound(int.Parse(m.dati)==1);
+                    DatiCondivisi.Instance().TermineRound(int.Parse(m.dati)==0);
+                    DatiCondivisi.Instance().M.Nturno++;
+                    if (int.Parse(m.dati) == 0)
+                        DatiCondivisi.Instance().M.Tvinti++;
                     break;
                 case "tb":
-                    DatiCondivisi.Instance().TerminaPartita(int.Parse(m.dati) == 1);
+                    DatiCondivisi.Instance().TerminaPartita(int.Parse(m.dati) == 0);
+                    Termina = true;
                     break;
                 case "y":
                     if(m.dati.Contains(';'))
@@ -90,6 +88,7 @@ namespace pokemonDuel.classi.Comunicazione
                         {
                             Invia(new Messaggio("y", ""));
                             DatiCondivisi.Instance().M.Turno = false;
+                            DatiCondivisi.Instance().AvviaPartita();
                         }
                         else
                             Invia(new Messaggio("n", ""));
@@ -153,43 +152,50 @@ namespace pokemonDuel.classi.Comunicazione
 
         private void GServer()
         {
-            while(!Termina)
+            try
             {
-                if (DaInviare.Count > 0)
+                while (!Termina || DaInviare.Count != 0)
                 {
-                    Messaggio m;
-                    lock (synInvia)
+                    if (DaInviare.Count > 0)
                     {
-                        m = DaInviare.Dequeue();
-                    }
-                    if (m != null)
-                    {
-                        sw.WriteLine(m.toCsv());
-                        sw.Flush();
+                        Messaggio m;
+                        lock (synInvia)
+                        {
+                            m = DaInviare.Dequeue();
+                        }
+                        if (m != null)
+                        {
+                            sw.WriteLine(m.toCsv());
+                            sw.Flush();
+                        }
                     }
                 }
-            }
+            }catch(Exception)
+            {}
             sw.Close();
         }
 
         private void GClient()
         {
+            try { 
             while(!Termina)
             {
-                string s;
-                     s= sr.ReadLine();
+                string s = sr.ReadLine();
                 if (s == null)
                     Termina = true;
                 else if (s != "")
                 {
                     Console.WriteLine(s);
+                    Messaggio m = new Messaggio(s);
                     lock (synElabora)
                     {
-                        DaElaborare.Enqueue(new Messaggio(s));
+                        DaElaborare.Enqueue(m);
                     }
                 }
             }
-            sr.Close();
+        }catch(Exception)
+            {}
+    sr.Close();
         }
     }
 }

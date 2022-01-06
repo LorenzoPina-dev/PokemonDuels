@@ -8,11 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800" SizeChanged="UserControl_SizeChanged">
     <Grid>
         <DockPanel x:Name="Mappa">
-            <Canvas DockPanel.Dock="Top" Name="CanvasGiocatore" Background="White"/>
-            <Canvas DockPanel.Dock="Bottom" Name="myCanvas" Background="White"/>
+            <Canvas DockPanel.Dock="Top" x:Name="CanvasGiocatore" Background="White"/>
+            <Canvas DockPanel.Dock="Bottom" x:Name="myCanvas" Background="White"/>
         </DockPanel>
         <Grid x:Name="Attacco">
-            <Canvas x:Name="CanvasEventi" Background="Transparent"></Canvas>
+            <Canvas x:Name="CanvasEventi" Background="Transparent"/>
         </Grid>
     </Grid>
 </UserControl>

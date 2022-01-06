@@ -66,29 +66,17 @@ namespace pokemonDuel.classi
 
         private void T_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if(tempoRimanente>0)
-            {
-                tempoRimanente--;
-                if (tempoRimanente==0)
-                {
-
-                    Avversario.Termina = true;
-                    Avversario = null;
-                    main.MostraApp();
-                    altro = null;
-                }
-            }
             if(tempoRimanenteRund > 0)
             {
                 tempoRimanenteRund--;
                 if (tempoRimanenteRund == 0)
                 {
+
                     b.gestCanvas.Svuota();
-                    M.RicominciaGioco();
+                    AvviaPartita();
+                    t.Stop();
                 }
             }
-            if (tempoRimanenteRund == 0 && tempoRimanente == 0)
-                t.Stop();
         }
 
         public void InviaMessaggio(Messaggio m)
@@ -99,27 +87,32 @@ namespace pokemonDuel.classi
                 throw new Exception("Avversario inesistente");
         }
 
-        internal void MostraRichiestaBattaglia(GestioneConnessione gestioneConnessione)
+        public void MostraRichiestaBattaglia(GestioneConnessione gestioneConnessione)
         {
             caricamento.AddConnessione(gestioneConnessione);
+
         }
 
         public void TermineRound(bool vinto)
         {
-            //Random r = new Random();
-            //int xp = r.Next(20, 50),materiale=r.Next(50,60);
-            b.gestCanvas.RenderFineRound(vinto/*,xp,materiale*/);
-            b.MostraUtil();
+            b.Dispatcher.Invoke(delegate
+            {
+                b.gestCanvas.RenderFineRound(vinto);
+                b.MostraUtil();
+            });
             tempoRimanenteRund = 5;
             t.Start();
         }
         public void TerminaPartita(bool vinto)
         {
-            b.gestCanvas.RenderFineRound(vinto/*,xp,materiale*/);
-            tempoRimanente = 30;
-            t.Start();
+            Random r = new Random();
+            int xp = r.Next(20, 50);//,materiale=r.Next(50,60);
+            b.Dispatcher.Invoke(delegate {
+                b.gestCanvas.RenderFine(vinto,xp/*,materiale*/);
+                b.MostraUtil();
+            });
         }
-        internal void AvviaPartita()
+        public void AvviaPartita()
         {
             main.Dispatcher.Invoke(delegate
             {
@@ -128,11 +121,6 @@ namespace pokemonDuel.classi
                 M.RicominciaGioco();
             });
         }
-        public void Upload()
-        {
-            
-        }
-
 
     }
 }

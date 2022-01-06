@@ -5,11 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
 using System.Threading;
-using Timer = System.Timers.Timer;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace pokemonDuel.classi.Grafica
 {
@@ -46,7 +44,7 @@ namespace pokemonDuel.classi.Grafica
                 ruota.Pokemon = DatiCondivisi.Instance().A.Mio.pokemon;
                 Random random = new Random();
                 Risultato = null;
-                gradi = (float)random.Next(4000, 5200);
+                gradi = (float)random.Next(1000, 2200);
                 ultimo = DateTime.Now;
                 stoppa = false;
                 MostraRuota(true);
@@ -72,17 +70,14 @@ namespace pokemonDuel.classi.Grafica
                         stoppa = true;
                         Attacco a = DatiCondivisi.Instance().A;
                         a.MossaMia = m;
-                        DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
-                        {
-                            DatiCondivisi.Instance().b.host.Visibility = Visibility.Hidden;
-                        });
+                        MostraRuota(false);
                         if (a.Settato())
                         {
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", "" + a.MossaMia.id));
                             a.EseguiAttacco();
                         }
                         else
-                        { 
+                        {
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("a", a.Mio.indice + ";" + a.Avversario.indice + ";" + a.MossaMia.id));
                             DatiCondivisi.Instance().b.gestCanvas.MostraAttacca();
                         }
@@ -92,7 +87,6 @@ namespace pokemonDuel.classi.Grafica
                 Thread.Sleep(100);
             }
         }
-
 
         public void Gira(int gradi)
         {
@@ -111,9 +105,7 @@ namespace pokemonDuel.classi.Grafica
                     DatiCondivisi.Instance().b.MostraAttacco();
                 }
                 else
-                {
                     DatiCondivisi.Instance().b.Attacco.Visibility = Visibility.Hidden;
-                }
             });
         }
 

@@ -26,6 +26,7 @@ namespace pokemonDuel
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
 
@@ -42,10 +43,7 @@ namespace pokemonDuel
             mio.pokemon = StoreInfo.Instance().Pokedex[1];
             Nodo Altro = (Nodo)m.mappa[34].Clone();
             Altro.pokemon = StoreInfo.Instance().Pokedex[3];
-            /*DatiCondivisi.Instance().A = new Attacco(mio, Altro, StoreInfo.Instance().Mosse[0], StoreInfo.Instance().Mosse[1]);
-            MostraPartita();*/
             MostraApp();
-            DatiCondivisi.Instance().io.Username = "lorenzo";
         }
 
         public void MostraMappa()

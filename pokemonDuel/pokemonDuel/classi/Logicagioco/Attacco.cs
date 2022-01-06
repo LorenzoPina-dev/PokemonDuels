@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -42,27 +41,23 @@ namespace pokemonDuel.classi.Logicagioco
         {
             if (!Settato())
                 throw new Exception("attacco non settato");
-            DatiCondivisi.Instance().b.gestCanvas.MostraAttacca();
-
             Timer t = new Timer();
-            t.AutoReset = false;
             t.Interval = 2000;
             t.Elapsed += T_Elapsed;
             t.Start();
         }
+
         private void T_Elapsed(object sender, ElapsedEventArgs e)
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
-                GestioneRuota.Instance().MostraRuota(false);
                 if (MossaMia.danno > MossaAvversario.danno)
                     DatiCondivisi.Instance().M.RimettiNellaMano(Avversario);
                 else if (MossaMia.danno < MossaAvversario.danno)
                     DatiCondivisi.Instance().M.RimettiNellaMano(Mio);
-
             });
             DatiCondivisi.Instance().M.Turno = !DatiCondivisi.Instance().M.Turno;
-            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t",""));
+            DatiCondivisi.Instance().Avversario.Invia(new Messaggio("t", ""));
         }
     }
 }

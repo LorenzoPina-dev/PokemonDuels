@@ -27,33 +27,58 @@ namespace pokemonDuel.classi.Grafica
                 RenderAttacco();
             });
         }
-        public void RenderFine(bool vinto/*, int xp,int materiali*/)
+        public void RenderFine(bool vinto, int xp/*,int materiali*/)
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
                 Svuota();
-            Rectangle sfondo = new Rectangle();
-            sfondo.Width = canvas.Width;
-            sfondo.Height = canvas.Height;
-            sfondo.Fill = Brushes.Black;
-            canvas.Children.Add(sfondo);
-            Label scritta = new Label();
-            if (vinto)
-            {
-                scritta.Content = "Vinto";
-                scritta.Foreground = Brushes.LightBlue;
-            }
-            else
-            { 
-                scritta.Content = "Perso";
-                scritta.Foreground = Brushes.OrangeRed;
-            }
-            scritta.FontSize = 40;
-            Canvas.SetLeft(scritta, canvas.Width / 2 - 50);
-            Canvas.SetTop(scritta, canvas.Height / 2);
-            canvas.Children.Add(scritta);
-
+                Rectangle sfondo = new Rectangle();
+                sfondo.Width = canvas.Width;
+                sfondo.Height = canvas.Height;
+                sfondo.Fill = new SolidColorBrush(Color.FromArgb(175,0,0,0));
+                canvas.Children.Add(sfondo);
+                Label scritta = new Label();
+                if (vinto)
+                {
+                    scritta.Content = "Vinto";
+                    scritta.Foreground = Brushes.LightBlue;
+                }
+                else
+                { 
+                    scritta.Content = "Perso";
+                    scritta.Foreground = Brushes.OrangeRed;
+                }
+                scritta.FontSize = 40;
+                Canvas.SetLeft(scritta, canvas.Width / 2 - 50);
+                Canvas.SetTop(scritta, canvas.Height / 2-60);
+                canvas.Children.Add(scritta);
+                Button TornaHome = new Button();
+                TornaHome.Content = "Torna Home";
+                TornaHome.Background = Brushes.LightBlue;
+                TornaHome.Foreground = Brushes.Black;
+                TornaHome.Click += TornaHome_Click;
+                Canvas.SetLeft(TornaHome, canvas.Width / 2 - 75);
+                Canvas.SetTop(TornaHome, canvas.Height/2 +60);
+                TornaHome.Width = 150;
+                TornaHome.Height = 60;
+                TornaHome.FontSize = 20;
+                TornaHome.VerticalContentAlignment = VerticalAlignment.Center;
+                TornaHome.HorizontalContentAlignment = HorizontalAlignment.Center;
+                canvas.Children.Add(TornaHome);
+                Label Xp = new Label();
+                Xp.Content ="XP +"+ xp;
+                Xp.Foreground = Brushes.White;
+                Xp.Background = Brushes.Transparent;
+                Xp.FontSize = 25;
+                Canvas.SetLeft(Xp, canvas.Width / 2 - 40);
+                Canvas.SetTop(Xp, canvas.Height / 2);
+                canvas.Children.Add(Xp);
             });
+        }
+
+        private void TornaHome_Click(object sender, RoutedEventArgs e)
+        {
+            DatiCondivisi.Instance().main.MostraApp();
         }
 
         public void RenderFineRound(bool vinto)

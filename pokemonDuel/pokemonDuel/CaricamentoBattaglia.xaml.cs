@@ -47,8 +47,8 @@ namespace pokemonDuel
 
         public void Ridimensiona(double Width,double Height)
         {
-            this.Width = Width;
             this.Height = Height;
+            this.Width = Width;
             Campo.Width = Width;
             Campo.Height = Height;
             Inviti.Height = Height- DatiCondivisi.Instance().main.Bottoni.Height;
@@ -62,6 +62,7 @@ namespace pokemonDuel
         {
             Campo.Visibility = Visibility.Visible;
             GestInviti.Visibility = Visibility.Hidden;
+            Campo.MostraMappa();
         }
         public void MostraInviti()
         {

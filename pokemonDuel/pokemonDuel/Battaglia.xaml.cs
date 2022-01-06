@@ -32,14 +32,13 @@ namespace pokemonDuel
         {
             InitializeComponent();
             host = new WindowsFormsHost();
-            host.Background = Brushes.Aqua;
             DatiCondivisi.Instance().b = this;
             DatiCondivisi.Instance().M = new Mappa();
             gestCanvas = new GestioneCanvas(CanvasEventi);
         }
 
         int i = 0;
-        public void Ridimensiona(double Width,double Height)
+        private void Ridimensiona(double Width,double Height)
         {
             if (!(Width is double.NaN && Height is double.NaN))
             {
@@ -55,6 +54,8 @@ namespace pokemonDuel
                 if (DatiCondivisi.Instance().A != null)
                     gestCanvas.MostraAttacca();
                 GestioneRuota.Instance().ruota.CambiaDimensioni(unita, unita);
+                /*DatiCondivisi.Instance().main.MostraPartita();
+                DatiCondivisi.Instance().TerminaPartita(true);*/
             }
         }
         public void MostraAttacco()
@@ -73,6 +74,7 @@ namespace pokemonDuel
         public void MostraMappa()
         {
             Attacco.Visibility = Visibility.Hidden;
+            myCanvas.Visibility = Visibility.Visible;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
