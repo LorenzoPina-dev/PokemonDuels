@@ -48,7 +48,6 @@ namespace pokemonDuel
             mio.pokemon = StoreInfo.Instance().Pokedex[1];
             Nodo Altro = (Nodo)m.mappa[34].Clone();
             Altro.pokemon = StoreInfo.Instance().Pokedex[3];
-            MostraFinestra(Finestra.Utente);
         }
         private void NascondiTutto()
         {
@@ -63,24 +62,25 @@ namespace pokemonDuel
         {
             Dispatcher.Invoke(delegate
             {
-                NascondiTutto();
-                switch (fin)
-                {
-                    case Finestra.Utente:
-                        App.Visibility = Visibility.Visible;
-                        utente.Visibility = Visibility.Visible;
-                        break;
-                    case Finestra.Pokemon:
-                        App.Visibility = Visibility.Visible;
-                        pokemon.Visibility = Visibility.Visible;
-                        break;
-                    case Finestra.Inviti:
-                        App.Visibility = Visibility.Visible;
-                        caricamento.Visibility = Visibility.Visible;
-                        break;
-                    case Finestra.Battaglia:
-                        battaglia.Visibility = Visibility.Visible;
-                        break;
+            NascondiTutto();
+            switch (fin)
+            {
+                case Finestra.Utente:
+                    App.Visibility = Visibility.Visible;
+                    utente.Visibility = Visibility.Visible;
+                    utente.disegna();
+                    break;
+                case Finestra.Pokemon:
+                    App.Visibility = Visibility.Visible;
+                    pokemon.Visibility = Visibility.Visible;
+                    break;
+                case Finestra.Inviti:
+                    App.Visibility = Visibility.Visible;
+                    caricamento.Visibility = Visibility.Visible;
+                    break;
+                case Finestra.Battaglia:
+                    battaglia.Visibility = Visibility.Visible;
+                    break;
                 }
             });
         }
@@ -98,6 +98,7 @@ namespace pokemonDuel
             pokemon.Width = Width;
             battaglia.Width = Width;
             battaglia.Height = Height;
+            MostraFinestra(Finestra.Utente);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

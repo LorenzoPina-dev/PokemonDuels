@@ -159,12 +159,17 @@ namespace pokemonDuel.classi.Logicagioco
                     if (n.pokemon == null)
                         n.presentePokemon = false;
                     Grafica[n.indice].Fill = n.pokemon.Render();
-                    Grafica[n.indice].Stroke = Brushes.Transparent;
+                    if(n.pokemon.mio)
+                        Grafica[n.indice].Stroke = Brushes.LightBlue;
+                    else
+                        Grafica[n.indice].Stroke = Brushes.OrangeRed;
+                    Grafica[n.indice].StrokeThickness=3;
                 }
                 else
                 {
                     Grafica[n.indice].Fill = Brushes.White;
                     Grafica[n.indice].Stroke = Brushes.Black;
+                    Grafica[n.indice].StrokeThickness = 1;
                 }
                 n.selezionato = false;
             }
@@ -432,7 +437,10 @@ namespace pokemonDuel.classi.Logicagioco
                 if (n.presentePokemon)
                 {
                     b.Fill = n.pokemon.Render();
-                    b.Stroke = Brushes.Transparent;
+                    if (n.pokemon.mio)
+                        b.Stroke = Brushes.LightBlue;
+                    else
+                        b.Stroke = Brushes.OrangeRed;
                 }
                 else
                     b.Fill = Brushes.White;

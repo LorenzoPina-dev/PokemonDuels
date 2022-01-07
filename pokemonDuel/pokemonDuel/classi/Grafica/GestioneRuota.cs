@@ -16,7 +16,7 @@ namespace pokemonDuel.classi.Grafica
         public  Ruota ruota;
         private static GestioneRuota instance = null;
         public Mossa _risultato;
-        public Mossa Risultato { get { return _risultato; }set { _risultato = value; } }
+        public Mossa Risultato { get { return _risultato; } set { _risultato = value; } }
         float gradi;
         DateTime ultimo;
         public bool stoppa = true;

@@ -26,7 +26,7 @@ namespace pokemonDuel
     {
         public string PedinaVuota =Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png";
         private Dictionary<int,Pokemon> tuttiPokemon;
-        private Image selezionata;
+        private Rectangle selezionata;
         int PokemonPerPagina;
         int pagina;
         int parti = 11,partiLista=8,partiMano=2;
@@ -52,21 +52,22 @@ namespace pokemonDuel
             int x = 0, unita = (int)(Deck.Width / 6);
             for (int j = 0; j < 6; j++)
             {
-                Image i = new Image();
+                Rectangle i = new Rectangle();
                 if (DatiCondivisi.Instance().io.Deck.Count > j)
                 {
-                    i.Source = new BitmapImage(new Uri(DatiCondivisi.Instance().io.Deck[j].UrlTexture));
-                    i.Width = unita-10;
+                    i.Fill = DatiCondivisi.Instance().io.Deck[j].Render();
+                    i.Width = (int)Math.Min(unita, Deck.Height) - 10;
                     i.Height = (int)Math.Min(unita, Deck.Height)-10;
                     i.Margin = new Thickness(x, 0, Deck.Width - x - unita, 10);
                 }
                 else
                 {
-                    i.Source = new BitmapImage(new Uri(PedinaVuota));
+                    i.Fill = new ImageBrush(new BitmapImage(new Uri(PedinaVuota)));
                     i.Margin = new Thickness(x, Deck.Height / 6, Deck.Width - x - unita, 0);
                     i.Height = (int)Math.Min(unita, Deck.Height);
                     i.Width = unita;
                 }
+                i.Stroke = Brushes.Transparent;
                 i.Name = "D_" + j;
                 i.MouseDown += Cliccata;
                 x += unita;
@@ -77,7 +78,11 @@ namespace pokemonDuel
 
         private void Cliccata(object sender, MouseButtonEventArgs e)
         {
-            selezionata = (Image)e.Source;
+            if (selezionata != null)
+                selezionata.Stroke = Brushes.Transparent;
+            selezionata = (Rectangle)e.Source;
+
+            selezionata.Stroke = Brushes.LightBlue;
         }
         private int DisegnaPokemon(int ind)
         {
@@ -87,8 +92,8 @@ namespace pokemonDuel
             for(;j< keys.Count;j++)
             {
                 Pokemon pok = (Pokemon)tuttiPokemon[keys[j]].Clone();
-                Image i = new Image();
-                i.Source = new BitmapImage(new Uri(pok.UrlTexture));
+                Rectangle i = new Rectangle();
+                i.Fill = new ImageBrush(new BitmapImage(new Uri(pok.UrlTexture)));
                 i.Width = unita;
                 i.Height = unita;
                 i.Margin = new Thickness(x, y, Lista.Width - x - unita, Lista.Height - y - unita);
@@ -100,6 +105,8 @@ namespace pokemonDuel
                     x = 0;
                     y += unita;
                 }
+                i.StrokeThickness = 5;
+                i.Stroke = Brushes.Transparent;
                 Lista.Children.Add(i);
                 if (y + unita >= Lista.Height)
                     return j-ind;
