@@ -1,6 +1,9 @@
-﻿using pokemonDuel.classi.Comunicazione;
+﻿using pokemonDuel.classi.Componenti;
+using pokemonDuel.classi.Comunicazione;
+using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
+using pokemonDuel.classi.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +23,6 @@ namespace pokemonDuel.classi
         public MainWindow main;
         public Giocatore io,altro;
         public Attacco A;
-        public GestioneTcp gt;
         public CaricamentoBattaglia caricamento;
         public Battaglia b;
         Timer t;
@@ -56,7 +58,6 @@ namespace pokemonDuel.classi
             M = null;
             io = new Giocatore();
             altro = new Giocatore();
-            gt = new GestioneTcp();
             t = new Timer();
             t.Interval = 1000;
             t.Elapsed += T_Elapsed;
@@ -115,13 +116,14 @@ namespace pokemonDuel.classi
         public void TerminaPartita(bool vinto)
         {
             Random r = new Random();
-            int xp = r.Next(20, 50);//,materiale=r.Next(50,60);
+            int xp = r.Next(20, 50),materiale=r.Next(50,60);
             io.Xp += xp;
+            io.Materiali += materiale;
             b.Dispatcher.Invoke(delegate {
-                b.gestCanvas.RenderFine(vinto,xp/*,materiale*/);
+                b.gestCanvas.RenderFine(vinto,xp,materiale);
                 b.MostraUtil();
             });
-            Avversario.Termina = true;
+            //Avversario.Termina = true;
             Avversario = null;
         }
         public void AvviaPartita()

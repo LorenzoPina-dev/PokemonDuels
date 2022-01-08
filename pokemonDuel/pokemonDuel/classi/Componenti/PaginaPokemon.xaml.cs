@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace pokemonDuel
+namespace pokemonDuel.classi.Componenti
 {
     /// <summary>
     /// Logica di interazione per PaginaPokemon.xaml
@@ -26,22 +26,22 @@ namespace pokemonDuel
     public partial class PaginaPokemon : UserControl
     {
         public string PedinaVuota =Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png";
-        private Dictionary<int,Pokemon> tuttiPokemon;
+        public SortedDictionary<int,Pokemon> tuttiPokemon;
         private Rectangle selezionata;
         int PokemonPerPagina;
         int pagina;
         int parti = 11,partiLista=8,partiMano=2;
+        int unita;
         public PaginaPokemon()
         {
             InitializeComponent();
-            tuttiPokemon = new Dictionary<int, Pokemon>();
-            foreach (KeyValuePair<int,Pokemon> p in StoreInfo.Instance().Pokedex)
-                tuttiPokemon.Add(p.Key,p.Value);
+            tuttiPokemon = new SortedDictionary<int, Pokemon>();
             selezionata = null;
         }
-        private void CaricaPokemon()
+        public void CaricaPokemon()
         {
-            PokemonPerPagina=DisegnaPokemon(0);
+            PokemonPerPagina = (int)(Lista.Width / unita * (Lista.Height / unita))+1;
+            DisegnaPokemon(0);
             CaricaMano();
             pagina = 0;
             
@@ -49,12 +49,12 @@ namespace pokemonDuel
         private void CaricaMano()
         {
             Deck.Children.Clear();
-            int unita = (int)Math.Min(Width/6, Deck.Height), x = (int)(Width/6 - unita)/2;
+            int unita = (int)Math.Min(Width / 6, Deck.Height),x = (int)(Width / 6 - unita) / 2; 
             for (int j = 0; j < 6; j++)
             {
                 if (DatiCondivisi.Instance().io.Deck.Count > j)
                 {
-                    GestioneCanvas.RenderPokemon(Deck, DatiCondivisi.Instance().io.Deck[j], unita, x, 0, false);
+                    GestioneCanvas.RenderPokemon(Deck, DatiCondivisi.Instance().io.Deck[j], unita, x, 0, false, true);
                 }
                 else
                 {
@@ -91,22 +91,26 @@ namespace pokemonDuel
         {
             Cliccata((Rectangle)e.Source);
         }
-        private int DisegnaPokemon(int ind)
+        public void DisegnaPokemon(int ind)
         {
             Lista.Children.Clear();
             int x = 0, y = 0, unita = 100,j=ind;
             var keys = tuttiPokemon.Keys.ToList();
-            for(;j< keys.Count;j++)
+            for(;j< PokemonPerPagina;j++)
             {
-                Pokemon pok = (Pokemon)tuttiPokemon[keys[j]].Clone();
-                GestioneCanvas.RenderPokemon(Lista, pok, unita, x, y,false);
-
                 Rectangle container = new Rectangle();
-                container.Fill = Brushes.Transparent;
+                if (j < keys.Count)
+                {
+                    Pokemon pok = (Pokemon)tuttiPokemon[keys[ind + j]].Clone();
+                    GestioneCanvas.RenderPokemon(Lista, pok, unita, x, y, false, true);
+                    container.Name = "P_" + pok.id;
+                    container.Fill = Brushes.Transparent;
+                }
+                else
+                    container.Fill = new ImageBrush(new BitmapImage(new Uri(PedinaVuota)));
                 container.Width = unita;
                 container.Height = unita;
                 container.Margin = new Thickness(x, y, Lista.Width - x - unita, Lista.Height - y - unita);
-                container.Name = "P_" + pok.id;
                 container.StrokeThickness = 5;
                 container.Stroke = Brushes.Transparent;
                 container.MouseDown += Cliccata;
@@ -117,11 +121,7 @@ namespace pokemonDuel
                     x = 0;
                     y += unita;
                 }
-
-                if (y + unita >= Lista.Height)
-                    return j-ind;
             }
-            return j - ind;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -131,7 +131,7 @@ namespace pokemonDuel
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (selezionata != null)
+            if (selezionata != null && selezionata.Name!="")
             {
                 string[] split = selezionata.Name.Split('_');
                 if (split[0] == "P")
@@ -152,7 +152,7 @@ namespace pokemonDuel
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if (selezionata != null)
+            if (selezionata != null && selezionata.Name != "")
             {
                 string[] split = selezionata.Name.Split('_');
                 if (split[0] != "D")
@@ -182,7 +182,7 @@ namespace pokemonDuel
 
         private void Dopo_Click(object sender, RoutedEventArgs e)
         {
-            if ((pagina + 1) * PokemonPerPagina <= tuttiPokemon.Count)
+            if ((pagina+1) * PokemonPerPagina <= tuttiPokemon.Count)
             {
                 pagina++;
                 DisegnaPokemon(pagina * PokemonPerPagina);
@@ -196,6 +196,7 @@ namespace pokemonDuel
             Lista.Height = Height * partiLista / parti;
             Deck.Height = Height * partiMano / parti;
             Deck.Width = Width;
+            unita = 100;
             CaricaPokemon();
         }
     }

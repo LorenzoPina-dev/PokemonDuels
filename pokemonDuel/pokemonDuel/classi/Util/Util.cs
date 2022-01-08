@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pokemonDuel.classi
+namespace pokemonDuel.classi.Util
 {
     public class Conversione
     {
@@ -15,7 +15,6 @@ namespace pokemonDuel.classi
     }
     public enum Finestra
     {
-        Utente,Pokemon,Inviti,Battaglia
+        Utente,Pokemon,Inviti,Battaglia,Shop
     }
-
 }

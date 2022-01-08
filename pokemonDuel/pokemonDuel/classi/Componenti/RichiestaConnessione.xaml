@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="pokemonDuel.classi.Util.RichiestaConnessione"
+﻿<UserControl x:Class="pokemonDuel.classi.Componenti.RichiestaConnessione"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:pokemonDuel.classi.Util"
-             mc:Ignorable="d" Height="45.455" Width="239.394">
+             xmlns:local="clr-namespace:pokemonDuel.classi.Componenti"
+             mc:Ignorable="d" Height="166.855" Width="819.974">
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="6*"/>

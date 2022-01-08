@@ -2,6 +2,7 @@
 using pokemonDuel.classi.Comunicazione;
 using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Logicagioco;
+using pokemonDuel.classi.Componenti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using pokemonDuel.classi.Util;
 
 namespace pokemonDuel
 {
@@ -29,6 +31,7 @@ namespace pokemonDuel
         CaricamentoBattaglia caricamento;
         PaginaPokemon pokemon;
         PaginaUtente utente;
+        ShopPokemon shop;
         public MainWindow()
         {
 
@@ -36,18 +39,21 @@ namespace pokemonDuel
             utente = new PaginaUtente();
             pokemon = new PaginaPokemon();
             caricamento = new CaricamentoBattaglia();
+            shop = new ShopPokemon(pokemon);
+
             finestre.Children.Add(caricamento);
             finestre.Children.Add(pokemon);
             finestre.Children.Add(utente);
+            finestre.Children.Add(shop);
             Width = SystemParameters.FullPrimaryScreenWidth;
             Height =SystemParameters.FullPrimaryScreenHeight;
             DatiCondivisi.Instance().main = this;
             DatiCondivisi.Instance().caricamento = caricamento;
-            Mappa m = DatiCondivisi.Instance().M;
-            Nodo mio = (Nodo)m.mappa[34].Clone();
-            mio.pokemon = StoreInfo.Instance().Pokedex[1];
-            Nodo Altro = (Nodo)m.mappa[34].Clone();
-            Altro.pokemon = StoreInfo.Instance().Pokedex[3];
+            List<string> Giocatore = GestFile.LeggiInfoGiocatore();
+            if(Giocatore.Count>0)
+                DatiCondivisi.Instance().io = new Giocatore(Giocatore[0], true);
+            if (Giocatore.Count > 1)
+                shop.settaVolori(Giocatore[1]);
         }
         private void NascondiTutto()
         {
@@ -56,31 +62,37 @@ namespace pokemonDuel
             caricamento.Visibility = Visibility.Hidden;
             pokemon.Visibility = Visibility.Hidden;
             utente.Visibility = Visibility.Hidden;
+            shop.Visibility = Visibility.Hidden;
         }
 
         public void MostraFinestra(Finestra fin)
         {
             Dispatcher.Invoke(delegate
             {
-            NascondiTutto();
-            switch (fin)
-            {
-                case Finestra.Utente:
-                    App.Visibility = Visibility.Visible;
-                    utente.Visibility = Visibility.Visible;
-                    utente.disegna();
-                    break;
-                case Finestra.Pokemon:
-                    App.Visibility = Visibility.Visible;
-                    pokemon.Visibility = Visibility.Visible;
-                    break;
-                case Finestra.Inviti:
-                    App.Visibility = Visibility.Visible;
-                    caricamento.Visibility = Visibility.Visible;
-                    break;
-                case Finestra.Battaglia:
-                    battaglia.Visibility = Visibility.Visible;
-                    break;
+                NascondiTutto();
+                switch (fin)
+                {
+                    case Finestra.Utente:
+                        App.Visibility = Visibility.Visible;
+                        utente.Visibility = Visibility.Visible;
+                        utente.disegna();
+                        break;
+                    case Finestra.Pokemon:
+                        App.Visibility = Visibility.Visible;
+                        pokemon.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Inviti:
+                        App.Visibility = Visibility.Visible;
+                        caricamento.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Battaglia:
+                        battaglia.Visibility = Visibility.Visible;
+                        break;
+                    case Finestra.Shop:
+                        App.Visibility = Visibility.Visible;
+                        shop.Visibility = Visibility.Visible;
+                        shop.TxtMateriali.Text = DatiCondivisi.Instance().io.Materiali + "";
+                        break;
                 }
             });
         }
@@ -95,6 +107,8 @@ namespace pokemonDuel
             caricamento.Height = Height;
             caricamento.Width = Width;
             pokemon.Height= Height - Bottoni.Height;
+            shop.Height = Height - Bottoni.Height;
+            shop.Width = Width;
             pokemon.Width = Width;
             battaglia.Width = Width;
             battaglia.Height = Height;
@@ -104,7 +118,8 @@ namespace pokemonDuel
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DatiCondivisi.Instance().gt.stop();
+            GestioneTcp.Instance().stop();
+            GestFile.SalvaInfoGiocatore(DatiCondivisi.Instance().io.toCsv()+"\r\n"+shop.Salva());
         }
 
 
@@ -121,6 +136,10 @@ namespace pokemonDuel
         private void Main_Click(object sender, RoutedEventArgs e)
         {
             MostraFinestra(Finestra.Utente);
+        }
+        private void Shop_Click(object sender, RoutedEventArgs e)
+        {
+            MostraFinestra(Finestra.Shop);
         }
 
         public void AggiornaXp(int xp)

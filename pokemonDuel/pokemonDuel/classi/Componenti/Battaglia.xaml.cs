@@ -19,7 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace pokemonDuel
+namespace pokemonDuel.classi.Componenti
 {
     /// <summary>
     /// Logica di interazione per Battaglia.xaml

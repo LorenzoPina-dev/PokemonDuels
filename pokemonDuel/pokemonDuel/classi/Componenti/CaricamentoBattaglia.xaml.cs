@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace pokemonDuel
+namespace pokemonDuel.classi.Componenti
 {
     /// <summary>
     /// Logica di interazione per CaricamentoBattaglia.xaml
@@ -32,12 +32,17 @@ namespace pokemonDuel
         public void AddConnessione(GestioneConnessione gr)
         {
             Dispatcher.Invoke(delegate {
-                Inviti.Items.Add(new RichiestaConnessione(gr, this));
+                RichiestaConnessione rc = new RichiestaConnessione(gr, this);
+                rc.Background = Brushes.Black;
+                rc.Width = Inviti.Width;
+                rc.Height = 50;
+                Inviti.Items.Add(rc);
             });
         }
         public void Rimuovi(RichiestaConnessione r)
         {
             Inviti.Items.Remove(r);
+            GestioneTcp.Instance().Disconnetti(r.gr);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -50,6 +55,7 @@ namespace pokemonDuel
             this.Height = Height;
             this.Width = Width;
             Inviti.Height = Height- DatiCondivisi.Instance().main.Bottoni.Height;
+            Inviti.Width = Width;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

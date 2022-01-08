@@ -1,4 +1,5 @@
-﻿using pokemonDuel.classi.Comunicazione;
+﻿using pokemonDuel.classi.Componenti;
+using pokemonDuel.classi.Comunicazione;
 using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Grafica;
 using System;
@@ -249,7 +250,7 @@ namespace pokemonDuel.classi.Logicagioco
 
         public void creaNodi()      //crea i nodi logici
         {
-            List<string> righe = GestioneFile.File.Leggi("./file/Mappa.csv");
+            List<string> righe = GestioneFile.GestFile.Leggi("./file/Mappa.csv");
             string[] split = righe[0].Split(';');
             partiX = int.Parse(split[0]);
             partiY = int.Parse(split[1]);
@@ -302,7 +303,7 @@ namespace pokemonDuel.classi.Logicagioco
         }
         public void creaCollegamenti()      //crea i collegamenti logici
         {
-            List<string> righe = GestioneFile.File.Leggi("./file/Collegamenti.csv");
+            List<string> righe = GestioneFile.GestFile.Leggi("./file/Collegamenti.csv");
             foreach (string s in righe)
             {
                 string[] estremi = s.Split(';');
@@ -422,7 +423,7 @@ namespace pokemonDuel.classi.Logicagioco
                 b.Width = dimensioneX * 3 / 4;
                 if (n.presentePokemon)
                 {
-                    GestioneCanvas.RenderPokemon(m.myCanvas,n.pokemon, dimensioneX * 3 / 4, dimensioneY * 3 / 4, dimensioneX * n.x + dimensioneX / 4, dimensioneY * n.y + dimensioneY / 4,  false);
+                    GestioneCanvas.RenderPokemon(m.myCanvas,n.pokemon, dimensioneX * 3 / 4, dimensioneY * 3 / 4, dimensioneX * n.x + dimensioneX / 4, dimensioneY * n.y + dimensioneY / 4,  false,false);
                     if (n.pokemon.mio)
                         b.Stroke = Brushes.LightBlue;
                     else

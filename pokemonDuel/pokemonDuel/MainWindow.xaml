@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:pokemonDuel"
+        xmlns:local="clr-namespace:pokemonDuel.classi.Componenti"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="700" SizeChanged="Window_SizeChanged" Closing="Window_Closing" ResizeMode="NoResize" WindowState="Maximized" WindowStartupLocation="Manual" Topmost="False" WindowStyle="None" >
     <Grid>
@@ -14,10 +14,12 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" FontSize="20" Click="Deck_Button">Deck</Button>
                 <Button Grid.Column="2" FontSize="20" Click="Play_Click">Play</Button>
                 <Button Grid.Column="1" FontSize="20" Click="Main_Click">Main</Button>
+                <Button Grid.Column="3" FontSize="20" Click="Shop_Click">Shop</Button>
             </Grid>
             <Grid DockPanel.Dock="Top" x:Name="finestre"></Grid>
         </DockPanel>

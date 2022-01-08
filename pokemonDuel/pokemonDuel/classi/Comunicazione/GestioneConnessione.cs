@@ -49,7 +49,7 @@ namespace pokemonDuel.classi.Comunicazione
             switch (m.scelta)
             {
                 case "c":
-                    Avversario = new Giocatore(m.dati);
+                    Avversario = new Giocatore(m.dati,false);
                     if (DatiCondivisi.Instance().Avversario == null)
                         DatiCondivisi.Instance().MostraRichiestaBattaglia(this);
                     else

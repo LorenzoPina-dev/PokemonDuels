@@ -21,14 +21,14 @@ namespace pokemonDuel.classi.GestioneFile
         private StoreInfo()
         {
             Mosse= new Dictionary<int,Mossa>();
-            List<string> Tmosse = File.Leggi("./file/Mosse.csv");
+            List<string> Tmosse = GestFile.Leggi("./file/Mosse.csv");
             foreach (string m in Tmosse)
             {
                 Mossa mossa = new Mossa(m);
                 Mosse.Add(mossa.id,mossa);
             }
             Pokedex = new Dictionary<int, Pokemon>();
-            List<string> pokemon = File.Leggi("./file/Pokemon.csv");
+            List<string> pokemon = GestFile.Leggi("./file/Pokemon.csv");
             foreach (string s in pokemon)
             {
                 try

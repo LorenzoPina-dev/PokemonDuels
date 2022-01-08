@@ -15,14 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace pokemonDuel.classi.Util
+namespace pokemonDuel.classi.Componenti
 {
     /// <summary>
     /// Logica di interazione per RichiestaConnessione.xaml
     /// </summary>
     public partial class RichiestaConnessione : UserControl
     {
-        GestioneConnessione gr;
+        public GestioneConnessione gr;
         CaricamentoBattaglia caricamento;
         public RichiestaConnessione( GestioneConnessione gr,CaricamentoBattaglia caricamento)
         {

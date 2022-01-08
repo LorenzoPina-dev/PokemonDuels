@@ -2,6 +2,7 @@
 using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
+using pokemonDuel.classi.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace pokemonDuel
+namespace pokemonDuel.classi.Componenti
 {
     /// <summary>
     /// Logica di interazione per PaginaUtente.xaml
@@ -50,10 +51,10 @@ namespace pokemonDuel
                 primopok.Width = 250;
                 primopok.Height = 250;
                 if (selezionato != null)
-                    GestioneCanvas.RenderPokemon(Mano, selezionato, 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80,false);
+                    GestioneCanvas.RenderPokemon(Mano, selezionato, 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80,false, true);
                 else if (DatiCondivisi.Instance().io.Deck.Count > 0)
                 {
-                    GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[0], 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80, false);
+                    GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[0], 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80, false,true);
                     Canvas.SetLeft(primopok, Mano.Width / 2 - primopok.Width / 2);
                     Canvas.SetTop(primopok, Mano.Height * 2 / 7 - primopok.Height / 2);
                 }
@@ -76,7 +77,7 @@ namespace pokemonDuel
                     pokemon.Fill = Brushes.Transparent;
                     double x = Mano.Width / 2 + Math.Cos(Conversione.getRad(partenza)) * primopok.Width, y = Mano.Height* 2/7 - Math.Sin(Conversione.getRad(partenza)) * primopok.Height;
                     if (DatiCondivisi.Instance().io.Deck.Count>i)
-                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[i], unita,Mano.Width-x-unita, y, false);
+                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[i], unita,Mano.Width-x-unita, y, false, true);
                     else
                         pokemon.Fill= new ImageBrush(new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png")));
                     pokemon.Name = "P_" + i;
@@ -90,7 +91,7 @@ namespace pokemonDuel
                     Secondo.MouseDown += Pokemon_MouseDown;
                     Secondo.Fill = Brushes.Transparent;
                     if (DatiCondivisi.Instance().io.Deck.Count > 5-i)
-                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[5 - i], unita,x, y, false);
+                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[5 - i], unita,x, y, false, true);
                     else
                         Secondo.Fill = new ImageBrush(new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png")));
                     Secondo.Name = "P_" + (5-i);

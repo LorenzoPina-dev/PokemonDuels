@@ -58,15 +58,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Battaglia.xaml">
+    <Page Include="classi\Componenti\Battaglia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CaricamentoBattaglia.xaml">
+    <Page Include="classi\Componenti\CaricamentoBattaglia.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="classi\Util\RichiestaConnessione.xaml">
+    <Page Include="classi\Componenti\RichiestaConnessione.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="classi\Componenti\ShopPokemon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -78,16 +82,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Battaglia.xaml.cs">
+    <Compile Include="classi\Componenti\Battaglia.xaml.cs">
       <DependentUpon>Battaglia.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CaricamentoBattaglia.xaml.cs">
+    <Compile Include="classi\Componenti\CaricamentoBattaglia.xaml.cs">
       <DependentUpon>CaricamentoBattaglia.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="classi\Componenti\ShopPokemon.xaml.cs">
+      <DependentUpon>ShopPokemon.xaml</DependentUpon>
     </Compile>
     <Compile Include="classi\Comunicazione\GestioneConnessione.cs" />
     <Compile Include="classi\Comunicazione\GestioneTcp.cs" />
     <Compile Include="classi\DatiCondivisi.cs" />
-    <Compile Include="classi\GestioneFile\File.cs" />
+    <Compile Include="classi\GestioneFile\GestFile.cs" />
     <Compile Include="classi\GestioneFile\StoreInfo.cs" />
     <Compile Include="classi\Grafica\GestioneCanvas.cs" />
     <Compile Include="classi\Grafica\GestioneRuota.cs" />
@@ -104,7 +111,7 @@
     <Compile Include="classi\Logicagioco\Ruota.Designer.cs">
       <DependentUpon>Ruota.cs</DependentUpon>
     </Compile>
-    <Compile Include="classi\Util\RichiestaConnessione.xaml.cs">
+    <Compile Include="classi\Componenti\RichiestaConnessione.xaml.cs">
       <DependentUpon>RichiestaConnessione.xaml</DependentUpon>
     </Compile>
     <Compile Include="classi\Util\Util.cs" />
@@ -112,20 +119,20 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PaginaPokemon.xaml">
+    <Page Include="classi\Componenti\PaginaPokemon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PaginaUtente.xaml">
+    <Page Include="classi\Componenti\PaginaUtente.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PaginaPokemon.xaml.cs">
+    <Compile Include="classi\Componenti\PaginaPokemon.xaml.cs">
       <DependentUpon>PaginaPokemon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PaginaUtente.xaml.cs">
+    <Compile Include="classi\Componenti\PaginaUtente.xaml.cs">
       <DependentUpon>PaginaUtente.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -156,6 +163,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="classi\Componenti\material.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,25 +19,29 @@ namespace pokemonDuel.classi.Logicagioco
         {
             _xp = 0;
             Username = "";
-            Materiali = 0;
+            Materiali = 500;
             Deck = new List<Pokemon>();
         }
-        public Giocatore(string csv)
+        public Giocatore(string csv,bool mieiDati)
         {
             string[] split = csv.Split(';');
-            Xp = 0;
             Username = split[0];
-            Materiali = int.Parse(split[1]);
+            _xp = int.Parse(split[1]);
+            Materiali = int.Parse(split[2]);
             Deck = new List<Pokemon>();
-            for(int i=2;i<split.Length;i++)
-                Deck.Add((Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone());
+            for(int i = 3; i < split.Length; i++)
+            {
+                Pokemon p = (Pokemon)StoreInfo.Instance().Pokedex[int.Parse(split[i])].Clone();
+                p.mio = mieiDati;
+                Deck.Add(p);
+            }
         }
         public string toCsv()
         {
             string mazzo = "";
             foreach (Pokemon p in Deck)
                 mazzo += ";" + p.id;
-            return Username + ";" + Xp + mazzo;
+            return Username + ";" + Xp+";"+Materiali + mazzo;
         }
     }
 }
