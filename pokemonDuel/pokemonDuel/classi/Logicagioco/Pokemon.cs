@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace pokemonDuel.classi.Logicagioco
 {
@@ -16,6 +19,7 @@ namespace pokemonDuel.classi.Logicagioco
         public string Nome;
         public int Salti;
         public List<int> Mosse;
+        public int Materiali;
         private string urlTexture;
         public string UrlTexture { get { return path + urlTexture; } }
         public Nodo posizione;
@@ -34,6 +38,7 @@ namespace pokemonDuel.classi.Logicagioco
             id = int.Parse(campi[0]);
             Nome = campi[1];
             Salti = int.Parse(campi[2]);
+            Materiali = int.Parse(campi[4]);
             Mosse = new List<int>();
             for (int i = 0; i < int.Parse(campi[3]); i++)
                 Mosse.Add(idArrivato++);

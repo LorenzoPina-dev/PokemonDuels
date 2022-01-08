@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:pokemonDuel"
              mc:Ignorable="d" Height="10000" Width="10000" SizeChanged="UserControl_SizeChanged">
     <DockPanel>
-        <Grid DockPanel.Dock="Top" x:Name="Deck"></Grid>
-        <Grid x:Name="Lista" Background="Red" DockPanel.Dock="Top"></Grid>
+        <Canvas DockPanel.Dock="Top" x:Name="Deck"></Canvas>
+        <Canvas x:Name="Lista" Background="Red" DockPanel.Dock="Top"></Canvas>
         <Grid  DockPanel.Dock="Bottom" x:Name="Bottoni">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>

@@ -99,6 +99,7 @@ namespace pokemonDuel
             battaglia.Width = Width;
             battaglia.Height = Height;
             MostraFinestra(Finestra.Utente);
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

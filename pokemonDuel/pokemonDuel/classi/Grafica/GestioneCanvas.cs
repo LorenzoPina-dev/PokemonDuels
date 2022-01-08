@@ -1,6 +1,7 @@
 ﻿using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace pokemonDuel.classi.Grafica
@@ -216,5 +218,80 @@ namespace pokemonDuel.classi.Grafica
                 canvas.Children.Clear();
             });
         }
+
+
+        public static void RenderPokemon(Canvas canvas, Pokemon pok, double Width, double x, double y, bool mostraCosto)
+        {
+            RenderPokemon(canvas,pok, Width, Width, x, y, mostraCosto);
+        }
+        public static void RenderPokemon(Canvas canvas, Pokemon pok, double Width, double Height, double x, double y, bool mostraCosto)
+        {
+            double unitaX = Width, unitaY = Height, offset = 0;
+            if (mostraCosto)
+            {
+                unitaX -= 20;
+                unitaY -= 20;
+                offset = 10;
+            }
+            Rectangle i = new Rectangle();
+            i.Fill = pok.Render();
+            i.Width = unitaX;
+            i.Height = unitaY;
+            Canvas.SetTop(i, y);
+            Canvas.SetLeft(i, x + offset); 
+            canvas.Children.Add(i);
+            Ellipse i2 = new Ellipse();
+            i2.Fill = Brushes.Blue;
+            i2.Width = unitaX / 4;
+            i2.Height = unitaY / 4;
+            Canvas.SetTop(i2, y + unitaY * 3 / 4);
+            Canvas.SetLeft(i2, x + unitaX * 3 / 4 + offset);
+            i2.StrokeThickness = 5;
+            i2.Stroke = Brushes.Transparent;
+            canvas.Children.Add(i2);
+            Label i3 = new Label();
+            i3.Content = pok.Salti;
+            i3.Foreground = Brushes.White;
+            i3.HorizontalContentAlignment = HorizontalAlignment.Center;
+            i3.VerticalContentAlignment = VerticalAlignment.Center;
+            i3.FontSize = Math.Min(unitaY,unitaY)/100*10;
+            i3.Width = unitaX / 4;
+            i3.Height = unitaY / 4;
+            Canvas.SetTop(i3, y + unitaY * 3 / 4);
+            Canvas.SetLeft(i3, x + unitaX * 3 / 4 + offset);
+            canvas.Children.Add(i3);
+            Label Nome = new Label();
+            Nome.Foreground = Brushes.White;
+            Nome.Content = pok.Nome;
+            Nome.HorizontalContentAlignment = HorizontalAlignment.Center;
+            Nome.VerticalContentAlignment = VerticalAlignment.Center;
+            Nome.Width = Width;
+            Nome.Height = Math.Min(unitaY, unitaY) / 100*25;
+            Nome.FontSize = Math.Min(unitaY, unitaY) / 100 * 10;
+            Canvas.SetTop(Nome, y + unitaY - Nome.Height);
+            Canvas.SetLeft(Nome, x);
+            canvas.Children.Add(Nome);
+            if (mostraCosto)
+            {
+                Image IconaMateriali = new Image();
+                IconaMateriali.Source = new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/material.png"));
+                IconaMateriali.Width = 15;
+                IconaMateriali.Height = 15;
+                Canvas.SetTop(IconaMateriali, y + Width - 2 * offset);
+                Canvas.SetLeft(IconaMateriali, x);
+                canvas.Children.Add(IconaMateriali);
+                Label Materiali = new Label();
+                Materiali.Foreground = Brushes.White;
+                Materiali.Content = pok.Materiali;
+                Materiali.VerticalContentAlignment = VerticalAlignment.Center;
+                Materiali.Width = Width - IconaMateriali.Width;
+                Materiali.Height = Math.Min(unitaY, unitaY) / 100 * 25;
+                Materiali.FontSize = Math.Min(unitaY, unitaY) / 100 * 10;
+                Canvas.SetTop(Materiali, y + Width - 2 * offset);
+                Canvas.SetLeft(Materiali, x + IconaMateriali.Width);
+                canvas.Children.Add(Materiali);
+            }
+        }
+
     }
 }

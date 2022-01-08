@@ -1,5 +1,6 @@
 ﻿using pokemonDuel.classi;
 using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace pokemonDuel
         int PokemonPerPagina;
         int pagina;
         int parti = 11,partiLista=8,partiMano=2;
-
         public PaginaPokemon()
         {
             InitializeComponent();
@@ -49,40 +49,47 @@ namespace pokemonDuel
         private void CaricaMano()
         {
             Deck.Children.Clear();
-            int x = 0, unita = (int)(Deck.Width / 6);
+            int unita = (int)Math.Min(Width/6, Deck.Height), x = (int)(Width/6 - unita)/2;
             for (int j = 0; j < 6; j++)
             {
-                Rectangle i = new Rectangle();
                 if (DatiCondivisi.Instance().io.Deck.Count > j)
                 {
-                    i.Fill = DatiCondivisi.Instance().io.Deck[j].Render();
-                    i.Width = (int)Math.Min(unita, Deck.Height) - 10;
-                    i.Height = (int)Math.Min(unita, Deck.Height)-10;
-                    i.Margin = new Thickness(x, 0, Deck.Width - x - unita, 10);
+                    GestioneCanvas.RenderPokemon(Deck, DatiCondivisi.Instance().io.Deck[j], unita, x, 0, false);
                 }
                 else
                 {
+                    Rectangle i = new Rectangle();
                     i.Fill = new ImageBrush(new BitmapImage(new Uri(PedinaVuota)));
-                    i.Margin = new Thickness(x, Deck.Height / 6, Deck.Width - x - unita, 0);
-                    i.Height = (int)Math.Min(unita, Deck.Height);
-                    i.Width = unita;
+                    i.Margin = new Thickness(x-unita/2, Deck.Height / 6, Deck.Width - x - Width / 6, 0);
+                    i.Height = unita;
+                    i.Width = Width / 6;
+                    Deck.Children.Add(i);
                 }
-                i.Stroke = Brushes.Transparent;
-                i.Name = "D_" + j;
-                i.MouseDown += Cliccata;
-                x += unita;
-                Deck.Children.Add(i);
+                Rectangle container = new Rectangle();
+                container.Fill = Brushes.Transparent;
+                container.Width = unita;
+                container.Height = unita;
+                container.Margin = new Thickness(x, 0, Lista.Width - x - unita, 0);
+                container.Name = "D_" + j;
+                container.StrokeThickness = 5;
+                container.Stroke = Brushes.Transparent;
+                container.MouseDown += Cliccata;
+                Deck.Children.Add(container);
+                x +=(int) Width / 6;
             }
             numPag.Text = pagina + 1 + "";
         }
-
-        private void Cliccata(object sender, MouseButtonEventArgs e)
+        public void Cliccata(Rectangle r)
         {
             if (selezionata != null)
                 selezionata.Stroke = Brushes.Transparent;
-            selezionata = (Rectangle)e.Source;
+            selezionata = r;
 
             selezionata.Stroke = Brushes.LightBlue;
+        }
+        private void Cliccata(object sender, MouseButtonEventArgs e)
+        {
+            Cliccata((Rectangle)e.Source);
         }
         private int DisegnaPokemon(int ind)
         {
@@ -92,22 +99,25 @@ namespace pokemonDuel
             for(;j< keys.Count;j++)
             {
                 Pokemon pok = (Pokemon)tuttiPokemon[keys[j]].Clone();
-                Rectangle i = new Rectangle();
-                i.Fill = new ImageBrush(new BitmapImage(new Uri(pok.UrlTexture)));
-                i.Width = unita;
-                i.Height = unita;
-                i.Margin = new Thickness(x, y, Lista.Width - x - unita, Lista.Height - y - unita);
-                i.Name = "P_" + pok.id;
+                GestioneCanvas.RenderPokemon(Lista, pok, unita, x, y,false);
+
+                Rectangle container = new Rectangle();
+                container.Fill = Brushes.Transparent;
+                container.Width = unita;
+                container.Height = unita;
+                container.Margin = new Thickness(x, y, Lista.Width - x - unita, Lista.Height - y - unita);
+                container.Name = "P_" + pok.id;
+                container.StrokeThickness = 5;
+                container.Stroke = Brushes.Transparent;
+                container.MouseDown += Cliccata;
+                Lista.Children.Add(container);
                 x += unita;
-                i.MouseDown += Cliccata;
                 if (x + unita >= Lista.Width)
                 {
                     x = 0;
                     y += unita;
                 }
-                i.StrokeThickness = 5;
-                i.Stroke = Brushes.Transparent;
-                Lista.Children.Add(i);
+
                 if (y + unita >= Lista.Height)
                     return j-ind;
             }

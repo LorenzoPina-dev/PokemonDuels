@@ -68,6 +68,7 @@ namespace pokemonDuel.classi.Logicagioco
             t.Interval = 1000;
             timer = new Label();
             t.Elapsed += T_Elapsed;
+            Grafica = new List<Rectangle>();
         }
         public void Riavvia()
         {
@@ -152,28 +153,8 @@ namespace pokemonDuel.classi.Logicagioco
 
         private void Ridisegna()
         {
-            foreach (Nodo n in mappa)
-            {
-                if (n.presentePokemon)
-                {
-                    if (n.pokemon == null)
-                        n.presentePokemon = false;
-                    Grafica[n.indice].Fill = n.pokemon.Render();
-                    if(n.pokemon.mio)
-                        Grafica[n.indice].Stroke = Brushes.LightBlue;
-                    else
-                        Grafica[n.indice].Stroke = Brushes.OrangeRed;
-                    Grafica[n.indice].StrokeThickness=3;
-                }
-                else
-                {
-                    Grafica[n.indice].Fill = Brushes.White;
-                    Grafica[n.indice].Stroke = Brushes.Black;
-                    Grafica[n.indice].StrokeThickness = 1;
-                }
-                n.selezionato = false;
-            }
-            if(!mappa[24].presentePokemon)
+            DisegnaMappa();
+            if (!mappa[24].presentePokemon)
                 Grafica[24].Fill = Brushes.LightBlue;
             if (!mappa[3].presentePokemon)
                 Grafica[3].Fill = Brushes.OrangeRed;
@@ -335,12 +316,17 @@ namespace pokemonDuel.classi.Logicagioco
             Battaglia m = DatiCondivisi.Instance().b;
             m.Dispatcher.Invoke(delegate
             {
-                m.myCanvas.Children.Clear();
                 m.CanvasGiocatore.Children.Clear();
                 DisegnaGiocatori(m);
-                DisegnaCollegamenti(m);
-                DisegnaNodi(m);
+                DisegnaMappa();
             });
+        }
+        public void DisegnaMappa()
+        {
+            Battaglia m = DatiCondivisi.Instance().b;
+            m.myCanvas.Children.Clear();
+            DisegnaCollegamenti(m);
+            DisegnaNodi(m);
         }
 
         private void DisegnaGiocatori(Battaglia m)      //disegna la barra in alto con le informazioni dei 2 utenti e il timer
@@ -426,7 +412,7 @@ namespace pokemonDuel.classi.Logicagioco
         public void DisegnaNodi(Battaglia m)        //per disegnare le caselle della mappa
         {
             double dimensioneX = (m.myCanvas.Width - distanza - 40) / (partiX + 2), dimensioneY = (m.myCanvas.Height - 40) / (partiY + PartiPerMano * 2);
-            Grafica = new List<Rectangle>();
+            Grafica.Clear();
 
             foreach (Nodo n in mappa)
             {
@@ -436,18 +422,20 @@ namespace pokemonDuel.classi.Logicagioco
                 b.Width = dimensioneX * 3 / 4;
                 if (n.presentePokemon)
                 {
-                    b.Fill = n.pokemon.Render();
+                    GestioneCanvas.RenderPokemon(m.myCanvas,n.pokemon, dimensioneX * 3 / 4, dimensioneY * 3 / 4, dimensioneX * n.x + dimensioneX / 4, dimensioneY * n.y + dimensioneY / 4,  false);
                     if (n.pokemon.mio)
                         b.Stroke = Brushes.LightBlue;
                     else
                         b.Stroke = Brushes.OrangeRed;
+                    b.Fill = Brushes.Transparent;
                 }
                 else
                     b.Fill = Brushes.White;
                 Canvas.SetTop(b, dimensioneY * n.y + dimensioneY / 4);
                 Canvas.SetLeft(b, distanza + dimensioneX * n.x + dimensioneX / 4);
+                Canvas.SetZIndex(b, 10);
                 b.Name = "p_" + n.indice;
-                b.MouseLeftButtonDown += Click_Pedina;
+                b.MouseDown += Click_Pedina;
                 Grafica.Add(b);
                 m.myCanvas.Children.Add(b);
             }

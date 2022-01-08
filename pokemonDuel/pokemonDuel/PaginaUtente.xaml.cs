@@ -1,5 +1,6 @@
 ﻿using pokemonDuel.classi;
 using pokemonDuel.classi.GestioneFile;
+using pokemonDuel.classi.Grafica;
 using pokemonDuel.classi.Logicagioco;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace pokemonDuel
     public partial class PaginaUtente : UserControl
     {
         Pokemon selezionato;
+
         public PaginaUtente()
         {
             InitializeComponent();
@@ -48,19 +50,19 @@ namespace pokemonDuel
                 primopok.Width = 250;
                 primopok.Height = 250;
                 if (selezionato != null)
-                    primopok.Fill = selezionato.Render();
+                    GestioneCanvas.RenderPokemon(Mano, selezionato, 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80,false);
                 else if (DatiCondivisi.Instance().io.Deck.Count > 0)
                 {
-                    primopok.Fill = DatiCondivisi.Instance().io.Deck[0].Render(); 
+                    GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[0], 250, Mano.Width / 2 - primopok.Width / 2 - 10, Mano.Height * 2 / 7 - primopok.Height / 2 + 80, false);
                     Canvas.SetLeft(primopok, Mano.Width / 2 - primopok.Width / 2);
                     Canvas.SetTop(primopok, Mano.Height * 2 / 7 - primopok.Height / 2);
                 }
                 else
-                { 
-                    
+                {
+
                     primopok.Fill = new ImageBrush(new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png")));
-                    Canvas.SetLeft(primopok, Mano.Width / 2 - primopok.Width / 2-10);
-                    Canvas.SetTop(primopok, Mano.Height * 2 / 7 - primopok.Height / 2+80);
+                    Canvas.SetLeft(primopok, Mano.Width / 2 - primopok.Width / 2 - 10);
+                    Canvas.SetTop(primopok, Mano.Height * 2 / 7 - primopok.Height / 2 + 80);
                 }
                 Mano.Children.Add(primopok);
                 int partenza = 0;
@@ -71,12 +73,13 @@ namespace pokemonDuel
                     pokemon.Width = unita;
                     pokemon.Height = unita;
                     pokemon.MouseDown += Pokemon_MouseDown;
-                    if(DatiCondivisi.Instance().io.Deck.Count>i)
-                    pokemon.Fill = DatiCondivisi.Instance().io.Deck[i].Render();
+                    pokemon.Fill = Brushes.Transparent;
+                    double x = Mano.Width / 2 + Math.Cos(Conversione.getRad(partenza)) * primopok.Width, y = Mano.Height* 2/7 - Math.Sin(Conversione.getRad(partenza)) * primopok.Height;
+                    if (DatiCondivisi.Instance().io.Deck.Count>i)
+                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[i], unita,Mano.Width-x-unita, y, false);
                     else
                         pokemon.Fill= new ImageBrush(new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png")));
                     pokemon.Name = "P_" + i;
-                    double x = Mano.Width / 2 + Math.Cos(Conversione.getRad(partenza)) * primopok.Width, y = Mano.Height* 2/7 - Math.Sin(Conversione.getRad(partenza)) * primopok.Height;
                     Canvas.SetRight(pokemon, x);
                     Canvas.SetTop(pokemon, y);
                     Mano.Children.Add(pokemon);
@@ -85,8 +88,9 @@ namespace pokemonDuel
                     Secondo.Width = unita;
                     Secondo.Height = unita;
                     Secondo.MouseDown += Pokemon_MouseDown;
+                    Secondo.Fill = Brushes.Transparent;
                     if (DatiCondivisi.Instance().io.Deck.Count > 5-i)
-                        Secondo.Fill = DatiCondivisi.Instance().io.Deck[5-i].Render();
+                        GestioneCanvas.RenderPokemon(Mano, DatiCondivisi.Instance().io.Deck[5 - i], unita,x, y, false);
                     else
                         Secondo.Fill = new ImageBrush(new BitmapImage(new Uri(Directory.GetCurrentDirectory() + "/file/Pedine/BaseVuota.png")));
                     Secondo.Name = "P_" + (5-i);
