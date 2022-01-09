@@ -34,6 +34,7 @@ namespace pokemonDuel.classi.Componenti
             TxtNome.Text= DatiCondivisi.Instance().io.Username;
             TxtXp.Content = DatiCondivisi.Instance().io.Xp;
             selezionato = null;
+            this.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)

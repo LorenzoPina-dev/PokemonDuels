@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:pokemonDuel.classi.Componenti"
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="700" SizeChanged="Window_SizeChanged" Closing="Window_Closing" ResizeMode="NoResize" WindowState="Maximized" WindowStartupLocation="Manual" Topmost="False" WindowStyle="None" >
-    <Grid>
+    <Grid x:Name="content">
         <local:Battaglia  x:Name="battaglia"></local:Battaglia>
         <DockPanel x:Name="App">
             <Grid DockPanel.Dock="Bottom" x:Name="Bottoni" Height="40">

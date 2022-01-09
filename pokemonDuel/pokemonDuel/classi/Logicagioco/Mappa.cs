@@ -423,15 +423,15 @@ namespace pokemonDuel.classi.Logicagioco
                 b.Width = dimensioneX * 3 / 4;
                 if (n.presentePokemon)
                 {
-                    GestioneCanvas.RenderPokemon(m.myCanvas,n.pokemon, dimensioneX * 3 / 4, dimensioneY * 3 / 4, dimensioneX * n.x + dimensioneX / 4, dimensioneY * n.y + dimensioneY / 4,  false,false);
+                    GestioneCanvas.RenderPokemon(m.myCanvas,n.pokemon, dimensioneX * 3 / 4, dimensioneY * 3 / 4, dimensioneX * n.x + dimensioneX / 4, dimensioneY * n.y + dimensioneY / 4,  false,false, new SolidColorBrush(Color.FromArgb(255, 200, 200, 200)));
                     if (n.pokemon.mio)
-                        b.Stroke = Brushes.LightBlue;
+                        b.Stroke = Brushes.Blue;
                     else
                         b.Stroke = Brushes.OrangeRed;
                     b.Fill = Brushes.Transparent;
                 }
                 else
-                    b.Fill = Brushes.White;
+                    b.Fill = new SolidColorBrush(Color.FromArgb(255, 200, 200, 200));
                 Canvas.SetTop(b, dimensioneY * n.y + dimensioneY / 4);
                 Canvas.SetLeft(b, distanza + dimensioneX * n.x + dimensioneX / 4);
                 Canvas.SetZIndex(b, 10);

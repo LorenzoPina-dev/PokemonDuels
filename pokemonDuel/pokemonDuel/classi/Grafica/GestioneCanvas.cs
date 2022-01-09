@@ -234,8 +234,19 @@ namespace pokemonDuel.classi.Grafica
         {
             RenderPokemon(canvas,pok, Width, Width, x, y, mostraCosto, MostraNome);
         }
-        public static void RenderPokemon(Canvas canvas, Pokemon pok, double Width, double Height, double x, double y, bool mostraCosto,bool MostraNome)
+        public static void RenderPokemon(Canvas canvas, Pokemon pok, double Width, double Height, double x, double y, bool mostraCosto, bool MostraNome)
         {
+            RenderPokemon(canvas, pok, Width, Width, x, y, mostraCosto, MostraNome,Brushes.Transparent);
+        }
+        public static void RenderPokemon(Canvas canvas, Pokemon pok, double Width, double Height, double x, double y, bool mostraCosto,bool MostraNome,Brush brush)
+        {
+            Rectangle sfondo = new Rectangle();
+            sfondo.Width = Width;
+            sfondo.Height = Height;
+            sfondo.Fill = brush;
+            Canvas.SetTop(sfondo, y);
+            Canvas.SetLeft(sfondo,x);
+            canvas.Children.Add(sfondo);
             double unitaX = Width, unitaY = Height, offset = 0;
             if (mostraCosto)
             {

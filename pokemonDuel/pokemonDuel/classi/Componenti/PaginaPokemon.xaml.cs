@@ -37,6 +37,8 @@ namespace pokemonDuel.classi.Componenti
             InitializeComponent();
             tuttiPokemon = new SortedDictionary<int, Pokemon>();
             selezionata = null;
+            this.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            Deck.Background = new SolidColorBrush(Color.FromArgb(255, 120, 120, 120));
         }
         public void CaricaPokemon()
         {
@@ -44,6 +46,7 @@ namespace pokemonDuel.classi.Componenti
             DisegnaPokemon(0);
             CaricaMano();
             pagina = 0;
+
             
         }
         private void CaricaMano()

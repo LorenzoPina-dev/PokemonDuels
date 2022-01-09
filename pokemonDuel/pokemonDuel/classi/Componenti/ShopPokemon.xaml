@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" SizeChanged="UserControl_SizeChanged">
     <DockPanel>
-        <Canvas x:Name="Lista" Background="Red" DockPanel.Dock="Top"></Canvas>
+        <Canvas x:Name="Lista" DockPanel.Dock="Top"></Canvas>
         <Grid  DockPanel.Dock="Bottom" x:Name="Bottoni">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -17,12 +17,12 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" FontSize="25" Click="Button_Click">Add</Button>
-            <DockPanel Grid.Column="1" >
+            <DockPanel Grid.Column="1" x:Name="DaColorare">
                 <Image Source="material.png" Width="50" Height="50" DockPanel.Dock="Left"/>
-                <TextBlock x:Name="TxtMateriali" FontSize="25" VerticalAlignment="Center" />
+                <Label x:Name="TxtMateriali" FontSize="25" VerticalAlignment="Center" />
             </DockPanel>
             <TextBox x:Name="numPag" Grid.Column="2" FontSize="25"></TextBox>
-            <Button Grid.Column="3" Click="Prima_Click" FontSize="25">Pagina prima</Button>
+            <Button Grid.Column="3" Click="Prima_Click" FontSize="25" >Pagina prima</Button>
             <Button Grid.Column="4" Click="Dopo_Click" FontSize="25">Pagina dopo</Button>
         </Grid>
     </DockPanel>

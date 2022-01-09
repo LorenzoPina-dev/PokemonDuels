@@ -84,12 +84,13 @@ namespace pokemonDuel.classi.Comunicazione
                         if (DatiCondivisi.Instance().Avversario == null)
                         {
                             Invia(new Messaggio("y", ""));
-                            DatiCondivisi.Instance().M.Turno = false;
                             DatiCondivisi.Instance().AvviaPartita();
                         }
                         else
                             Invia(new Messaggio("n", ""));
                     }
+                    else
+                        DatiCondivisi.Instance().M.Turno = false;
                     if (DatiCondivisi.Instance().Avversario == null)
                     {
                         DatiCondivisi.Instance().altro = Avversario;

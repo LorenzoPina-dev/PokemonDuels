@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:pokemonDuel.classi.Componenti"
              mc:Ignorable="d" Height="166.855" Width="819.974">
-    <Grid Background="White">
+    <Grid x:Name="content">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Username" Grid.Column="0" FontSize="30">Pippo</TextBlock>
+        <Label x:Name="Username" Grid.Column="0" FontSize="30">Pippo</Label>
         <Button x:Name="Accetta" Grid.Column="1" FontSize="30" Click="Accetta_Click">V</Button>
         <Button x:Name="Nega" Grid.Column="2" FontSize="30" Click="Nega_Click">X</Button>
     </Grid>

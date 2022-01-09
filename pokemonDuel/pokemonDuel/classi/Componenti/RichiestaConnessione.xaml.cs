@@ -28,8 +28,15 @@ namespace pokemonDuel.classi.Componenti
         {
             InitializeComponent();
             this.gr = gr;
-            Username.Text = gr.Avversario.Username;
+            Username.Content = gr.Avversario.Username;
             this.caricamento = caricamento;
+
+            foreach (UIElement el in content.Children)
+                if (el is Control)
+                {
+                    ((Control)el).Background = new SolidColorBrush(Color.FromArgb(255, 120, 120, 120));
+                    ((Control)el).Foreground = Brushes.White;
+                }
         }
 
         private void Accetta_Click(object sender, RoutedEventArgs e)

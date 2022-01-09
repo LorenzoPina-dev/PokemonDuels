@@ -3,23 +3,11 @@ using pokemonDuel.classi.Comunicazione;
 using pokemonDuel.classi.GestioneFile;
 using pokemonDuel.classi.Logicagioco;
 using pokemonDuel.classi.Componenti;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using pokemonDuel.classi.Util;
+using System.Windows.Controls;
 
 namespace pokemonDuel
 {
@@ -54,6 +42,25 @@ namespace pokemonDuel
             if (Giocatore.Count > 1)
                 shop.settaVolori(Giocatore[1]);
             GestioneTcp.Instance();
+            Queue<Panel> elementi = new Queue<Panel>();
+            elementi.Enqueue(content);
+            while (elementi.Count != 0)
+                foreach (UIElement el in elementi.Dequeue().Children)
+                    if (el is ShopPokemon)
+                        elementi.Enqueue(((ShopPokemon)el).Bottoni);
+                    else if (el is PaginaUtente)
+                        elementi.Enqueue(((PaginaUtente)el).Profilo);
+                    else if (el is CaricamentoBattaglia)
+                        elementi.Enqueue(((CaricamentoBattaglia)el).top);
+                    else if(el is PaginaPokemon)
+                        elementi.Enqueue(((PaginaPokemon)el).Bottoni);
+                    else if (el is Control)
+                    {
+                        ((Control)el).Background = new SolidColorBrush(Color.FromArgb(255, 120, 120, 120));
+                        ((Control)el).Foreground = Brushes.White;
+                    }
+                    else if (el is Panel)
+                        elementi.Enqueue((Panel)el);
         }
         private void NascondiTutto()
         {
@@ -91,7 +98,7 @@ namespace pokemonDuel
                     case Finestra.Shop:
                         App.Visibility = Visibility.Visible;
                         shop.Visibility = Visibility.Visible;
-                        shop.TxtMateriali.Text = DatiCondivisi.Instance().io.Materiali + "";
+                        shop.TxtMateriali.Content = DatiCondivisi.Instance().io.Materiali + "";
                         break;
                 }
             });

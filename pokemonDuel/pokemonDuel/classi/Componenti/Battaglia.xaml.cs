@@ -35,6 +35,7 @@ namespace pokemonDuel.classi.Componenti
             DatiCondivisi.Instance().b = this;
             DatiCondivisi.Instance().M = new Mappa();
             gestCanvas = new GestioneCanvas(CanvasEventi);
+            myCanvas.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
         }
 
         int i = 0;

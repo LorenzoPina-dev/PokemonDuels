@@ -45,6 +45,8 @@ namespace pokemonDuel.classi.Componenti
                 if (p.Value.Materiali <= 250)
                     comprati.Add(p.Value.id);
             }
+            this.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            DaColorare.Background = new SolidColorBrush(Color.FromArgb(255, 120, 120, 120));
 
         }
         private void CaricaPokemon()
@@ -61,7 +63,7 @@ namespace pokemonDuel.classi.Componenti
             Bottoni.Height = Height / 11;
             Lista.Width = Width;
             Lista.Height = Height -Bottoni.Height;
-            TxtMateriali.Text = DatiCondivisi.Instance().io.Materiali+"";
+            TxtMateriali.Content = DatiCondivisi.Instance().io.Materiali+"";
             CaricaPokemon();
         }
 
@@ -150,7 +152,7 @@ namespace pokemonDuel.classi.Componenti
                 comprati.Add(p.id);
                 DisegnaPokemon(PokemonPerPagina * pagina);
                 DatiCondivisi.Instance().io.Materiali -= p.Materiali;
-                TxtMateriali.Text = DatiCondivisi.Instance().io.Materiali + "";
+                TxtMateriali.Content = DatiCondivisi.Instance().io.Materiali + "";
             }
         }
 

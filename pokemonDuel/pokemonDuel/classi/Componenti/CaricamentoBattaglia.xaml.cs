@@ -27,13 +27,13 @@ namespace pokemonDuel.classi.Componenti
         public CaricamentoBattaglia()
         {
             InitializeComponent();
-            Inviti.Background = Brushes.Red;
+            this.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+
         }
         public void AddConnessione(GestioneConnessione gr)
         {
             Dispatcher.Invoke(delegate {
                 RichiestaConnessione rc = new RichiestaConnessione(gr, this);
-                rc.Background = Brushes.Black;
                 rc.Width = Inviti.Width;
                 rc.Height = 50;
                 Inviti.Items.Add(rc);
