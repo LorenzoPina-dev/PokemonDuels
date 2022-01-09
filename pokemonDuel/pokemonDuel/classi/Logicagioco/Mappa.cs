@@ -199,7 +199,7 @@ namespace pokemonDuel.classi.Logicagioco
                         else
                         {
                             DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "0"));
-                            DatiCondivisi.Instance().TerminaPartita(true);
+                            DatiCondivisi.Instance().TerminaPartita(false);
                         }
                     }
                     else

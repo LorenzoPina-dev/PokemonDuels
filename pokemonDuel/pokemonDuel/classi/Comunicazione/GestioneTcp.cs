@@ -47,8 +47,9 @@ namespace pokemonDuel.classi.Comunicazione
                         connessioni.Add(gc);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
             }
             listener.Stop();
         }

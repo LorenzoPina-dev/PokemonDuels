@@ -40,7 +40,6 @@ namespace pokemonDuel
             pokemon = new PaginaPokemon();
             caricamento = new CaricamentoBattaglia();
             shop = new ShopPokemon(pokemon);
-
             finestre.Children.Add(caricamento);
             finestre.Children.Add(pokemon);
             finestre.Children.Add(utente);
@@ -54,6 +53,7 @@ namespace pokemonDuel
                 DatiCondivisi.Instance().io = new Giocatore(Giocatore[0], true);
             if (Giocatore.Count > 1)
                 shop.settaVolori(Giocatore[1]);
+            GestioneTcp.Instance();
         }
         private void NascondiTutto()
         {
@@ -118,6 +118,8 @@ namespace pokemonDuel
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (DatiCondivisi.Instance().Avversario != null)
+                DatiCondivisi.Instance().Avversario.Invia(new Messaggio("tb", "0"));
             GestioneTcp.Instance().stop();
             GestFile.SalvaInfoGiocatore(DatiCondivisi.Instance().io.toCsv()+"\r\n"+shop.Salva());
         }

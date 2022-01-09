@@ -117,8 +117,11 @@ namespace pokemonDuel.classi
         {
             Random r = new Random();
             int xp = r.Next(20, 50),materiale=r.Next(50,60);
-            io.Xp += xp;
-            io.Materiali += materiale;
+            if (vinto)
+            {
+                io.Xp += xp;
+                io.Materiali += materiale;
+            }
             b.Dispatcher.Invoke(delegate {
                 b.gestCanvas.RenderFine(vinto,xp,materiale);
                 b.MostraUtil();

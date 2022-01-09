@@ -48,6 +48,24 @@ namespace pokemonDuel.classi.Grafica
                 {
                     scritta.Content = "Vinto";
                     scritta.Foreground = Brushes.LightBlue;
+
+                    Label Xp = new Label();
+                    Xp.Content = "XP +" + xp;
+                    Xp.Foreground = Brushes.White;
+                    Xp.Background = Brushes.Transparent;
+                    Xp.FontSize = 25;
+                    Canvas.SetLeft(Xp, canvas.Width / 2 - 40);
+                    Canvas.SetTop(Xp, canvas.Height / 2);
+                    canvas.Children.Add(Xp);
+
+                    Label Materiali = new Label();
+                    Materiali.Content = "Materiali +" + materiali;
+                    Materiali.Foreground = Brushes.White;
+                    Materiali.Background = Brushes.Transparent;
+                    Materiali.FontSize = 25;
+                    Canvas.SetLeft(Materiali, canvas.Width / 2 - 75);
+                    Canvas.SetTop(Materiali, canvas.Height / 2 + 40);
+                    canvas.Children.Add(Materiali);
                 }
                 else
                 { 
@@ -72,24 +90,6 @@ namespace pokemonDuel.classi.Grafica
                 TornaHome.VerticalContentAlignment = VerticalAlignment.Center;
                 TornaHome.HorizontalContentAlignment = HorizontalAlignment.Center;
                 canvas.Children.Add(TornaHome);
-
-                Label Xp = new Label();
-                Xp.Content ="XP +"+ xp;
-                Xp.Foreground = Brushes.White;
-                Xp.Background = Brushes.Transparent;
-                Xp.FontSize = 25;
-                Canvas.SetLeft(Xp, canvas.Width / 2 - 40);
-                Canvas.SetTop(Xp, canvas.Height / 2);
-                canvas.Children.Add(Xp);
-
-                Label Materiali = new Label();
-                Materiali.Content = "Materiali +" + materiali;
-                Materiali.Foreground = Brushes.White;
-                Materiali.Background = Brushes.Transparent;
-                Materiali.FontSize = 25;
-                Canvas.SetLeft(Materiali, canvas.Width / 2 - 75);
-                Canvas.SetTop(Materiali, canvas.Height / 2+40);
-                canvas.Children.Add(Materiali);
             });
         }
 
