@@ -128,6 +128,7 @@ namespace pokemonDuel.classi
             });
             //Avversario.Termina = true;
             Avversario = null;
+            M.Stop();
         }
         public void AvviaPartita()
         {

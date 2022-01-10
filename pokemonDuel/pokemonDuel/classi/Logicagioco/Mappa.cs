@@ -469,5 +469,10 @@ namespace pokemonDuel.classi.Logicagioco
                 daSistemare = PedineMappa-1 - daSistemare;
             return daSistemare;
         }
+
+        public void Stop()
+        {
+            t.Stop();
+        }
     }
 }
