@@ -43,11 +43,11 @@ namespace pokemonDuel.classi.Componenti
             {
                 tuttiPokemon.Add(p.Key, p.Value);
                 if (p.Value.Materiali <= 250)
-                    comprati.Add(p.Value.id);
+                    CompraPokemon(p.Value.id);
             }
             this.Background = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
             DaColorare.Background = new SolidColorBrush(Color.FromArgb(255, 120, 120, 120));
-
+            paginaPoK.DisegnaPokemon(0);
         }
         private void CaricaPokemon()
         {
@@ -79,13 +79,15 @@ namespace pokemonDuel.classi.Componenti
             {
                 int indice = int.Parse(s);
                 if (tuttiPokemon.ContainsKey(indice))
-                {
-                    tuttiPokemon.Remove(indice);
-                    comprati.Add(indice);
-                    paginaPoK.tuttiPokemon.Add(indice, (Pokemon)StoreInfo.Instance().Pokedex[indice].Clone());
-                }
+                    CompraPokemon(indice);
             }
             paginaPoK.DisegnaPokemon(0);
+        }
+        public void CompraPokemon(int indice)
+        {
+            tuttiPokemon.Remove(indice);
+            comprati.Add(indice);
+            paginaPoK.tuttiPokemon.Add(indice, (Pokemon)StoreInfo.Instance().Pokedex[indice].Clone());
         }
 
         private void Prima_Click(object sender, RoutedEventArgs e)
