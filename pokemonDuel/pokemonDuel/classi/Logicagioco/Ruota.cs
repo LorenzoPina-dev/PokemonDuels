@@ -94,7 +94,7 @@ namespace pokemonDuel.classi.Logicagioco
                 if (Pokemon != null)
                 {
                     ultimoAngolo =(ultimoAngolo+ Gradi)%360;
-                    g.Clear(Color.White);
+                    g.Clear(Color.FromArgb(255, 120, 120, 120));
                     int Arrivati = ultimoAngolo;
                     for (int i = 0; i < _pokemon.Mosse.Count; i++)
                     {
