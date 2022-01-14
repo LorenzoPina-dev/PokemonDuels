@@ -61,7 +61,7 @@ namespace pokemonDuel.classi.Grafica
             {
                 lock (this)
                 {
-                    float g = (float)(gradi * (DateTime.Now - ultimo).TotalSeconds) / 3;
+                    float g = (float)(gradi * (DateTime.Now - ultimo).TotalSeconds);
                     gradi -= g;
                     ultimo = DateTime.Now;
                     if (gradi <= 10)
@@ -93,6 +93,7 @@ namespace pokemonDuel.classi.Grafica
         {
             DatiCondivisi.Instance().b.Dispatcher.Invoke(delegate
             {
+                ruota.Aggiorna();
                 ruota.Gira(gradi);
             });
         }

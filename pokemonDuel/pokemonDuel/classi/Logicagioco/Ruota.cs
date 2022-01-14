@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,16 @@ namespace pokemonDuel.classi.Logicagioco
 {
     public partial class Ruota : UserControl
     {
-        Graphics g;
         double W, H;
         Pokemon _pokemon;
         int ultimoAngolo;
         List<int> percentuali;
         int d;
+        private BufferedGraphicsContext context;
         private object synPokemon;
         int ris = -1;
+        private BufferedGraphics grafx;
+
         public Pokemon Pokemon
         {
             get { lock (synPokemon) { return _pokemon; } }
@@ -39,7 +42,10 @@ namespace pokemonDuel.classi.Logicagioco
                 }
             }
         }
-
+        public void Aggiorna()
+        {
+            canvas.Refresh();
+        }
 
         public Ruota()
         {
@@ -47,14 +53,24 @@ namespace pokemonDuel.classi.Logicagioco
             synPokemon = new object();
             ultimoAngolo = 0;
             d = (int)Math.Min(W, H);
-
+            canvas.Paint += Canvas_Paint;
         }
+
+        private void Canvas_Paint(object sender, PaintEventArgs e)
+        {
+            grafx.Render(e.Graphics);
+        }
+
         public void CambiaDimensioni(double W, double H)
         {
             this.W = W;
             this.H = H;
             d = (int)Math.Min(W, H);
-            g = canvas.CreateGraphics();
+            context = BufferedGraphicsManager.Current;
+            context.MaximumBuffer = new Size(d,d);
+            grafx = context.Allocate(canvas.CreateGraphics(),
+                 new Rectangle(0, 0, this.Width, this.Height));
+
         }
 
         private List<int> CalcolaPerc()
@@ -86,22 +102,22 @@ namespace pokemonDuel.classi.Logicagioco
         {
             try
             {
-
             lock (synPokemon)
             {
+                    Graphics gra = grafx.Graphics;
                 d = Math.Min(canvas.Width, canvas.Height);
                 ris = -1;
                 if (Pokemon != null)
                 {
                     ultimoAngolo =(ultimoAngolo+ Gradi)%360;
-                    g.Clear(Color.FromArgb(255, 120, 120, 120));
+                        gra.Clear(Color.FromArgb(255, 70, 70, 70));
                     int Arrivati = ultimoAngolo;
                     for (int i = 0; i < _pokemon.Mosse.Count; i++)
                     {
                         if (((Arrivati + percentuali[i])/360>=1 || Arrivati == 0)&& ris==-1)
                             ris = i;
                         Mossa m = StoreInfo.Instance().Mosse[_pokemon.Mosse[i]];
-                        g.FillPie(m.colore, new Rectangle(new Point(0, 0), new Size(d, d)), Arrivati, percentuali[i]);
+                            gra.FillPie(m.colore, new Rectangle(new Point(0, 0), new Size(d, d)), Arrivati, percentuali[i]);
 
                         int x, y;
                         int gradi = (Arrivati * 2 + percentuali[i]) / 2;
@@ -111,7 +127,7 @@ namespace pokemonDuel.classi.Logicagioco
                             x -= d * 1 / 7;
                         if (y > d * 5 / 7)
                             y -= d * 1 / 7;
-                        g.DrawString(m.nome + " " + m.danno, new Font("Arial", 8), Brushes.Black, new Point(x, y));
+                            gra.DrawString(m.nome + " " + m.danno, new Font("Arial", 8), Brushes.Black, new Point(x, y));
                         Arrivati += percentuali[i];
                     }
                     Arrivati = ultimoAngolo;
@@ -119,11 +135,11 @@ namespace pokemonDuel.classi.Logicagioco
                     {
                         Pen p = new Pen(Color.Black, 2);
                         Mossa m = StoreInfo.Instance().Mosse[_pokemon.Mosse[i]];
-                        g.DrawPie(p, new Rectangle(new Point(0, 0), new Size(d, d)), Arrivati, percentuali[i]);
+                            gra.DrawPie(p, new Rectangle(new Point(0, 0), new Size(d, d)), Arrivati, percentuali[i]);
                         Arrivati += percentuali[i];
                     }
                     Pen pen = new Pen(Color.Red, 4);
-                    g.DrawLine(pen, (float)(d - 10), d / 2, d + 10, d / 2);
+                        gra.DrawLine(pen, (float)(d - 10), d / 2, d + 10, d / 2);
                     }
                 }
             }catch (Exception) { }
